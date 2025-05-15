@@ -1,0 +1,3 @@
+team:
+  # Max characters for name creation (default: 32)
+  max-name-length: 32

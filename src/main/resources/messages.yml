@@ -1,0 +1,133 @@
+# template, will be changed...
+
+
+team:
+  prefix: "team > "
+  help:
+    header: "&8----- &bTeam Help &7(Page %page%) &8-----" # placeholders: %page%
+    page-1:
+      - "&7/team create <name> &f- Create a new team"
+      - "&7/team invite <player> &f- Invite a player"
+      - "&7/team kick <player> [reason] &f- Kick a team member"
+      - "&7/team ban <player> [reason] &f- Ban a member"
+      - "&7/team promote <player> &f- Promote a member"
+      - "&7/team demote <player> &f- Demote a member"
+      - "&7/team info [team] &f- Info about a team"
+      - "&7/team chat [message] &f- Toggle/send team chat"
+    page-2:
+      - "&7/team tag <new tag> &f- Change team tag (admin only)"
+      - "&7/team sethome &f- Set team home"
+      - "&7/team home &f- Teleport to team home"
+      - "&7/team delhome &f- Delete team home"
+      - "&7/team leave &f- Leave your team"
+      - "&7/team disband &f- Disband your team"
+      - "&7/team who <player> &f- Show player's team info"
+      - "&7/team auditlog &f- Show audit logs"
+  notifications: # these all have the prefix before the message.
+    invite-sent: "&f%sender% invited %target% to join the team. they have 5 minutes" # placeholders: %sender% %target%
+    player-joined: "&f%player% has joined the team!" # placeholders: %player%
+    player-banned: "&f%target% has been banned by %executor%. Reason: %reason% Duration: %duration%" # placeholders: %reason% %target% %player% %duration%
+    player-kicked: "&f%target% has been kicked by %executor%. Reason: %reason%" # placeholders: %reason% %target% %executor%
+    player-left: "&f%player% has left the team." # placeholders: %player%
+    owner-disbanded: "&c%player% has disbanded the team: %team%" # placeholders: %player% %team%
+    transferred: "%old-owner% transferred team ownership to %new-owner%." # placeholders: %new-owner% %old-owner%
+    promoted: "%executor% promoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor%
+    demoted: "%executor% demoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor%
+  create:
+    success: "&aSuccessfully created team &f%name% &awith tag &f[%tag%]" # placeholders: %name% %tag%
+    exists: "&cA team with that name already exists."
+    in-team: "&cYou are already in a team."
+    error: "&cAn error occurred while creating the team, please contact a server administrator for more information."
+    not-player: "&cOnly players can create teams."
+    length-error: "&cTeam names must be 32 characters or less."
+  invite:
+    sent: "&aYou invited &f%target% &ato join your team!" # placeholders: %target%
+    received: "&6You have been invited to join &f%team%&6! Use &e/team join %team% &6to accept. Expires in 5 minutes." # placeholders: %team% %sender%
+    no_team: "&cYou must be in a team to invite players."
+    expired-invitee: "&cYour invite from %team% has expired." # placeholders: %team%
+    expired-team: "&fThe invite to %target% expired." # placeholders: %target%
+    no_permission: "&cYou do not have permission to invite players."
+    already_in_team: "&cThat player is already in a team."
+    already_invited: "&eThat player has already been invited."
+    player_not_found: "&cThat player is not online."
+    banned: "&cYou cannot invite that player. They are currently banned from the Team."
+  join:
+    no-pending-invite: "&cYou have no pending invite to that team."
+    team-null: "&cThat team no longer exists."
+    join-failed: "&cSorry, but we're unable to add you to this team. Please try again later."
+    join-success: "You have joined the team '%team%'" # placeholders: %team%
+    already-in-team: "&cYou are already in a team."
+    banned: "&cYou are banned from this team. Reason: %reason% Duration: %duration%" # placeholders: %reason% %duration%
+  kick:
+    success: "&aYou kicked &f%target% &afrom the team for %reason%." # placeholders: %reason% %target%
+    failed: "&cSomething failed whilst trying to kick that player. Please try again later."
+    you-were-kicked: "&cYou were kicked from %team% for %reason%." # placeholders: %reason% %team% %executor%
+    no-permission: "&cYou don't have permission to kick that player."
+    not-in-team: "&cThat player is not in your team."
+    self: "&cYou cannot kick yourself."
+    usage: "&cUsage: /team kick <player> [reason]"
+  ban:
+    success: "&aYou banned &f%target% &afrom the team for %reason% for %duration%." # placeholders: %reason% %target% %duration%
+    failed: "&cSomething failed whilst trying to ban that player. Please try again later."
+    you-were-banned: "&cYou were banned from %team% for %reason% for %duration%." # placeholders: %reason% %team% %executor% %duration%
+    no-permission: "&cYou don't have permission to ban that player."
+    banned: "&cYou have been banned from %team%! Reason: %reason% Duration: %duration%" # placeholders: %reason% %team% %executor% %duration%
+    already-banned: "&cThat player is already banned."
+    not-in-team: "&cThat player is not in your team."
+    self: "&cYou cannot ban yourself."
+    usage: "&cUsage: /team ban <player> [reason] [duration: e.g. 10m, 2h, 1d]"
+  leave:
+    success: "&aYou have left the team &f%team%&a." # placeholders: %team%
+    not-in-team: "&cYou're not in a team."
+    owner-cannot-leave: "&cYou're the team owner. Use /team disband instead."
+    failed: "&cSomething went wrong while leaving the team."
+  disband:
+    confirm: "&eRun /team disband again within 10 seconds to confirm disbanding your team."
+    success: "&cYou have disbanded your team: %team%" # placeholders: %team%
+    timeout: "&cDisband confirmation timed out."
+    not-in-team: "&cYou're not in a team."
+    not-owner: "&cOnly the team owner can disband the team."
+    failed: "&cSomething went wrong while disbanding the team."
+  info:
+    not-in-team: "&cYou're not in a team."
+    team-not-found: "&cThat team doesn't exist."
+    online-indicator: "&a●"
+    offline-indicator: "&c●"
+    format: # Placeholders : %name% %tag% %owner% %admins% %mods% %members% %created%
+      - "&7&m-----------------------------"
+      - "&eTeam: &f%name% &7[%tag%]"
+      - "&eOwner: &f%owner%"
+      - "&eAdmins: &f%admins%"
+      - "&eModerators: &f%mods%"
+      - "&eMembers: &f%members%"
+      - "&eCreated: &f%created%"
+      - "&7&m-----------------------------"
+  transfer:
+    confirm: "Run the command again within 10 seconds to transfer ownership to %target%" # placeholders: %target%
+    success: "Ownership has been transferred to %target%" # placeholders: %target%
+    timeout: "Ownership transfer timed out."
+    not-owner: "You are not the team owner."
+    not-in-team: "That player is not in your team."
+    self: "&cYou cannot transfer ownership to yourself."
+    player-not-found: "Player not found."
+  who:
+    not-found: "&cPlayer not found."
+    not-in-team: "&c%player% is not in a team." # placeholders: %player%
+  promote:
+    success: "&aPromoted %target% to &e%role%!" # placeholders: %target% %oldrole% %newrole%
+    no-permission: "&cYou don't have permission to promote that player."
+    not-in-team: "&cThat player is not in your team."
+    invalid-target: "&cThat player cannot be promoted."
+    not-found: "&cPlayer not found."
+    failed: "&cPromotion failed."
+  demote:
+    success: "&cDemoted %target% to &7%role%." # placeholders: %target% %oldrole% %newrole%
+    no-permission: "&cYou don't have permission to demote that player."
+    not-in-team: "&cThat player is not in your team."
+    invalid-target: "&cThat player cannot be demoted."
+    not-found: "&cPlayer not found."
+    failed: "&cDemotion failed."
+
+
+
+
