@@ -6,7 +6,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
 import discord.qeid.database.TeamManager;
 import discord.qeid.model.Team;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.Bukkit;
@@ -33,17 +33,17 @@ public class TeamWhoCommand {
                     OfflinePlayer target = Bukkit.getOfflinePlayer(name);
 
                     if (!(sender instanceof Player player)) {
-                        sender.sendMessage(ConfigUtil.get("general.players-only"));
+                        sender.sendMessage(MessagesUtil.get("general.players-only"));
                         return Command.SINGLE_SUCCESS;
                     }
                     if (target == null || target.getName() == null) {
-                        sender.sendMessage(ConfigUtil.get("team.who.not-found"));
+                        sender.sendMessage(MessagesUtil.get("team.who.not-found"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     Team team = Teams.getInstance().getTeamManager().getTeamByPlayer(target.getUniqueId());
                     if (team == null) {
-                        sender.sendMessage(ConfigUtil.get("team.who.not-in-team").replace("%player%", name));
+                        sender.sendMessage(MessagesUtil.get("team.who.not-in-team").replace("%player%", name));
                         return Command.SINGLE_SUCCESS;
                     }
 

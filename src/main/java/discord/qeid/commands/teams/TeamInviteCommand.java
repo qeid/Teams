@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
 import discord.qeid.model.Team;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import discord.qeid.listeners.TeamMessengerListener;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -30,7 +30,7 @@ public class TeamInviteCommand {
                     CommandSender sender = ctx.getSource().getSender();
 
                     if (!(sender instanceof Player inviter)) {
-                        sender.sendMessage(ConfigUtil.get("general.players-only"));
+                        sender.sendMessage(MessagesUtil.get("general.players-only"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -38,7 +38,7 @@ public class TeamInviteCommand {
                     Player target = Bukkit.getPlayerExact(targetName);
 
                     if (target == null || !target.isOnline()) {
-                        inviter.sendMessage(ConfigUtil.get("team.invite.player_not_found"));
+                        inviter.sendMessage(MessagesUtil.get("team.invite.player_not_found"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -50,30 +50,30 @@ public class TeamInviteCommand {
 
                     Team team = teamManager.getTeamByPlayer(inviterUUID);
                     if (team == null) {
-                        inviter.sendMessage(ConfigUtil.get("team.invite.no_team"));
+                        inviter.sendMessage(MessagesUtil.get("team.invite.no_team"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (teamManager.isBanned(team.getId(), targetUUID)) {
-                        inviter.sendMessage(ConfigUtil.get("team.invite.banned"));
+                        inviter.sendMessage(MessagesUtil.get("team.invite.banned"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (!inviterUUID.equals(team.getOwner())
                         && !team.getAdmins().contains(inviterUUID)
                         && !team.getMods().contains(inviterUUID)) {
-                        inviter.sendMessage(ConfigUtil.get("team.invite.no_permission"));
+                        inviter.sendMessage(MessagesUtil.get("team.invite.no_permission"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     Team targetTeam = teamManager.getTeamByPlayer(targetUUID);
                     if (targetTeam != null) {
-                        inviter.sendMessage(ConfigUtil.get("team.invite.already_in_team"));
+                        inviter.sendMessage(MessagesUtil.get("team.invite.already_in_team"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (playerData.hasInvite(targetUUID, team.getId())) {
-                        inviter.sendMessage(ConfigUtil.get("team.invite.already_invited"));
+                        inviter.sendMessage(MessagesUtil.get("team.invite.already_invited"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -84,17 +84,17 @@ public class TeamInviteCommand {
                         if (!playerData.hasInvite(targetUUID, team.getId())) return;
 
                         playerData.removeInvite(targetUUID, team.getId());
-                        target.sendMessage(ConfigUtil.get("team.invite.expired-invitee").replace("%team%", team.getName()));
+                        target.sendMessage(MessagesUtil.get("team.invite.expired-invitee").replace("%team%", team.getName()));
                         TeamMessengerListener.broadcast(team,
-                            ConfigUtil.get("team.invite.expired-team").replace("%target%", target.getName()));
+                            MessagesUtil.get("team.invite.expired-team").replace("%target%", target.getName()));
                     }, 20L * 60 * 5); // 5 minutes
 
-                    inviter.sendMessage(ConfigUtil.get("team.invite.sent").replace("%target%", target.getName()));
-                    target.sendMessage(ConfigUtil.get("team.invite.received")
+                    inviter.sendMessage(MessagesUtil.get("team.invite.sent").replace("%target%", target.getName()));
+                    target.sendMessage(MessagesUtil.get("team.invite.received")
                         .replace("%team%", team.getName())
                         .replace("%sender%", inviter.getName()));
 
-                    TeamMessengerListener.broadcastWithRank(team, inviterUUID, ConfigUtil.get("team.notifications.invite-sent")
+                    TeamMessengerListener.broadcastWithRank(team, inviterUUID, MessagesUtil.get("team.notifications.invite-sent")
                         .replace("%sender%", inviter.getName())
                         .replace("%target%", target.getName()));
 

@@ -7,7 +7,7 @@ import discord.qeid.Teams;
 import discord.qeid.database.TeamManager;
 import discord.qeid.model.Team;
 import discord.qeid.utils.ColorUtils;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -34,7 +34,7 @@ public class TeamInfoCommand {
                 Team team = teamManager.getTeamByPlayer(uuid);
 
                 if (team == null) {
-                    player.sendMessage(ConfigUtil.get("team.info.not-in-team"));
+                    player.sendMessage(MessagesUtil.get("team.info.not-in-team"));
                     return Command.SINGLE_SUCCESS;
                 }
 
@@ -61,7 +61,7 @@ public class TeamInfoCommand {
                 .executes(ctx -> {
                     CommandSender sender = ctx.getSource().getSender();
                     if (!(sender instanceof Player player)) {
-                        sender.sendMessage(ConfigUtil.get("general.players-only"));
+                        sender.sendMessage(MessagesUtil.get("general.players-only"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -70,7 +70,7 @@ public class TeamInfoCommand {
                     Team team = teamManager.getTeamByName(input);
 
                     if (team == null) {
-                        player.sendMessage(ConfigUtil.get("team.info.team-not-found"));
+                        player.sendMessage(MessagesUtil.get("team.info.team-not-found"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -84,16 +84,26 @@ public class TeamInfoCommand {
 
 
     public static String formatPlayerList(Set<UUID> players) {
-        if (players.isEmpty()) return "&8(None)";
+        if (players.isEmpty()) return MessagesUtil.get("team.null");
         return players.stream()
             .map(TeamInfoCommand::formatPlayerName)
             .collect(Collectors.joining("&r, "));
     }
 
     public static String formatPlayerName(UUID uuid) {
+        boolean showIndicator = Teams.getInstance().getConfig().getBoolean(
+            "team.info.show-online-indicator", true);
+
         Player p = Bukkit.getPlayer(uuid);
-        String dot = (p != null && p.isOnline()) ? ConfigUtil.get("team.info.online-indicator") : ConfigUtil.get("team.info.offline-indicator");
         String name = (p != null) ? p.getName() : Bukkit.getOfflinePlayer(uuid).getName();
+
+        if (!showIndicator) {
+            return name;
+        }
+
+        String dot = (p != null && p.isOnline())
+            ? MessagesUtil.get("team.info.online-indicator")
+            : MessagesUtil.get("team.info.offline-indicator");
         return name + " " + dot;
     }
 }

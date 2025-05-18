@@ -7,7 +7,7 @@ import discord.qeid.database.TeamManager;
 import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.ColorUtils;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import discord.qeid.utils.DurationUtil;
 import discord.qeid.listeners.TeamMessengerListener;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -19,7 +19,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 import static discord.qeid.utils.DurationUtil.formatFullDuration;
 
@@ -77,24 +76,24 @@ public class TeamBanCommand {
         Team team = teamManager.getTeamByPlayer(executorId);
 
         if (team == null) {
-            sender.sendMessage(ConfigUtil.get("team.ban.not-in-team"));
+            sender.sendMessage(MessagesUtil.get("team.ban.not-in-team"));
             return 0;
         }
 
         OfflinePlayer target = Bukkit.getOfflinePlayer(targetName);
         if (target == null || target.getName() == null) {
-            sender.sendMessage(ConfigUtil.get("team.ban.not-in-team"));
+            sender.sendMessage(MessagesUtil.get("team.ban.not-in-team"));
             return 0;
         }
 
         UUID targetId = target.getUniqueId();
         if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
-            sender.sendMessage(ConfigUtil.get("team.ban.not-in-team"));
+            sender.sendMessage(MessagesUtil.get("team.ban.not-in-team"));
             return 0;
         }
 
         if (targetId.equals(executorId)) {
-            sender.sendMessage(ConfigUtil.get("team.ban.self"));
+            sender.sendMessage(MessagesUtil.get("team.ban.self"));
             return 0;
         }
 
@@ -102,7 +101,7 @@ public class TeamBanCommand {
         TeamRoles targetRole = getRole(team, targetId);
 
         if (!canBan(executorRole, targetRole)) {
-            sender.sendMessage(ConfigUtil.get("team.ban.no-permission"));
+            sender.sendMessage(MessagesUtil.get("team.ban.no-permission"));
             return 0;
         }
 
@@ -111,7 +110,7 @@ public class TeamBanCommand {
         if (reason.isEmpty()) reason = "No reason specified";
 
         if (teamManager.isBanned(team.getId(), targetId)) {
-            sender.sendMessage(ConfigUtil.get("team.ban.already-banned"));
+            sender.sendMessage(MessagesUtil.get("team.ban.already-banned"));
             return 0;
         }
 
@@ -120,19 +119,19 @@ public class TeamBanCommand {
         );
 
         if (!success) {
-            sender.sendMessage(ConfigUtil.get("team.ban.failed"));
+            sender.sendMessage(MessagesUtil.get("team.ban.failed"));
             return 0;
         }
 
         teamManager.kickMember(team.getId(), targetId);
         team = teamManager.getTeamById(team.getId());
 
-        sender.sendMessage(ConfigUtil.get("team.ban.success")
+        sender.sendMessage(MessagesUtil.get("team.ban.success")
             .replace("%target%", target.getName())
             .replace("%reason%", reason)
             .replace("%duration%", formatFullDuration(durationSeconds)));
 
-        TeamMessengerListener.broadcastWithRank(team, executorId, ConfigUtil.get("team.notifications.player-banned")
+        TeamMessengerListener.broadcastWithRank(team, executorId, MessagesUtil.get("team.notifications.player-banned")
             .replace("%target%", target.getName())
             .replace("%reason%", reason)
             .replace("%executor%", executor.getName())
@@ -140,7 +139,7 @@ public class TeamBanCommand {
 
         Player onlineTarget = Bukkit.getPlayer(targetId);
         if (onlineTarget != null) {
-            onlineTarget.sendMessage(ConfigUtil.get("team.ban.banned")
+            onlineTarget.sendMessage(MessagesUtil.get("team.ban.banned")
                 .replace("%team%", team.getName())
                 .replace("%executor%", executor.getName())
                 .replace("%reason%", reason)

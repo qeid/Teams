@@ -7,7 +7,7 @@ import discord.qeid.Teams;
 import discord.qeid.database.TeamManager;
 import discord.qeid.model.Team;
 import discord.qeid.listeners.TeamMessengerListener;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.Bukkit;
@@ -56,7 +56,7 @@ public class TeamTransferCommand {
                 .executes(ctx -> {
                     CommandSender sender = ctx.getSource().getSender();
                     if (!(sender instanceof Player executor)) {
-                        sender.sendMessage(ConfigUtil.get("general.players-only"));
+                        sender.sendMessage(MessagesUtil.get("general.players-only"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -69,24 +69,24 @@ public class TeamTransferCommand {
                     Team team = teamManager.getTeamByPlayer(executorId);
 
                     if (team == null) {
-                        executor.sendMessage(ConfigUtil.get("team.transfer.not-in-team"));
+                        executor.sendMessage(MessagesUtil.get("team.transfer.not-in-team"));
                         return Command.SINGLE_SUCCESS;
                     }
 
 
 
                     if (!team.getOwner().equals(executorId)) {
-                        executor.sendMessage(ConfigUtil.get("team.transfer.not-owner"));
+                        executor.sendMessage(MessagesUtil.get("team.transfer.not-owner"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (!team.getAdmins().contains(targetId)
                         && !team.getMods().contains(targetId)
                         && !team.getMembers().contains(targetId)) {
-                        executor.sendMessage(ConfigUtil.get("team.transfer.not-member"));
+                        executor.sendMessage(MessagesUtil.get("team.transfer.not-member"));
                         return Command.SINGLE_SUCCESS;
                     }
-                    if(executorId.equals(targetId)) { executor.sendMessage(ConfigUtil.get("team.transfer.self")); }
+                    if(executorId.equals(targetId)) { executor.sendMessage(MessagesUtil.get("team.transfer.self")); }
 
                     // Handle confirmation
                     if (pendingTransfers.containsKey(executorId)
@@ -116,16 +116,16 @@ public class TeamTransferCommand {
 
 
                             if (targetId.equals(executorId)) {
-                                executor.sendMessage(ConfigUtil.get("team.transfer.failed"));
+                                executor.sendMessage(MessagesUtil.get("team.transfer.failed"));
                                 return Command.SINGLE_SUCCESS;
                             }
 
-                            executor.sendMessage(ConfigUtil.get("team.transfer.success")
+                            executor.sendMessage(MessagesUtil.get("team.transfer.success")
                                 .replace("%target%", target.getName()));
 
                             Team updatedTeam = teamManager.getTeamById(team.getId());
                             TeamMessengerListener.broadcastWithTwo(updatedTeam, executorId, targetId,
-                                ConfigUtil.get("team.notifications.transferred")
+                                MessagesUtil.get("team.notifications.transferred")
                                     .replace("%old-owner%", executor.getName())
                                     .replace("%new-owner%", target.getName()));
                             return Command.SINGLE_SUCCESS;
@@ -133,7 +133,7 @@ public class TeamTransferCommand {
                         } else {
                             pendingTransfers.remove(executorId);
                             pendingTimes.remove(executorId);
-                            executor.sendMessage(ConfigUtil.get("team.transfer.timeout"));
+                            executor.sendMessage(MessagesUtil.get("team.transfer.timeout"));
                             return Command.SINGLE_SUCCESS;
                         }
                     }
@@ -142,7 +142,7 @@ public class TeamTransferCommand {
                     pendingTransfers.put(executorId, targetId);
                     pendingTimes.put(executorId, System.currentTimeMillis());
 
-                    executor.sendMessage(ConfigUtil.get("team.transfer.confirm")
+                    executor.sendMessage(MessagesUtil.get("team.transfer.confirm")
                         .replace("%target%", target.getName()));
 
                     Bukkit.getScheduler().runTaskLater(Teams.getInstance(), () -> {
@@ -151,7 +151,7 @@ public class TeamTransferCommand {
                             pendingTimes.remove(executorId);
 
                             if (teamManager.getTeamByPlayer(executorId) != null) {
-                                executor.sendMessage(ConfigUtil.get("team.transfer.timeout"));
+                                executor.sendMessage(MessagesUtil.get("team.transfer.timeout"));
                             }
                         }
                     }, 200L); // 10 seconds (should be configurable laters)

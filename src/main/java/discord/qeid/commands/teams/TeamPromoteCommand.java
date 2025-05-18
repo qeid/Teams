@@ -7,7 +7,7 @@ import discord.qeid.Teams;
 import discord.qeid.database.TeamManager;
 import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import discord.qeid.listeners.TeamMessengerListener;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -51,7 +51,7 @@ public class TeamPromoteCommand {
                     String name = StringArgumentType.getString(ctx, "player");
                     OfflinePlayer target = Bukkit.getOfflinePlayer(name);
                     if (target == null || target.getName() == null) {
-                        sender.sendMessage(ConfigUtil.get("team.promote.not-found"));
+                        sender.sendMessage(MessagesUtil.get("team.promote.not-found"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -60,12 +60,12 @@ public class TeamPromoteCommand {
                     TeamManager manager = Teams.getInstance().getTeamManager();
                     Team team = manager.getTeamByPlayer(execId);
                     if (team == null) {
-                        sender.sendMessage(ConfigUtil.get("team.promote.not-in-team"));
+                        sender.sendMessage(MessagesUtil.get("team.promote.not-in-team"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
-                        sender.sendMessage(ConfigUtil.get("team.promote.not-in-team"));
+                        sender.sendMessage(MessagesUtil.get("team.promote.not-in-team"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -80,32 +80,32 @@ public class TeamPromoteCommand {
                     };
 
                     if (newRole == null) {
-                        sender.sendMessage(ConfigUtil.get("team.promote.invalid-target"));
+                        sender.sendMessage(MessagesUtil.get("team.promote.invalid-target"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     // permission checks
                     if (!canPromote(execRole, oldRole)) {
-                        sender.sendMessage(ConfigUtil.get("team.promote.no-permission"));
+                        sender.sendMessage(MessagesUtil.get("team.promote.no-permission"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (!manager.promoteToRole(team.getId(), targetId, newRole)) {
-                        sender.sendMessage(ConfigUtil.get("team.promote.failed"));
+                        sender.sendMessage(MessagesUtil.get("team.promote.failed"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     team = manager.getTeamById(team.getId());
 
 
-                    sender.sendMessage(ConfigUtil.get("team.promote.success")
+                    sender.sendMessage(MessagesUtil.get("team.promote.success")
                         .replace("%target%", target.getName())
                         .replace("%oldrole%", oldRole.name())
                         .replace("%newrole%", newRole));
 
                     Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
 
-                    TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, ConfigUtil.get("team.notifications.promoted")
+                    TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, MessagesUtil.get("team.notifications.promoted")
                         .replace("%target%", target.getName())
                         .replace("%executor%", executor.getName())
                         .replace("%oldrole%", oldRole.name())

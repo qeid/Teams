@@ -3,6 +3,7 @@
 
 team:
   prefix: "team > "
+  null: "&8(None)"
   help:
     header: "&8----- &bTeam Help &7(Page %page%) &8-----" # placeholders: %page%
     page-1:
@@ -93,9 +94,12 @@ team:
   info:
     not-in-team: "&cYou're not in a team."
     team-not-found: "&cThat team doesn't exist."
+
+    # indicators will not display if false in config
     online-indicator: "&a●"
     offline-indicator: "&c●"
-    format: # Placeholders : %name% %tag% %owner% %admins% %mods% %members% %created%
+
+    message: # Placeholders : %name% %tag% %owner% %admins% %mods% %members% %created%
       - "&7&m-----------------------------"
       - "&eTeam: &f%name% &7[%tag%]"
       - "&eOwner: &f%owner%"

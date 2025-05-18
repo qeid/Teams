@@ -6,7 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 
-public class ConfigUtil {
+public class MessagesUtil {
     private static FileConfiguration messages;
 
     public static void loadMessages(JavaPlugin plugin) {

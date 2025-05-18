@@ -7,7 +7,7 @@ import discord.qeid.Teams;
 import discord.qeid.database.TeamManager;
 import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import discord.qeid.listeners.TeamMessengerListener;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -52,7 +52,7 @@ public class TeamDemoteCommand {
                     String name = StringArgumentType.getString(ctx, "player");
                     OfflinePlayer target = Bukkit.getOfflinePlayer(name);
                     if (target == null || target.getName() == null) {
-                        sender.sendMessage(ConfigUtil.get("team.demote.not-found"));
+                        sender.sendMessage(MessagesUtil.get("team.demote.not-found"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -61,12 +61,12 @@ public class TeamDemoteCommand {
                     TeamManager manager = Teams.getInstance().getTeamManager();
                     Team team = manager.getTeamByPlayer(execId);
                     if (team == null) {
-                        sender.sendMessage(ConfigUtil.get("team.demote.not-in-team"));
+                        sender.sendMessage(MessagesUtil.get("team.demote.not-in-team"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
-                        sender.sendMessage(ConfigUtil.get("team.demote.not-in-team"));
+                        sender.sendMessage(MessagesUtil.get("team.demote.not-in-team"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -81,21 +81,21 @@ public class TeamDemoteCommand {
                     };
 
                     if (newRole == null) {
-                        sender.sendMessage(ConfigUtil.get("team.demote.invalid-target"));
+                        sender.sendMessage(MessagesUtil.get("team.demote.invalid-target"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (!canDemote(execRole, oldRole)) {
-                        sender.sendMessage(ConfigUtil.get("team.demote.no-permission"));
+                        sender.sendMessage(MessagesUtil.get("team.demote.no-permission"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (!manager.demoteToRole(team.getId(), targetId, newRole)) {
-                        sender.sendMessage(ConfigUtil.get("team.demote.failed"));
+                        sender.sendMessage(MessagesUtil.get("team.demote.failed"));
                         return Command.SINGLE_SUCCESS;
                     }
 
-                    sender.sendMessage(ConfigUtil.get("team.demote.success")
+                    sender.sendMessage(MessagesUtil.get("team.demote.success")
                         .replace("%target%", target.getName())
                         .replace("%oldrole%", oldRole.name())
                         .replace("%newrole%", newRole));
@@ -104,7 +104,7 @@ public class TeamDemoteCommand {
 
 
 
-                    TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, ConfigUtil.get("team.notifications.demoted")
+                    TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, MessagesUtil.get("team.notifications.demoted")
                         .replace("%target%", target.getName())
                         .replace("%executor%", executor.getName())
                         .replace("%oldrole%", oldRole.name())

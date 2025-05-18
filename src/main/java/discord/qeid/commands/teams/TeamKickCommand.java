@@ -7,7 +7,7 @@ import discord.qeid.Teams;
 import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.ColorUtils;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import discord.qeid.listeners.TeamMessengerListener;
 import discord.qeid.utils.DebugUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -77,24 +77,24 @@ public class TeamKickCommand {
         Team team = teamManager.getTeamByPlayer(executorId);
 
         if (team == null) {
-            sender.sendMessage(ConfigUtil.get("team.kick.not-in-team"));
+            sender.sendMessage(MessagesUtil.get("team.kick.not-in-team"));
             return Command.SINGLE_SUCCESS;
         }
 
         OfflinePlayer target = Bukkit.getOfflinePlayer(targetName);
         if (target == null || target.getName() == null) {
-            sender.sendMessage(ConfigUtil.get("team.kick.not-in-team"));
+            sender.sendMessage(MessagesUtil.get("team.kick.not-in-team"));
             return Command.SINGLE_SUCCESS;
         }
 
         UUID targetId = target.getUniqueId();
         if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
-            sender.sendMessage(ConfigUtil.get("team.kick.not-in-team"));
+            sender.sendMessage(MessagesUtil.get("team.kick.not-in-team"));
             return Command.SINGLE_SUCCESS;
         }
 
         if (targetId.equals(executorId)) {
-            sender.sendMessage(ConfigUtil.get("team.kick.self"));
+            sender.sendMessage(MessagesUtil.get("team.kick.self"));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -102,13 +102,13 @@ public class TeamKickCommand {
         TeamRoles targetRole = teamManager.getRole(team, targetId);
 
         if (!canKick(executorRole, targetRole)) {
-            sender.sendMessage(ConfigUtil.get("team.kick.no-permission"));
+            sender.sendMessage(MessagesUtil.get("team.kick.no-permission"));
             return Command.SINGLE_SUCCESS;
         }
 
         boolean kicked = teamManager.kickMember(team.getId(), targetId);
         if (!kicked) {
-            sender.sendMessage(ConfigUtil.get("team.kick.failed"));
+            sender.sendMessage(MessagesUtil.get("team.kick.failed"));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -121,20 +121,20 @@ public class TeamKickCommand {
 
         Player targetOnline = Bukkit.getPlayer(targetId);
         if (targetOnline != null && targetOnline.isOnline()) {
-            targetOnline.sendMessage(ConfigUtil.get("team.kick.you-were-kicked")
+            targetOnline.sendMessage(MessagesUtil.get("team.kick.you-were-kicked")
                 .replace("%reason%", reason)
                 .replace("%executor%", executor.getName()
                 .replace("%team%", team.getName())));
         }
 
-        sender.sendMessage(ConfigUtil.get("team.kick.success")
+        sender.sendMessage(MessagesUtil.get("team.kick.success")
                 .replace("%target%", target.getName())
                 .replace("%reason%", reason)
                 .replace("%team%", team.getName()));
 
 
         Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
-        TeamMessengerListener.broadcastWithRank(updatedTeam, executorId, ConfigUtil.get("team.notifications.player-kicked")
+        TeamMessengerListener.broadcastWithRank(updatedTeam, executorId, MessagesUtil.get("team.notifications.player-kicked")
                 .replace("%target%", target.getName())
                 .replace("%reason%", reason)
                 .replace("%executor%", executor.getName()

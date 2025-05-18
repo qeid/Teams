@@ -7,7 +7,7 @@ import discord.qeid.Teams;
 import discord.qeid.database.TeamManager;
 import discord.qeid.model.Team;
 import discord.qeid.utils.ColorUtils;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import discord.qeid.listeners.TeamMessengerListener;
 import discord.qeid.utils.DebugUtil;
 import discord.qeid.utils.DurationUtil;
@@ -60,7 +60,7 @@ public class TeamJoinCommand {
                     //
                     Team targetTeam = teamManager.getTeamByName(input);
                     if (targetTeam == null) {
-                        player.sendMessage(ConfigUtil.get("team.join.team-null"));
+                        player.sendMessage(MessagesUtil.get("team.join.team-null"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -68,13 +68,13 @@ public class TeamJoinCommand {
 
                     //
                     if (teamManager.getTeamByPlayer(playerId) != null) {
-                        player.sendMessage(ConfigUtil.get("team.join.already-in-team"));
+                        player.sendMessage(MessagesUtil.get("team.join.already-in-team"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (teamManager.isBanned(teamId, playerId)) {
                         var banInfo = teamManager.getBanInfo(teamId, playerId);
-                        player.sendMessage(ConfigUtil.get("team.join.banned")
+                        player.sendMessage(MessagesUtil.get("team.join.banned")
                             .replace("%reason%", banInfo.reason())
                             .replace("%duration%", DurationUtil.formatDurationUntil(banInfo.expiresAt())));
                         return Command.SINGLE_SUCCESS;
@@ -82,19 +82,19 @@ public class TeamJoinCommand {
 
                     //
                     if (!dataManager.hasInvite(playerId, teamId)) {
-                        player.sendMessage(ConfigUtil.get("team.join.no-pending-invite"));
+                        player.sendMessage(MessagesUtil.get("team.join.no-pending-invite"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     Team team = teamManager.getTeamById(teamId);
                     if (team == null) {
-                        player.sendMessage(ConfigUtil.get("team.join.team-null"));
+                        player.sendMessage(MessagesUtil.get("team.join.team-null"));
                         return Command.SINGLE_SUCCESS;
                     }
 
                     boolean added = teamManager.addMemberToTeam(teamId, playerId);
                     if (!added) {
-                        player.sendMessage(ConfigUtil.get("team.join.join-failed"));
+                        player.sendMessage(MessagesUtil.get("team.join.join-failed"));
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -104,9 +104,9 @@ public class TeamJoinCommand {
 
 
                     dataManager.removeInvite(playerId, teamId);
-                    player.sendMessage(ConfigUtil.get("team.join.join-success").replace("%team%", team.getName()));
+                    player.sendMessage(MessagesUtil.get("team.join.join-success").replace("%team%", team.getName()));
                     Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
-                    TeamMessengerListener.broadcast(updatedTeam, ConfigUtil.get("team.notifications.player-joined").replace("%player%", player.getName()));
+                    TeamMessengerListener.broadcast(updatedTeam, MessagesUtil.get("team.notifications.player-joined").replace("%player%", player.getName()));
 
                     team = teamManager.getTeamById(team.getId());
                     DebugUtil.sendTeamDebugInfo(player, team);

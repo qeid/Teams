@@ -3,7 +3,7 @@ package discord.qeid.listeners;
 import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.ColorUtils;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
 public class TeamMessengerListener {
 
     public static void broadcast(Team team, String rawMessage) {
-        String prefix = ConfigUtil.get("team.prefix").replace("%tag%", team.getTag());
+        String prefix = MessagesUtil.get("team.prefix").replace("%tag%", team.getTag());
         String formattedMessage = ColorUtils.format(rawMessage);
 
         for (UUID uuid : getAllOnlineTeamMembers(team)) {
@@ -36,10 +36,10 @@ public class TeamMessengerListener {
     }
 
     public static void broadcastWithRank(Team team, UUID actor, String rawMessage) {
-        String prefix = ConfigUtil.get("team.prefix").replace("%tag%", team.getTag());
+        String prefix = MessagesUtil.get("team.prefix").replace("%tag%", team.getTag());
         TeamRoles role = getRole(team, actor);
 
-        // Pretty rank (capitalize first letter, rest lowercase)
+
         String prettyRank = capitalize(role.name().toLowerCase());
 
         String formattedMessage = ColorUtils.format(
@@ -57,7 +57,7 @@ public class TeamMessengerListener {
     }
 
     public static void broadcastWithTwo(Team team, UUID actor, UUID target, String rawMessage) {
-        String prefix = ConfigUtil.get("team.prefix").replace("%tag%", team.getTag());
+        String prefix = MessagesUtil.get("team.prefix").replace("%tag%", team.getTag());
 
         TeamRoles actorRole = getRole(team, actor);
         String actorPretty = capitalize(actorRole.name().toLowerCase());

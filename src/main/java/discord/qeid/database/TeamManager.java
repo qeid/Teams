@@ -6,7 +6,7 @@ import discord.qeid.model.Team;
 import discord.qeid.model.TeamBanInfo;
 import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.ColorUtils;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -403,7 +403,7 @@ public class TeamManager {
                 .withZone(ZoneId.systemDefault());
         String dateFormatted = formatter.format(Instant.ofEpochSecond(team.getCreatedAt()));
 
-        List<String> format = ConfigUtil.getMessages().getStringList("team.info.format");
+        List<String> format = MessagesUtil.getMessages().getStringList("team.info.message");
         for (String line : format) {
             line = line
                 .replace("%tag%", team.getTag())

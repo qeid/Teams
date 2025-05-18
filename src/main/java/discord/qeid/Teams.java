@@ -4,7 +4,7 @@ import discord.qeid.commands.CommandTree;
 import discord.qeid.database.DatabaseManager;
 import discord.qeid.database.PlayerDataManager;
 import discord.qeid.database.TeamManager;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,7 +26,7 @@ public class Teams extends JavaPlugin {
         instance = this;
 
         saveDefaultConfig();
-        ConfigUtil.loadMessages(this);
+        MessagesUtil.loadMessages(this);
 
         this.databaseManager = new DatabaseManager(this);
         this.teamManager = new TeamManager(this);

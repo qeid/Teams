@@ -9,7 +9,7 @@ import net.kyori.adventure.text.Component;
 import discord.qeid.utils.ColorUtils;
 
 import org.bukkit.command.CommandSender;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 
 import java.util.List;
 
@@ -35,13 +35,13 @@ public class TeamHelpCommand {
     private static int runHelp(CommandContext<CommandSourceStack> ctx, int page) {
         CommandSender sender = ctx.getSource().getSender();
 
-        List<String> lines = ConfigUtil.getMessages().getStringList("team.help.page-" + page);
+        List<String> lines = MessagesUtil.getMessages().getStringList("team.help.page-" + page);
         if (lines.isEmpty()) {
             sender.sendMessage(ColorUtils.format("§cNo help message found for page " + page + "."));
             return 1;
         }
 
-        sender.sendMessage(ConfigUtil.get("team.help.header").replace("%page%", page + ""));
+        sender.sendMessage(MessagesUtil.get("team.help.header").replace("%page%", page + ""));
         for (String line : lines) {
             sender.sendMessage(Component.text(ColorUtils.format(line)));
         }

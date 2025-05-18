@@ -4,7 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
 import discord.qeid.model.Team;
-import discord.qeid.utils.ConfigUtil;
+import discord.qeid.utils.MessagesUtil;
 import discord.qeid.listeners.TeamMessengerListener;
 import discord.qeid.utils.DebugUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -30,27 +30,27 @@ public class TeamLeaveCommand {
                 Team team = teamManager.getTeamByPlayer(playerId);
 
                 if (team == null) {
-                    player.sendMessage(ConfigUtil.get("team.leave.not-in-team"));
+                    player.sendMessage(MessagesUtil.get("team.leave.not-in-team"));
                     return Command.SINGLE_SUCCESS;
                 }
 
                 if (team.getOwner().equals(playerId)) {
-                    player.sendMessage(ConfigUtil.get("team.leave.owner-cannot-leave"));
+                    player.sendMessage(MessagesUtil.get("team.leave.owner-cannot-leave"));
                     return Command.SINGLE_SUCCESS;
                 }
 
                 boolean removed = teamManager.kickMember(team.getId(), playerId);
                 if (!removed) {
-                    player.sendMessage(ConfigUtil.get("team.leave.failed"));
+                    player.sendMessage(MessagesUtil.get("team.leave.failed"));
                     return Command.SINGLE_SUCCESS;
                 }
 
-                player.sendMessage(ConfigUtil.get("team.leave.success")
+                player.sendMessage(MessagesUtil.get("team.leave.success")
                     .replace("%team%", team.getName()));
 
                 Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
                 TeamMessengerListener.broadcastExcluding(updatedTeam, playerId,
-                    ConfigUtil.get("team.notifications.player-left")
+                    MessagesUtil.get("team.notifications.player-left")
                         .replace("%player%", player.getName()));
 
                 team = teamManager.getTeamById(team.getId());
