@@ -54,12 +54,12 @@ public class TeamBanCommand {
                 })
                 .then(Commands.argument("reason / duration", StringArgumentType.greedyString())
                     .executes(ctx -> {
-                        String playerName = StringArgumentType.getString(ctx, "player / duration");
+                        String playerName = StringArgumentType.getString(ctx, "reason / duration");
                         String input = StringArgumentType.getString(ctx, "reason");
                         return execute(ctx.getSource().getSender(), playerName, input);
                     }))
                 .executes(ctx -> {
-                    String playerName = StringArgumentType.getString(ctx, "player / duration");
+                    String playerName = StringArgumentType.getString(ctx, "reason / duration");
                     return execute(ctx.getSource().getSender(), playerName, "");
                 })
             )
