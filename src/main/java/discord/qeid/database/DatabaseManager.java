@@ -54,13 +54,6 @@ public class DatabaseManager {
 
 
     public Connection getConnection() {
-        try {
-            if (connection == null || connection.isClosed()) {
-                connect();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return connection;
     }
 

@@ -27,28 +27,28 @@ public class TeamTransferCommand {
             .then(Commands.argument("member", StringArgumentType.word())
                 .suggests((ctx, builder) -> {
                     CommandSender sender = ctx.getSource().getSender();
-                    //System.out.println("[DEBUG][TRANSFER] Suggestion fired for input: " + builder.getInput());
+                    System.out.println("[DEBUG][TRANSFER] Suggestion fired for input: " + builder.getInput());
 
                     if (!(sender instanceof Player player)) {
-                        //System.out.println("[DEBUG][TRANSFER] Not a player.");
+                        System.out.println("[DEBUG][TRANSFER] Not a player.");
                         return builder.buildFuture();
                     }
 
                     UUID uuid = player.getUniqueId();
                     Team team = Teams.getInstance().getTeamManager().getTeamByPlayer(uuid);
                     if (team == null) {
-                        //System.out.println("[DEBUG][TRANSFER] No team found for player: " + player.getName());
+                        System.out.println("[DEBUG][TRANSFER] No team found for player: " + player.getName());
                         return builder.buildFuture();
                     }
 
-                    //System.out.println("[DEBUG][TRANSFER] Suggesting names...");
+                    System.out.println("[DEBUG][TRANSFER] Suggesting names...");
                     Set<UUID> allMembers = TeamMessengerListener.getAllTeamMembers(team);
                     allMembers.stream()
                         .filter(id -> !id.equals(uuid))
                         .map(Bukkit::getOfflinePlayer)
                         .map(OfflinePlayer::getName)
                         .filter(name -> name != null && name.toLowerCase().startsWith(builder.getRemainingLowerCase()))
-                        //.peek(name -> System.out.println("[DEBUG][TRANSFER] Suggesting: " + name))
+                        .peek(name -> System.out.println("[DEBUG][TRANSFER] Suggesting: " + name))
                         .forEach(builder::suggest);
 
                     return builder.buildFuture();
