@@ -116,14 +116,14 @@ team:
     not-found: "&cPlayer not found."
     not-in-team: "&c%player% is not in a team." # placeholders: %player%
   promote:
-    success: "&aPromoted %target% to &e%role%!" # placeholders: %target% %oldrole% %newrole%
+    success: "&aPromoted %target% to &e%newrole%!" # placeholders: %target% %oldrole% %newrole%
     no-permission: "&cYou don't have permission to promote that player."
     not-in-team: "&cThat player is not in your team."
     invalid-target: "&cThat player cannot be promoted."
     not-found: "&cPlayer not found."
     failed: "&cPromotion failed."
   demote:
-    success: "&cDemoted %target% to &7%role%." # placeholders: %target% %oldrole% %newrole%
+    success: "&cDemoted %target% to &7%newrole%." # placeholders: %target% %oldrole% %newrole%
     no-permission: "&cYou don't have permission to demote that player."
     not-in-team: "&cThat player is not in your team."
     invalid-target: "&cThat player cannot be demoted."

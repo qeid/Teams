@@ -188,12 +188,16 @@ public class TeamManager {
 
             UUID owner = UUID.fromString(rs.getString("owner_uuid"));
             long createdAt = rs.getLong("created_at");
+            Map<TeamRoles, Set<UUID>> members = loadTeamMembers(id); // <-- load all roles
+
             return new Team(
                     rs.getString("id"),
                     rs.getString("name"),
                     rs.getString("tag"),
                     owner,
-                    Set.of(), Set.of(), Set.of(),
+                    members.get(TeamRoles.ADMIN),
+                    members.get(TeamRoles.MOD),
+                    members.get(TeamRoles.MEMBER),
                     createdAt
             );
         } catch (SQLException e) {
@@ -201,6 +205,7 @@ public class TeamManager {
             return null;
         }
     }
+
    public Team getTeamByName(String name) {
         try (PreparedStatement stmt = db.getConnection().prepareStatement(
                 "SELECT id, name, tag, owner_uuid, created_at FROM teams WHERE name = ?")) {

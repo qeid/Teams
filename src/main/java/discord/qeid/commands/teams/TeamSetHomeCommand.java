@@ -44,7 +44,7 @@ public class TeamSetHomeCommand {
 
                     // Broadcast to team members (excluding the player if you want)
                     String broadcastMsg = ConfigUtil.get("team.notifications.home-set")
-                        .replace("%player%", player.getName())
+                        .replace("%executor%", player.getName())
                         .replace("%x%", String.format("%.2f", loc.getX()))
                         .replace("%y%", String.format("%.2f", loc.getY()))
                         .replace("%z%", String.format("%.2f", loc.getZ()));

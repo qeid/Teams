@@ -37,7 +37,7 @@ public class TeamDelHomeCommand {
                 if (success) {
                     player.sendMessage(ConfigUtil.get("team.delhome.success"));
 
-                    String broadcastMsg = ConfigUtil.get("team.notifications-home-deleted")
+                    String broadcastMsg = ConfigUtil.get("team.notifications.home-deleted")
                         .replace("%player%", player.getName());
                     TeamMessengerListener.broadcast(team, broadcastMsg);
                 } else {
