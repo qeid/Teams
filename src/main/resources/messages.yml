@@ -146,6 +146,14 @@ team:
     not-set: "&cYour team does not have a home set."
     no-permission: "&cOnly team admins or owner can delete the home."
 
+admin:
+  reload:
+    no-permission: "&cYou do not have permission to use this command."
+    usage: "&cUsage: /team reload [database|messages|config]"
+    success: "&aReloaded %type% in %time% ms."
+    failed: "&cFailed to reload %type%."
+
+
 
 
 

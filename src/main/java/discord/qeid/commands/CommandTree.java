@@ -2,6 +2,7 @@ package discord.qeid.commands;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
+import discord.qeid.commands.admin.TeamReloadCommand;
 import discord.qeid.commands.teams.*;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -33,6 +34,7 @@ public class CommandTree {
             .then(TeamSetHomeCommand.buildSubcommand())
             .then(TeamHomeCommand.buildSubcommand())
             .then(TeamDelHomeCommand.buildSubcommand())
+            .then(TeamReloadCommand.buildSubcommand())
 
         .build();
 

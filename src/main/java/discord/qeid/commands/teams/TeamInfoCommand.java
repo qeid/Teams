@@ -42,7 +42,7 @@ public class TeamInfoCommand {
                 return Command.SINGLE_SUCCESS;
             })
 
-            .then(Commands.argument("team", StringArgumentType.word())
+            .then(Commands.argument("team", StringArgumentType.greedyString())
                 .suggests((ctx, builder) -> {
                     //System.out.println("[DEBUG][INFO] Tab suggestions requested: ");
 

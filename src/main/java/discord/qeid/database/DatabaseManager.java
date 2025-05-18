@@ -16,7 +16,7 @@ public class DatabaseManager {
         initializeSchema();
     }
 
-    private void connect() {
+    public void connect() {
         try {
             String url = "jdbc:sqlite:" + plugin.getDataFolder().getAbsolutePath() + "/teams.db";
             connection = DriverManager.getConnection(url);
@@ -27,7 +27,7 @@ public class DatabaseManager {
         }
     }
 
-    private void initializeSchema() {
+    public void initializeSchema() {
         try (InputStream stream = plugin.getResource("schema.sql")) {
             if (stream == null) {
                 plugin.getLogger().warning("schema.sql not found!");

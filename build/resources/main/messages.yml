@@ -3,6 +3,7 @@
 
 team:
   prefix: "team > "
+  null: "&8(None)"
   help:
     header: "&8----- &bTeam Help &7(Page %page%) &8-----" # placeholders: %page%
     page-1:
@@ -24,17 +25,17 @@ team:
       - "&7/team who <player> &f- Show player's team info"
       - "&7/team auditlog &f- Show audit logs"
   notifications: # these all have the prefix before the message.
-    invite-sent: "&f%sender% invited %target% to join the team. they have 5 minutes" # placeholders: %sender% %target%
+    invite-sent: "&f%sender% invited %target% to join the team. they have 5 minutes" # placeholders: %sender% %target% %rank% %rank-caps%
     player-joined: "&f%player% has joined the team!" # placeholders: %player%
-    player-banned: "&f%target% has been banned by %executor%. Reason: %reason% Duration: %duration%" # placeholders: %reason% %target% %player% %duration%
-    player-kicked: "&f%target% has been kicked by %executor%. Reason: %reason%" # placeholders: %reason% %target% %executor%
+    player-banned: "&f%target% has been banned by %executor%. Reason: %reason% Duration: %duration%" # placeholders: %reason% %target% %player% %duration% %rank% %rank-caps%
+    player-kicked: "&f%target% has been kicked by %executor%. Reason: %reason%" # placeholders: %reason% %target% %executor% %rank% %rank-caps%
     player-left: "&f%player% has left the team." # placeholders: %player%
     owner-disbanded: "&c%player% has disbanded the team: %team%" # placeholders: %player% %team%
-    transferred: "%old-owner% transferred team ownership to %new-owner%." # placeholders: %new-owner% %old-owner%
-    promoted: "%executor% promoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor%
-    demoted: "%executor% demoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor%
-    home-set: "&e%executor% &7updated the team home to &fX: %x% Y: %y% Z: %z%" # placeholders: %x% %y% %z% %executor%
-    home-deleted: "&e%executor% &7deleted the team home." # placeholders: %executor%
+    transferred: "%old-owner% transferred team ownership to %new-owner%." # placeholders: %new-owner% %old-owner% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    promoted: "%executor% promoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    demoted: "%executor% demoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    home-set: "&e%executor% &7updated the team home to &fX: %x% Y: %y% Z: %z%" # placeholders: %x% %y% %z% %executor% %rank% %rank-caps%
+    home-deleted: "&e%executor% &7deleted the team home." # placeholders: %executor% %rank% %rank-caps%
   create:
     success: "&aSuccessfully created team &f%name% &awith tag &f[%tag%]" # placeholders: %name% %tag%
     exists: "&cA team with that name already exists."
@@ -93,9 +94,12 @@ team:
   info:
     not-in-team: "&cYou're not in a team."
     team-not-found: "&cThat team doesn't exist."
+
+    # indicators will not display if false in config
     online-indicator: "&a●"
     offline-indicator: "&c●"
-    format: # Placeholders : %name% %tag% %owner% %admins% %mods% %members% %created%
+
+    message: # Placeholders : %name% %tag% %owner% %admins% %mods% %members% %created%
       - "&7&m-----------------------------"
       - "&eTeam: &f%name% &7[%tag%]"
       - "&eOwner: &f%owner%"
@@ -139,6 +143,7 @@ team:
   delhome:
     success: "&aTeam home deleted."
     failed: "&cFailed to delete team home."
+    not-set: "&cYour team does not have a home set."
     no-permission: "&cOnly team admins or owner can delete the home."
 
 
