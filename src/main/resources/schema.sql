@@ -1,39 +1,33 @@
--- Teams Table
 CREATE TABLE IF NOT EXISTS teams (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL UNIQUE,
     tag TEXT NOT NULL,
     owner_uuid TEXT NOT NULL,
-
     home_world TEXT,
     home_x REAL,
     home_y REAL,
     home_z REAL,
-
     created_at INTEGER NOT NULL
 );
 
--- Team Members Table
 CREATE TABLE IF NOT EXISTS team_members (
-    id TEXT PRIMARY KEY,
-    team_id INTEGER NOT NULL,
+    team_id TEXT NOT NULL,
     player_uuid TEXT NOT NULL,
-    role TEXT NOT NULL, -- MEMBER, MOD, ADMIN
-    FOREIGN KEY(team_id) REFERENCES teams(id)
+    role TEXT NOT NULL,
+    PRIMARY KEY (team_id, player_uuid),
+    FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
 );
 
--- Audit Log Table
-CREATE TABLE IF NOT EXISTS audit_log (
-    id TEXT PRIMARY KEY,
-    team_id INTEGER NOT NULL,
+CREATE TABLE IF NOT EXISTS team_audit_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    team_id TEXT NOT NULL,
     actor_uuid TEXT NOT NULL,
     action TEXT NOT NULL,
     timestamp INTEGER NOT NULL,
     info TEXT,
-    FOREIGN KEY(team_id) REFERENCES teams(id)
+    FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
 );
 
--- Team Ban List
 CREATE TABLE IF NOT EXISTS team_bans (
     team_id TEXT NOT NULL,
     player_uuid TEXT NOT NULL,
@@ -41,5 +35,14 @@ CREATE TABLE IF NOT EXISTS team_bans (
     reason TEXT,
     expires_at INTEGER,
     executed_at INTEGER NOT NULL,
-    PRIMARY KEY (team_id, player_uuid)
+    PRIMARY KEY (team_id, player_uuid),
+    FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS team_invites (
+    player_uuid TEXT NOT NULL,
+    team_id TEXT NOT NULL,
+    invited_at INTEGER NOT NULL,
+    PRIMARY KEY (player_uuid, team_id),
+    FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
 );

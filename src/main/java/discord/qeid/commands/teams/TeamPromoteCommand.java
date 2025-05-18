@@ -26,7 +26,7 @@ public class TeamPromoteCommand {
         return Commands.literal("promote")
             .then(Commands.argument("player", StringArgumentType.word())
                 .suggests((ctx, builder) -> {
-                    System.out.println("[DEBUG][PROMOTE] Suggestions loaded:");
+                    //System.out.println("[DEBUG][PROMOTE] Suggestions loaded:");
                     CommandSender sender = ctx.getSource().getSender();
                     if (!(sender instanceof Player p)) return builder.buildFuture();
 
