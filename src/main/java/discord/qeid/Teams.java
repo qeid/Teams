@@ -30,7 +30,7 @@ public class Teams extends JavaPlugin {
 
         this.databaseManager = new DatabaseManager(this);
         this.teamManager = new TeamManager(this);
-        this.playerDataManager = new PlayerDataManager();
+        this.playerDataManager = new PlayerDataManager(this);
 
 
 
