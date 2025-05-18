@@ -8,6 +8,9 @@ import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.ColorUtils;
 import discord.qeid.utils.ConfigUtil;
 import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.sql.*;
 import java.time.Instant;
@@ -459,6 +462,53 @@ public class TeamManager {
             stmt.setString(2, playerId.toString());
             stmt.executeUpdate();
             return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean setHome(String teamId, Location loc) {
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+                "UPDATE teams SET home_world = ?, home_x = ?, home_y = ?, home_z = ? WHERE id = ?")) {
+            stmt.setString(1, loc.getWorld().getName());
+            stmt.setDouble(2, loc.getX());
+            stmt.setDouble(3, loc.getY());
+            stmt.setDouble(4, loc.getZ());
+            stmt.setString(5, teamId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Location getHome(String teamId) {
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+                "SELECT home_world, home_x, home_y, home_z FROM teams WHERE id = ?")) {
+            stmt.setString(1, teamId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String worldName = rs.getString("home_world");
+                if (worldName == null) return null;
+                World world = Bukkit.getWorld(worldName);
+                if (world == null) return null;
+                double x = rs.getDouble("home_x");
+                double y = rs.getDouble("home_y");
+                double z = rs.getDouble("home_z");
+                return new Location(world, x, y, z);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean delHome(String teamId) {
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+                "UPDATE teams SET home_world = NULL, home_x = NULL, home_y = NULL, home_z = NULL WHERE id = ?")) {
+            stmt.setString(1, teamId);
+            return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

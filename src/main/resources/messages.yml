@@ -33,6 +33,8 @@ team:
     transferred: "%old-owner% transferred team ownership to %new-owner%." # placeholders: %new-owner% %old-owner%
     promoted: "%executor% promoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor%
     demoted: "%executor% demoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor%
+    home-set: "&e%executor% &7updated the team home to &fX: %x% Y: %y% Z: %z%" # placeholders: %x% %y% %z% %executor%
+    home-deleted: "&e%executor% &7deleted the team home." # placeholders: %executor%
   create:
     success: "&aSuccessfully created team &f%name% &awith tag &f[%tag%]" # placeholders: %name% %tag%
     exists: "&cA team with that name already exists."
@@ -127,6 +129,18 @@ team:
     invalid-target: "&cThat player cannot be demoted."
     not-found: "&cPlayer not found."
     failed: "&cDemotion failed."
+  sethome:
+    success: "&aTeam home set at &fX: %x% Y: %y% Z: %z%&a!" # placeholders: %x% %y% %z%
+    failed: "&cFailed to set team home."
+    no-permission: "&cOnly team admins or owner can set the home."
+  home:
+    not-set: "&cYour team does not have a home set."
+    success: "&aTeleported to your team home!"
+  delhome:
+    success: "&aTeam home deleted."
+    failed: "&cFailed to delete team home."
+    no-permission: "&cOnly team admins or owner can delete the home."
+
 
 
 

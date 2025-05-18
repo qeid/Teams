@@ -30,6 +30,10 @@ public class CommandTree {
             .then(TeamWhoCommand.buildSubcommand())
             .then(TeamPromoteCommand.buildSubcommand())
             .then(TeamDemoteCommand.buildSubcommand())
+            .then(TeamSetHomeCommand.buildSubcommand())
+            .then(TeamHomeCommand.buildSubcommand())
+            .then(TeamDelHomeCommand.buildSubcommand())
+
         .build();
 
     }
