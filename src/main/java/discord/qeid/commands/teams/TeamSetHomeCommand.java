@@ -48,7 +48,7 @@ public class TeamSetHomeCommand {
                         .replace("%x%", String.format("%.2f", loc.getX()))
                         .replace("%y%", String.format("%.2f", loc.getY()))
                         .replace("%z%", String.format("%.2f", loc.getZ()));
-                    TeamMessengerListener.broadcast(team, broadcastMsg);
+                    TeamMessengerListener.broadcastWithRank(team, player.getUniqueId(), broadcastMsg);
                 } else {
                     player.sendMessage(ConfigUtil.get("team.sethome.failed"));
                 }

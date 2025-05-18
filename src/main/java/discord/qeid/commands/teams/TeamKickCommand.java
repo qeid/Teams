@@ -134,7 +134,7 @@ public class TeamKickCommand {
 
 
         Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
-        TeamMessengerListener.broadcast(updatedTeam, ConfigUtil.get("team.notifications.player-kicked")
+        TeamMessengerListener.broadcastWithRank(updatedTeam, executorId, ConfigUtil.get("team.notifications.player-kicked")
                 .replace("%target%", target.getName())
                 .replace("%reason%", reason)
                 .replace("%executor%", executor.getName()

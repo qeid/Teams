@@ -75,8 +75,8 @@ public class TeamDemoteCommand {
 
 
                     String newRole = switch (oldRole) {
-                        case ADMIN -> "Mod";
-                        case MOD -> "Member";
+                        case ADMIN -> TeamRoles.MOD.name();
+                        case MOD -> TeamRoles.MEMBER.name();
                         default -> null;
                     };
 
@@ -104,7 +104,7 @@ public class TeamDemoteCommand {
 
 
 
-                    TeamMessengerListener.broadcast(updatedTeam, ConfigUtil.get("team.notifications.demoted")
+                    TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, ConfigUtil.get("team.notifications.demoted")
                         .replace("%target%", target.getName())
                         .replace("%executor%", executor.getName())
                         .replace("%oldrole%", oldRole.name())

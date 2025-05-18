@@ -206,6 +206,7 @@ public class TeamManager {
         }
     }
 
+
    public Team getTeamByName(String name) {
         try (PreparedStatement stmt = db.getConnection().prepareStatement(
                 "SELECT id, name, tag, owner_uuid, created_at FROM teams WHERE name = ?")) {
@@ -382,8 +383,7 @@ public class TeamManager {
             try {
                 TeamRoles role = TeamRoles.valueOf(rs.getString("role"));
                 members.get(role).add(uuid);
-            } catch (IllegalArgumentException ignored) {
-            }
+            } catch (IllegalArgumentException ignored) {}
         }
 
         stmt.close();

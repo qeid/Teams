@@ -54,12 +54,12 @@ public class TeamBanCommand {
                 })
                 .then(Commands.argument("reason / duration", StringArgumentType.greedyString())
                     .executes(ctx -> {
-                        String playerName = StringArgumentType.getString(ctx, "reason / duration");
-                        String input = StringArgumentType.getString(ctx, "reason reason / duration");
+                        String playerName = StringArgumentType.getString(ctx, "player");
+                        String input = StringArgumentType.getString(ctx, "reason / duration");
                         return execute(ctx.getSource().getSender(), playerName, input);
                     }))
                 .executes(ctx -> {
-                    String playerName = StringArgumentType.getString(ctx, "reason / duration");
+                    String playerName = StringArgumentType.getString(ctx, "player");
                     return execute(ctx.getSource().getSender(), playerName, "");
                 })
             )
@@ -132,7 +132,7 @@ public class TeamBanCommand {
             .replace("%reason%", reason)
             .replace("%duration%", formatFullDuration(durationSeconds)));
 
-        TeamMessengerListener.broadcast(team, ConfigUtil.get("team.notifications.player-banned")
+        TeamMessengerListener.broadcastWithRank(team, executorId, ConfigUtil.get("team.notifications.player-banned")
             .replace("%target%", target.getName())
             .replace("%reason%", reason)
             .replace("%executor%", executor.getName())

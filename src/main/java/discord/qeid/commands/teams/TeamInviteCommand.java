@@ -94,7 +94,7 @@ public class TeamInviteCommand {
                         .replace("%team%", team.getName())
                         .replace("%sender%", inviter.getName()));
 
-                    TeamMessengerListener.broadcast(team, ConfigUtil.get("team.notifications.invite-sent")
+                    TeamMessengerListener.broadcastWithRank(team, inviterUUID, ConfigUtil.get("team.notifications.invite-sent")
                         .replace("%sender%", inviter.getName())
                         .replace("%target%", target.getName()));
 

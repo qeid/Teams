@@ -74,8 +74,8 @@ public class TeamPromoteCommand {
 
                     // chain
                     String newRole = switch (oldRole) {
-                        case MEMBER -> "Mod";
-                        case MOD -> "Admin";
+                        case MEMBER -> TeamRoles.MOD.name();
+                        case MOD -> TeamRoles.ADMIN.name();
                         default -> null;
                     };
 
@@ -105,19 +105,17 @@ public class TeamPromoteCommand {
 
                     Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
 
-                    TeamMessengerListener.broadcast(updatedTeam, ConfigUtil.get("team.notifications.promoted")
+                    TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, ConfigUtil.get("team.notifications.promoted")
                         .replace("%target%", target.getName())
                         .replace("%executor%", executor.getName())
                         .replace("%oldrole%", oldRole.name())
                         .replace("%newrole%", newRole));
 
 
-                    System.out.println("Team Members after update:");
-                    System.out.println("Owner: " + team.getOwner());
-                    System.out.println("Admins: " + team.getAdmins());
-                    System.out.println("Mods: " + team.getMods());
-                    System.out.println("Members: " + team.getMembers());
+
                     return Command.SINGLE_SUCCESS;
+
+
                 })).build();
     }
 

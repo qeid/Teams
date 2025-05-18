@@ -1,12 +1,16 @@
 package discord.qeid.listeners;
 
 import discord.qeid.model.Team;
+import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.ColorUtils;
 import discord.qeid.utils.ConfigUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
+
+import static discord.qeid.database.TeamManager.getRole;
+import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class TeamMessengerListener {
 
@@ -29,6 +33,52 @@ public class TeamMessengerListener {
             .map(Bukkit::getPlayer)
             .filter(p -> p != null && p.isOnline())
             .forEach(p -> p.sendMessage(component));
+    }
+
+    public static void broadcastWithRank(Team team, UUID actor, String rawMessage) {
+        String prefix = ConfigUtil.get("team.prefix").replace("%tag%", team.getTag());
+        TeamRoles role = getRole(team, actor);
+
+        // Pretty rank (capitalize first letter, rest lowercase)
+        String prettyRank = capitalize(role.name().toLowerCase());
+
+        String formattedMessage = ColorUtils.format(
+            rawMessage
+                .replace("%rank%", prettyRank)
+                .replace("%rank-caps%", role.name())
+        );
+
+        for (UUID uuid : getAllOnlineTeamMembers(team)) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null && player.isOnline()) {
+                player.sendMessage(prefix + formattedMessage);
+            }
+        }
+    }
+
+    public static void broadcastWithTwo(Team team, UUID actor, UUID target, String rawMessage) {
+        String prefix = ConfigUtil.get("team.prefix").replace("%tag%", team.getTag());
+
+        TeamRoles actorRole = getRole(team, actor);
+        String actorPretty = capitalize(actorRole.name().toLowerCase());
+
+        TeamRoles targetRole = getRole(team, target);
+        String targetPretty = capitalize(targetRole.name().toLowerCase());
+
+        String formattedMessage = ColorUtils.format(
+            rawMessage
+                .replace("%rank%", actorPretty)
+                .replace("%rank-caps%", actorRole.name())
+                .replace("%target-rank%", targetPretty)
+                .replace("%target-rank-caps%", targetRole.name())
+        );
+
+        for (UUID uuid : getAllOnlineTeamMembers(team)) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null && player.isOnline()) {
+                player.sendMessage(prefix + formattedMessage);
+            }
+        }
     }
 
 

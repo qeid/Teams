@@ -1,17 +1,17 @@
 package discord.qeid.commands.teams;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
-import discord.qeid.database.TeamManager;
 import discord.qeid.listeners.TeamMessengerListener;
 import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.ConfigUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.mojang.brigadier.Command;
 
 public class TeamDelHomeCommand {
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
@@ -28,18 +28,23 @@ public class TeamDelHomeCommand {
                     player.sendMessage(ConfigUtil.get("team.info.not-in-team"));
                     return Command.SINGLE_SUCCESS;
                 }
-                TeamRoles role = TeamManager.getRole(team, player.getUniqueId());
+                TeamRoles role = teamManager.getRole(team, player.getUniqueId());
                 if (role != TeamRoles.ADMIN && role != TeamRoles.OWNER) {
                     player.sendMessage(ConfigUtil.get("team.delhome.no-permission"));
+                    return Command.SINGLE_SUCCESS;
+                }
+                // Check if home exists
+                Location home = teamManager.getHome(team.getId());
+                if (home == null) {
+                    player.sendMessage(ConfigUtil.get("team.delhome.not-set"));
                     return Command.SINGLE_SUCCESS;
                 }
                 boolean success = teamManager.delHome(team.getId());
                 if (success) {
                     player.sendMessage(ConfigUtil.get("team.delhome.success"));
-
-                    String broadcastMsg = ConfigUtil.get("team.notifications.home-deleted")
-                        .replace("%player%", player.getName());
-                    TeamMessengerListener.broadcast(team, broadcastMsg);
+                    String broadcastMsg = ConfigUtil.get("team.delhome.broadcast")
+                        .replace("%executor%", player.getName());
+                    TeamMessengerListener.broadcastWithRank(team, player.getUniqueId(), broadcastMsg);
                 } else {
                     player.sendMessage(ConfigUtil.get("team.delhome.failed"));
                 }

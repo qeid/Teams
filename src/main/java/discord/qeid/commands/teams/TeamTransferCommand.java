@@ -124,7 +124,7 @@ public class TeamTransferCommand {
                                 .replace("%target%", target.getName()));
 
                             Team updatedTeam = teamManager.getTeamById(team.getId());
-                            TeamMessengerListener.broadcast(updatedTeam,
+                            TeamMessengerListener.broadcastWithTwo(updatedTeam, executorId, targetId,
                                 ConfigUtil.get("team.notifications.transferred")
                                     .replace("%old-owner%", executor.getName())
                                     .replace("%new-owner%", target.getName()));

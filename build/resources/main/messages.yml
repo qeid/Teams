@@ -33,6 +33,8 @@ team:
     transferred: "%old-owner% transferred team ownership to %new-owner%." # placeholders: %new-owner% %old-owner%
     promoted: "%executor% promoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor%
     demoted: "%executor% demoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor%
+    home-set: "&e%executor% &7updated the team home to &fX: %x% Y: %y% Z: %z%" # placeholders: %x% %y% %z% %executor%
+    home-deleted: "&e%executor% &7deleted the team home." # placeholders: %executor%
   create:
     success: "&aSuccessfully created team &f%name% &awith tag &f[%tag%]" # placeholders: %name% %tag%
     exists: "&cA team with that name already exists."
@@ -53,7 +55,7 @@ team:
     banned: "&cYou cannot invite that player. They are currently banned from the Team."
   join:
     no-pending-invite: "&cYou have no pending invite to that team."
-    team-null: "&cThat team no longer exists."
+    team-null: "&cThat team does not exist."
     join-failed: "&cSorry, but we're unable to add you to this team. Please try again later."
     join-success: "You have joined the team '%team%'" # placeholders: %team%
     already-in-team: "&cYou are already in a team."
@@ -114,19 +116,31 @@ team:
     not-found: "&cPlayer not found."
     not-in-team: "&c%player% is not in a team." # placeholders: %player%
   promote:
-    success: "&aPromoted %target% to &e%role%!" # placeholders: %target% %oldrole% %newrole%
+    success: "&aPromoted %target% to &e%newrole%!" # placeholders: %target% %oldrole% %newrole%
     no-permission: "&cYou don't have permission to promote that player."
     not-in-team: "&cThat player is not in your team."
     invalid-target: "&cThat player cannot be promoted."
     not-found: "&cPlayer not found."
     failed: "&cPromotion failed."
   demote:
-    success: "&cDemoted %target% to &7%role%." # placeholders: %target% %oldrole% %newrole%
+    success: "&cDemoted %target% to &7%newrole%." # placeholders: %target% %oldrole% %newrole%
     no-permission: "&cYou don't have permission to demote that player."
     not-in-team: "&cThat player is not in your team."
     invalid-target: "&cThat player cannot be demoted."
     not-found: "&cPlayer not found."
     failed: "&cDemotion failed."
+  sethome:
+    success: "&aTeam home set at &fX: %x% Y: %y% Z: %z%&a!" # placeholders: %x% %y% %z%
+    failed: "&cFailed to set team home."
+    no-permission: "&cOnly team admins or owner can set the home."
+  home:
+    not-set: "&cYour team does not have a home set."
+    success: "&aTeleported to your team home!"
+  delhome:
+    success: "&aTeam home deleted."
+    failed: "&cFailed to delete team home."
+    no-permission: "&cOnly team admins or owner can delete the home."
+
 
 
 
