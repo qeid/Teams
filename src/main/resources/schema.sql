@@ -18,15 +18,7 @@ CREATE TABLE IF NOT EXISTS team_members (
     FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS team_audit_log (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    team_id TEXT NOT NULL,
-    actor_uuid TEXT NOT NULL,
-    action TEXT NOT NULL,
-    timestamp INTEGER NOT NULL,
-    info TEXT,
-    FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
-);
+
 
 CREATE TABLE IF NOT EXISTS team_bans (
     team_id TEXT NOT NULL,
@@ -44,5 +36,15 @@ CREATE TABLE IF NOT EXISTS team_invites (
     team_id TEXT NOT NULL,
     invited_at INTEGER NOT NULL,
     PRIMARY KEY (player_uuid, team_id),
+    FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS team_audit_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    team_id TEXT NOT NULL,
+    executor_uuid TEXT NOT NULL,
+    action TEXT NOT NULL,
+    info TEXT,
+    timestamp INTEGER NOT NULL,
     FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
 );

@@ -20,7 +20,7 @@ public class MessagesUtil {
     }
 
     public static String get(String path) {
-        return ColorUtils.format(messages.getString(path, "&cMessage not found: " + path));
+        return ColorUtils.formatLegacy(messages.getString(path, "&cMessage not found: " + path));
     }
     public static FileConfiguration getMessages() {
         return messages;
