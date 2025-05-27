@@ -18,9 +18,12 @@ team:
 
     # Regex for allowed team tags (letters and numbers only, no spaces)
     tag-regex: "^[A-Za-z0-9]+$"
+
+    # Tag case: "upper" for ALL CAPS, "lower" for all lowercase, "proper" for First letter uppercase
+    tag-case: "upper"
   info:
     # Show online/offline indicator in /team info & who (true = show, false = hide)
     show-online-indicator: true
   admin:
-    # Permission required to use /team reload
-    reload-permission: "teams.admin"
+    # Permission required to use team admin commands
+    permission: "teams.admin"
