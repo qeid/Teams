@@ -56,6 +56,14 @@ public class TeamLeaveCommand {
                 team = teamManager.getTeamById(team.getId());
                 DebugUtil.sendTeamDebugInfo(player, team);
 
+                teamManager.logAudit(
+                team.getId(),
+                player.getUniqueId(),
+                "Leave",
+                player.getName() + " left the team."
+            );
+
+
                 return Command.SINGLE_SUCCESS;
 
 

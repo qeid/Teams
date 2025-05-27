@@ -15,7 +15,7 @@ public class TeamReloadCommand {
         return Commands.literal("reload")
             .executes(ctx -> {
                 CommandSender sender = ctx.getSource().getSender();
-                String perm = Teams.getInstance().getConfig().getString("admin.reload-permission", "teams.admin");
+                String perm = Teams.getInstance().getConfig().getString("admin.permission", "teams.admin");
                 if (!sender.hasPermission(perm)) {
                     sender.sendMessage(MessagesUtil.get("admin.reload.no-permission"));
                     return Command.SINGLE_SUCCESS;

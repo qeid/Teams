@@ -98,6 +98,13 @@ public class TeamInviteCommand {
                         .replace("%sender%", inviter.getName())
                         .replace("%target%", target.getName()));
 
+                    teamManager.logAudit(
+                        team.getId(),
+                        inviterUUID, // the player who sent the invite
+                        "Invite",
+                        inviter.getName() + " invited " + target.getName() + " to the team."
+                    );
+
                     return Command.SINGLE_SUCCESS;
                 })
             )

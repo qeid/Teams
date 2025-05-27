@@ -10,13 +10,14 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 import static discord.qeid.database.TeamManager.getRole;
+import static discord.qeid.utils.ColorUtils.coloredRank;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class TeamMessengerListener {
 
     public static void broadcast(Team team, String rawMessage) {
         String prefix = MessagesUtil.get("team.prefix").replace("%tag%", team.getTag());
-        String formattedMessage = ColorUtils.format(rawMessage);
+        String formattedMessage = ColorUtils.formatLegacy(rawMessage);
 
         for (UUID uuid : getAllOnlineTeamMembers(team)) {
             Player player = Bukkit.getPlayer(uuid);
@@ -27,7 +28,7 @@ public class TeamMessengerListener {
     }
 
     public static void broadcastExcluding(Team team, UUID excludePlayer, String message) {
-        String component = ColorUtils.format(message);
+        String component = ColorUtils.formatLegacy(message);
         getAllTeamMembers(team).stream()
             .filter(uuid -> !uuid.equals(excludePlayer))
             .map(Bukkit::getPlayer)
@@ -39,13 +40,13 @@ public class TeamMessengerListener {
         String prefix = MessagesUtil.get("team.prefix").replace("%tag%", team.getTag());
         TeamRoles role = getRole(team, actor);
 
+        String coloredPretty = coloredRank(role, true);   // e.g. &cAdmin
+        String coloredCaps   = coloredRank(role, false);  // e.g. &cADMIN
 
-        String prettyRank = capitalize(role.name().toLowerCase());
-
-        String formattedMessage = ColorUtils.format(
+        String formattedMessage = ColorUtils.formatLegacy(
             rawMessage
-                .replace("%rank%", prettyRank)
-                .replace("%rank-caps%", role.name())
+                .replace("%rank%", coloredPretty)
+                .replace("%rank-caps%", coloredCaps)
         );
 
         for (UUID uuid : getAllOnlineTeamMembers(team)) {
@@ -57,29 +58,32 @@ public class TeamMessengerListener {
     }
 
     public static void broadcastWithTwo(Team team, UUID actor, UUID target, String rawMessage) {
-        String prefix = MessagesUtil.get("team.prefix").replace("%tag%", team.getTag());
+            String prefix = MessagesUtil.get("team.prefix").replace("%tag%", team.getTag());
 
-        TeamRoles actorRole = getRole(team, actor);
-        String actorPretty = capitalize(actorRole.name().toLowerCase());
+            TeamRoles actorRole = getRole(team, actor);
+            TeamRoles targetRole = getRole(team, target);
 
-        TeamRoles targetRole = getRole(team, target);
-        String targetPretty = capitalize(targetRole.name().toLowerCase());
+            String actorPretty = coloredRank(actorRole, true);
+            String actorCaps   = coloredRank(actorRole, false);
+            String targetPretty = coloredRank(targetRole, true);
+            String targetCaps   = coloredRank(targetRole, false);
 
-        String formattedMessage = ColorUtils.format(
-            rawMessage
-                .replace("%rank%", actorPretty)
-                .replace("%rank-caps%", actorRole.name())
-                .replace("%target-rank%", targetPretty)
-                .replace("%target-rank-caps%", targetRole.name())
-        );
+            String formattedMessage = ColorUtils.formatLegacy(
+                rawMessage
+                    .replace("%rank%", actorPretty)
+                    .replace("%rank-caps%", actorCaps)
+                    .replace("%target-rank%", targetPretty)
+                    .replace("%target-rank-caps%", targetCaps)
+            );
 
-        for (UUID uuid : getAllOnlineTeamMembers(team)) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (player != null && player.isOnline()) {
-                player.sendMessage(prefix + formattedMessage);
+            for (UUID uuid : getAllOnlineTeamMembers(team)) {
+                Player player = Bukkit.getPlayer(uuid);
+                if (player != null && player.isOnline()) {
+                    player.sendMessage(prefix + formattedMessage);
+                }
             }
         }
-    }
+
 
 
     private static Iterable<UUID> getAllOnlineTeamAdmins(Team team) {

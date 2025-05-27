@@ -2,6 +2,7 @@ package discord.qeid.database;
 
 import discord.qeid.Teams;
 import discord.qeid.commands.teams.TeamInfoCommand;
+import discord.qeid.model.AuditLogEntry;
 import discord.qeid.model.Team;
 import discord.qeid.model.TeamBanInfo;
 import discord.qeid.model.TeamRoles;
@@ -520,7 +521,71 @@ public class TeamManager {
         }
     }
 
+    public List<AuditLogEntry> getAuditLog(String teamId, int page, int pageSize) {
+        List<AuditLogEntry> entries = new ArrayList<>();
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+            "SELECT * FROM team_audit_log WHERE team_id = ? ORDER BY timestamp DESC LIMIT ? OFFSET ?"
+        )) {
+            stmt.setString(1, teamId);
+            stmt.setInt(2, pageSize);
+            stmt.setInt(3, (page - 1) * pageSize);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                entries.add(new AuditLogEntry(
+                    rs.getInt("id"),
+                    rs.getString("team_id"),
+                    UUID.fromString(rs.getString("executor_uuid")),
+                    rs.getString("action"),
+                    rs.getString("info"),
+                    rs.getLong("timestamp")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return entries;
+    }
 
+    public int getAuditLogCount(String teamId) {
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+            "SELECT COUNT(*) FROM team_audit_log WHERE team_id = ?"
+        )) {
+            stmt.setString(1, teamId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
+    public void logAudit(String teamId, UUID executor, String action, String info) {
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+            "INSERT INTO team_audit_log (team_id, executor_uuid, action, info, timestamp) VALUES (?, ?, ?, ?, ?)"
+        )) {
+            stmt.setString(1, teamId);
+            stmt.setString(2, executor.toString());
+            stmt.setString(3, action);
+            stmt.setString(4, info);
+            stmt.setLong(5, System.currentTimeMillis() / 1000);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean setTag(String teamId, String newTag) {
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+                "UPDATE teams SET tag = ? WHERE id = ?")) {
+            stmt.setString(1, newTag);
+            stmt.setString(2, teamId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 

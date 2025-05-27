@@ -48,6 +48,14 @@ public class TeamDelHomeCommand {
                 } else {
                     player.sendMessage(MessagesUtil.get("team.delhome.failed"));
                 }
+
+                teamManager.logAudit(
+                    team.getId(),
+                    player.getUniqueId(),
+                    "Delete Home",
+                    player.getName() + " deleted the team home."
+                );
+
                 return Command.SINGLE_SUCCESS;
             }).build();
     }

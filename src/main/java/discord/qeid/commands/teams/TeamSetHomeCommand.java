@@ -51,6 +51,18 @@ public class TeamSetHomeCommand {
                 } else {
                     player.sendMessage(MessagesUtil.get("team.sethome.failed"));
                 }
+
+                var loc = player.getLocation();
+                teamManager.logAudit(
+                    team.getId(),
+                    player.getUniqueId(),
+                    "Set Home",
+                    player.getName() + " set the team home to X: " +
+                        String.format("%.2f", loc.getX()) + " Y: " +
+                        String.format("%.2f", loc.getY()) + " Z: " +
+                        String.format("%.2f", loc.getZ()) + " (" + loc.getWorld().getName() + ")"
+                );
+
                 return Command.SINGLE_SUCCESS;
             }).build();
     }

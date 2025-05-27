@@ -140,7 +140,15 @@ public class TeamKickCommand {
                 .replace("%executor%", executor.getName()
                 .replace("%team%", team.getName())));
 
-        // TODO: Audit logging here
+
+
+        teamManager.logAudit(
+            team.getId(),
+            executor.getUniqueId(),
+            "Kick",
+            executor.getName() + " kicked " + target.getName() + " from the team. Reason: " + reason
+        );
+
         return Command.SINGLE_SUCCESS;
     }
 

@@ -128,6 +128,14 @@ public class TeamTransferCommand {
                                 MessagesUtil.get("team.notifications.transferred")
                                     .replace("%old-owner%", executor.getName())
                                     .replace("%new-owner%", target.getName()));
+
+                            teamManager.logAudit(
+                                team.getId(),
+                                executor.getUniqueId(),
+                                "Transfer Ownership",
+                                executor.getName() + " transferred team ownership to " + target.getName() + "."
+                            );
+
                             return Command.SINGLE_SUCCESS;
 
                         } else {
@@ -144,6 +152,8 @@ public class TeamTransferCommand {
 
                     executor.sendMessage(MessagesUtil.get("team.transfer.confirm")
                         .replace("%target%", target.getName()));
+
+
 
                     Bukkit.getScheduler().runTaskLater(Teams.getInstance(), () -> {
                         if (pendingTransfers.containsKey(executorId)) {

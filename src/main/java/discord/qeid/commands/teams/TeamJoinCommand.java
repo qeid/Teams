@@ -111,6 +111,13 @@ public class TeamJoinCommand {
                     team = teamManager.getTeamById(team.getId());
                     DebugUtil.sendTeamDebugInfo(player, team);
 
+                    teamManager.logAudit(
+                    team.getId(),
+                    playerId,
+                    "JOIN",
+                    player.getName() + " joined the team."
+                );
+
                     return Command.SINGLE_SUCCESS;
                 })
             ).build();

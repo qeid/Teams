@@ -110,6 +110,14 @@ public class TeamDemoteCommand {
                         .replace("%oldrole%", oldRole.name())
                         .replace("%newrole%", newRole));
 
+                    manager.logAudit(
+                        team.getId(),
+                        executor.getUniqueId(),
+                        "Demote",
+                        executor.getName() + " demoted " + target.getName() + " from " + oldRole.name() + " to " + newRole + "."
+                    );
+
+
                     return Command.SINGLE_SUCCESS;
                 })).build();
     }

@@ -43,7 +43,7 @@ public class TeamHelpCommand {
 
         sender.sendMessage(MessagesUtil.get("team.help.header").replace("%page%", page + ""));
         for (String line : lines) {
-            sender.sendMessage(Component.text(ColorUtils.format(line)));
+            sender.sendMessage(ColorUtils.format(line));
         }
 
         return 1;

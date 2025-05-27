@@ -111,6 +111,14 @@ public class TeamPromoteCommand {
                         .replace("%oldrole%", oldRole.name())
                         .replace("%newrole%", newRole));
 
+                    manager.logAudit(
+                        team.getId(),
+                        executor.getUniqueId(),
+                        "Promote",
+                        executor.getName() + " promoted " + target.getName() + " from " + oldRole.name() + " to " + newRole + "."
+                    );
+
+
 
 
                     return Command.SINGLE_SUCCESS;
