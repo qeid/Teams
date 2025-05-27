@@ -4,26 +4,72 @@
 team:
   prefix: "team > "
   null: "&8(None)"
+  team:
   help:
-    header: "&8----- &bTeam Help &7(Page %page%) &8-----" # placeholders: %page%
-    page-1:
-      - "&7/team create <name> &f- Create a new team"
-      - "&7/team invite <player> &f- Invite a player"
-      - "&7/team kick <player> [reason] &f- Kick a team member"
-      - "&7/team ban <player> [reason] &f- Ban a member"
-      - "&7/team promote <player> &f- Promote a member"
-      - "&7/team demote <player> &f- Demote a member"
-      - "&7/team info [team] &f- Info about a team"
-      - "&7/team chat [message] &f- Toggle/send team chat"
-    page-2:
-      - "&7/team tag <new tag> &f- Change team tag (admin only)"
-      - "&7/team sethome &f- Set team home"
-      - "&7/team home &f- Teleport to team home"
-      - "&7/team delhome &f- Delete team home"
-      - "&7/team leave &f- Leave your team"
-      - "&7/team disband &f- Disband your team"
-      - "&7/team who <player> &f- Show player's team info"
-      - "&7/team auditlog &f- Show audit logs"
+    sound: "entity.experience_orb.pickup"
+    pages:
+      1: #page 1
+        - "&7&m                                            "
+        - "&7❙ &7&lTeams &f- &bListing help commands &7(Page 1)"
+        - "&7❙"
+        - "&7❙ &f/team create <name> &7- &bCreate a team"
+        - "&7❙ &f/team invite (player) &7- &bInvite someone to your team"
+        - "&7❙ &f/team kick (player) &7- &bKick someone from your team"
+        - "&7❙ &f/team join <team> &7- &bJoin a team"
+        - "&7❙ &f/team chat [message] &7- &bToggle team chat or send a message"
+        - "&7❙ &f/team leave &7- &bLeave your current team"
+        - "&7❙ &f/team disband &7- &bDisband your team [confirmation]"
+        - "&7❙ &f/team info [team] &7- &bView yours or another team's info"
+        - "&7❙ &f/team who <player> &7- &bView info about a player's team"
+        - "&7&m                                            "
+        - "%footer%"
+      2: # page 2
+        - "&7&m                                            "
+        - "&7❙ &7&lTeams &f- &bListing help commands &7(Page 2)"
+        - "&7❙"
+        - "&7❙ &f/team tag (new tag) &7- &bChange team tag"
+        - "&7❙ &f/team auditlog [page] &7- &bView audit log"
+        - "&7❙ &f/team promote (player) &7- &bPromote a member"
+        - "&7❙ &f/team demote (player) &7- &bDemote a member"
+        - "&7❙ &f/team home &7- &bTeleport to your team home"
+        - "&7❙ &f/team sethome &7- &bSet team home"
+        - "&7❙ &f/team delhome &7- &bDelete team home"
+        - "&7❙ &f/team transfer <player> &7- &bTransfer ownership [confirmation]"
+        - "&7&m                                            "
+        - "%footer%"
+      3: #page 3
+        - "&7&m                                            "
+        - "&7❙ &7&lTeams &f- &bListing help commands &7(Page 3)"
+        - "&7❙"
+        - "&7❙ &f/team help [page] &7- &bShows this help message"
+        - "&7&m                                            "
+        - "%footer%"
+      0: #admin page
+        - "&6&m                                            "
+        - "&6❙ &6&lTeams ADMIN &7- &fListing admin commands &6(Page 1)"
+        - "&6❙"
+        - "&6❙ &f/team force-disband <team> [reason] &7- &eForcefully disband a team"
+        - "&6❙ &f/team filter add <string> &7- &eAdd a word to the Name Creation Filter"
+        - "&6❙ &f/team filter remove <string> &7- &eRemove a word from the Name Creation Filter"
+        - "&6❙ &f/team filter list &7- &eView the NCF List"
+        - "&6❙ &f/team force-join <team> &7- &eForcefully join a team without an invite."
+        - "&eNote: Name Creation Filter uses the same list from Ghost Filter."
+        - "&6&m                                            "
+        - "%footer%"
+    footer:
+      1: "%next% %admin%"
+      2: "%prev% %next% %admin%"
+      3: "%prev% %admin%"
+      0: "%user%"
+    nav:
+      next: "&b[» Next Page]"
+      prev: "&b[« Prev Page]"
+      admin: "&6[★ Admin Commands]"
+      user: "&7[☆ User Commands]"
+      next-tooltip: "&7Go to next page"
+      prev-tooltip: "&7Go to previous page"
+      admin-tooltip: "&6View admin commands"
+      user-tooltip: "&7View user commands"
   notifications: # these all have the prefix before the message.
     invite-sent: "&f%sender% (%rank%) invited %target% to join the team. they have 5 minutes" # placeholders: %sender% %target% %rank% %rank-caps%
     player-joined: "&f%player% has joined the team!" # placeholders: %player%
@@ -168,6 +214,13 @@ team:
     failed: "&cFailed to change team tag."
     no-permission: "&cOnly the team owner can change the tag."
     invalid: "&cThat tag is invalid. Tags must be %min%-%max% characters and match: %regex%" # placeholders: %min% %max% %regex%
+
+  chat:
+    toggled-on: "&aTeam chat enabled. Your messages will go to team chat."
+    toggled-off: "&cTeam chat disabled. Your messages will go to public chat."
+    not-in-team: "&cYou are not in a team."
+    format: "&8[&bTeam&8] &7[%tag%] &f%player%&7: &b%message%"
+
 
 admin:
   reload:
