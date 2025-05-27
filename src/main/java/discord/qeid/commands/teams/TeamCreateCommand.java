@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.regex.Pattern;
 
+import static discord.qeid.utils.ColorUtils.applyTagCase;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class TeamCreateCommand {
@@ -43,6 +44,9 @@ public class TeamCreateCommand {
         int maxTagLength = config.getInt("team.create.max-tag-length", 5);
         String nameRegex = config.getString("team.create.name-regex", "^[A-Za-z0-9 _-]+$");
         String tagRegex = config.getString("team.create.tag-regex", "^[A-Za-z0-9]+$");
+        
+        String tagCase = config.getString("team.create.tag-case", "upper");
+
 
         String teamName = StringArgumentType.getString(ctx, "team name").trim();
 
@@ -72,7 +76,7 @@ public class TeamCreateCommand {
             return Command.SINGLE_SUCCESS;
         }
         if (tag.length() > maxTagLength) {
-            tag = capitalize(tag.substring(0, maxTagLength));
+            tag = applyTagCase(tag, tagCase);
         }
 
         // validate tag characters

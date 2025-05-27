@@ -1,5 +1,6 @@
 package discord.qeid.commands.teams;
 
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
@@ -68,7 +69,7 @@ public class TeamBanCommand {
     private static int execute(CommandSender sender, String targetName, String input) {
         if (!(sender instanceof Player executor)) {
             sender.sendMessage(ColorUtils.format("&cOnly players can use this command."));
-            return 0;
+            return Command.SINGLE_SUCCESS;
         }
 
         UUID executorId = executor.getUniqueId();
@@ -77,24 +78,24 @@ public class TeamBanCommand {
 
         if (team == null) {
             sender.sendMessage(MessagesUtil.get("team.ban.not-in-team"));
-            return 0;
+            return Command.SINGLE_SUCCESS;
         }
 
         OfflinePlayer target = Bukkit.getOfflinePlayer(targetName);
         if (target == null || target.getName() == null) {
             sender.sendMessage(MessagesUtil.get("team.ban.not-in-team"));
-            return 0;
+            return Command.SINGLE_SUCCESS;
         }
 
         UUID targetId = target.getUniqueId();
         if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
             sender.sendMessage(MessagesUtil.get("team.ban.not-in-team"));
-            return 0;
+            return Command.SINGLE_SUCCESS;
         }
 
         if (targetId.equals(executorId)) {
             sender.sendMessage(MessagesUtil.get("team.ban.self"));
-            return 0;
+            return Command.SINGLE_SUCCESS;
         }
 
         TeamRoles executorRole = getRole(team, executorId);
@@ -102,7 +103,7 @@ public class TeamBanCommand {
 
         if (!canBan(executorRole, targetRole)) {
             sender.sendMessage(MessagesUtil.get("team.ban.no-permission"));
-            return 0;
+            return Command.SINGLE_SUCCESS;
         }
 
         long durationSeconds = DurationUtil.parseDurationSeconds(input);
@@ -111,7 +112,7 @@ public class TeamBanCommand {
 
         if (teamManager.isBanned(team.getId(), targetId)) {
             sender.sendMessage(MessagesUtil.get("team.ban.already-banned"));
-            return 0;
+            return Command.SINGLE_SUCCESS;
         }
 
         boolean success = teamManager.banPlayer(
@@ -120,11 +121,21 @@ public class TeamBanCommand {
 
         if (!success) {
             sender.sendMessage(MessagesUtil.get("team.ban.failed"));
-            return 0;
+            return Command.SINGLE_SUCCESS;
         }
 
         teamManager.kickMember(team.getId(), targetId);
         team = teamManager.getTeamById(team.getId());
+
+        String auditInfo = "Banned " + target.getName() +
+            " for " + (durationSeconds > 0 ? DurationUtil.formatFullDuration(durationSeconds) : "Permanent") +
+            ". Reason: " + reason;
+        teamManager.logAudit(
+            team.getId(),
+            executorId,
+            "Ban",
+            auditInfo
+        );
 
         sender.sendMessage(MessagesUtil.get("team.ban.success")
             .replace("%target%", target.getName())
@@ -146,7 +157,7 @@ public class TeamBanCommand {
                 .replace("%duration%", formatFullDuration(durationSeconds)));
         }
 
-        return 1;
+        return Command.SINGLE_SUCCESS;
     }
 
     private static boolean canBan(TeamRoles executor, TeamRoles target) {
