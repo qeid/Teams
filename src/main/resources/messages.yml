@@ -25,17 +25,19 @@ team:
       - "&7/team who <player> &f- Show player's team info"
       - "&7/team auditlog &f- Show audit logs"
   notifications: # these all have the prefix before the message.
-    invite-sent: "&f%sender% invited %target% to join the team. they have 5 minutes" # placeholders: %sender% %target% %rank% %rank-caps%
+    invite-sent: "&f%sender% (%rank%) invited %target% to join the team. they have 5 minutes" # placeholders: %sender% %target% %rank% %rank-caps%
     player-joined: "&f%player% has joined the team!" # placeholders: %player%
-    player-banned: "&f%target% has been banned by %executor%. Reason: %reason% Duration: %duration%" # placeholders: %reason% %target% %player% %duration% %rank% %rank-caps%
-    player-kicked: "&f%target% has been kicked by %executor%. Reason: %reason%" # placeholders: %reason% %target% %executor% %rank% %rank-caps%
+    player-banned: "&f%target% has been banned by %executor% (%rank%). Reason: %reason% Duration: %duration%" # placeholders: %reason% %target% %player% %duration% %rank% %rank-caps%
+    player-kicked: "&f%target% has been kicked by %executor% (%rank%). Reason: %reason%" # placeholders: %reason% %target% %executor% %rank% %rank-caps%
     player-left: "&f%player% has left the team." # placeholders: %player%
     owner-disbanded: "&c%player% has disbanded the team: %team%" # placeholders: %player% %team%
     transferred: "%old-owner% transferred team ownership to %new-owner%." # placeholders: %new-owner% %old-owner% %rank% %rank-caps% %target-rank% %target-rank-caps%
-    promoted: "%executor% promoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
-    demoted: "%executor% demoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
-    home-set: "&e%executor% &7updated the team home to &fX: %x% Y: %y% Z: %z%" # placeholders: %x% %y% %z% %executor% %rank% %rank-caps%
-    home-deleted: "&e%executor% &7deleted the team home." # placeholders: %executor% %rank% %rank-caps%
+    promoted: "%executor% (%rank%) promoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    demoted: "%executor% (%rank%) demoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    home-set: "&e%executor% (%rank%) &7updated the team home to &fX: %x% Y: %y% Z: %z%" # placeholders: %x% %y% %z% %executor% %rank% %rank-caps%
+    home-deleted: "&e%executor% (%rank%) &7deleted the team home." # placeholders: %executor% %rank% %rank-caps%
+    tag-change: "&e%executor% (%rank%) &7changed the team tag to &f%tag%&7." # placeholders: %executor% %rank% %rank-caps% %tag%
+
   create:
     success: "&aSuccessfully created team &f%name% &awith tag &f[%tag%]" # placeholders: %name% %tag%
     exists: "&cA team with that name already exists."
@@ -145,6 +147,27 @@ team:
     failed: "&cFailed to delete team home."
     not-set: "&cYour team does not have a home set."
     no-permission: "&cOnly team admins or owner can delete the home."
+  auditlog:
+    no-permission: "&cOnly team admins or the owner can view the audit log."
+    header: "&8----- &bTeam Audit Log &7(Page %page%/%maxpage%) &8-----" # placeholders: %page% %maxpage%
+    no-entries: "&7No audit log entries found."
+    entry: "&b[%date%] &7%executor% &f- &e%action%" # placeholders: %date% %executor% %action%
+    entry-hover: | # placeholders: %date% %executor% %action% %info%
+      &7Date: &f%date%
+      &7By: &f%executor%
+      &7Action: &f%action%
+      &7Info: &f%info%
+    date-format: "yyyy-MM-dd HH:mm:ss" # https://docs.oracle.com/javase/10/docs/api/java/text/SimpleDateFormat.html
+    nav-prev: "« Prev"
+    nav-next: "Next »"
+    nav-separator: " | "
+    nav-hover-prev: "Previous page"
+    nav-hover-next: "Next page"
+  tag:
+    success: "&aTeam tag changed to &f[%tag%]&a!" # placeholders: %tag%
+    failed: "&cFailed to change team tag."
+    no-permission: "&cOnly the team owner can change the tag."
+    invalid: "&cThat tag is invalid. Tags must be %min%-%max% characters and match: %regex%" # placeholders: %min% %max% %regex%
 
 admin:
   reload:
