@@ -149,13 +149,13 @@ public class TeamBanCommand {
         sender.sendMessage(MessagesUtil.get("team.ban.success")
             .replace("%target%", target.getName())
             .replace("%reason%", reason)
-            .replace("%duration%", formatFullDuration(durationSeconds)));
+            .replace("%duration%", (durationSeconds > 0 ? DurationUtil.formatFullDuration(durationSeconds) : "Permanent")));
 
         TeamMessengerListener.broadcastWithRank(team, executorId, MessagesUtil.get("team.notifications.player-banned")
             .replace("%target%", target.getName())
             .replace("%reason%", reason)
             .replace("%executor%", executor.getName())
-            .replace("%duration%", formatFullDuration(durationSeconds)));
+            .replace("%duration%", (durationSeconds > 0 ? DurationUtil.formatFullDuration(durationSeconds) : "Permanent")));
 
         Player onlineTarget = Bukkit.getPlayer(targetId);
         if (onlineTarget != null) {
@@ -163,7 +163,7 @@ public class TeamBanCommand {
                 .replace("%team%", team.getName())
                 .replace("%executor%", executor.getName())
                 .replace("%reason%", reason)
-                .replace("%duration%", formatFullDuration(durationSeconds)));
+                .replace("%duration%", (durationSeconds > 0 ? DurationUtil.formatFullDuration(durationSeconds) : "Permanent")));
         }
         ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 

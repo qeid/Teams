@@ -54,7 +54,7 @@ public class TeamLeaveCommand {
                 player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
                 Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
-                TeamMessengerListener.broadcastExcluding(updatedTeam, playerId,
+                TeamMessengerListener.broadcast(updatedTeam,
                     MessagesUtil.get("team.notifications.player-left")
                         .replace("%player%", player.getName()));
 

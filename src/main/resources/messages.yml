@@ -129,31 +129,32 @@ team:
 
     invitee: # supports minimessage component formatting
       - "&7&m                                            "
-      - "&fYou were invited to join &#db7dac&n%team% &fby &#db7dac%inviter%&f!"
-      - "<click:run_command:'/team join %team%'><hover:show_text:'<#db7dac><white>Click to join this team!'></hover><bold><#db7dac>[ CLICK ]</bold></click> <white>or run <#db7dac><underlined>/team join %team%</underlined></#db7dac> <white>to join this team."
-      - "&eThis invite will expire in 5 minutes&b."
+      - "&#db7dac❙ &fYou were invited to join &#db7dac%team% &fby &#db7dac%inviter%&f!"
+      - "&#db7dac❙ <click:run_command:'/team join %team%'><hover:show_text:'<#db7dac><white>Click to join this team!'></hover><bold><#db7dac>[ CLICK ]</bold></click> <white>or run <#db7dac><underlined>/team join %team%</underlined></#db7dac> <white>to join this team."
+      - "&#db7dac❙ "
+      - "&#db7dac❙ &fThis invite will expire in 5 minutes&b."
       - "&7&m                                            "
   join:
-    no-pending-invite: "&cYou have no pending invite to that team."
-    null: "&cThat team does not exist."
-    failed: "&cSorry, but we're unable to add you to this team. Please try again later."
+    no-pending-invite: "&cYou have no pending invite to that Team."
+    null: "&cThat Team does not exist."
+    failed: "&cSorry, but we're unable to add you to this Team. Please try again later."
     success: "&#db7dac❙ &fYou have joined the Team &e'%team%'" # placeholders: %team%
     already-in-team: "&cYou are already in a Team."
-    banned: "&cYou are currently banned from this Team! &cReason: &7%reason% &cDuration: &7%duration%" # placeholders: %reason% %duration%
+    banned: "&#db7dac❙ &fYou are currently banned from this Team for &e'%reason%' &ffor &7%duration%&f." # placeholders: %reason% %duration%
   kick:
     success: "&#db7dac❙ &fYou kicked &#db7dac%target% &ffrom the team for &e'%reason%'&f." # placeholders: %reason% %target%
     failed: "&cSomething failed whilst trying to kick that player. Please try again later."
-    you-were-kicked: "&cYou were kicked from %team% for %reason%." # placeholders: %reason% %team% %executor%
+    you-were-kicked: "&#db7dac❙ &fYou were kicked from your Team for &#db7dac'%reason%'&f." # placeholders: %reason% %team% %executor%
     no-permission: "&cYou need to be Mod or higher in your Team to kick players!"
-    not-in-team: "&cThat player is not in your team."
+    not-in-team: "&cThat player is not in your Team."
     self: "&cYou cannot kick yourself."
     usage: "&cUsage: /team kick <player> [reason]"
   ban:
     success: "&#db7dac❙ &fYou banned &#db7dac%target% &ffrom the Team for &e'%reason%' &ffor %duration%." # placeholders: %reason% %target% %duration%
     failed: "&cSomething failed whilst trying to ban that player. Please try again later."
-    you-were-banned: "&cYou were banned from %team%! Reason: &7%reason% &cDuration: &7%duration%." # placeholders: %reason% %team% %executor% %duration%
+    you-were-banned: "&#db7dac❙ &fYou were banned from &#db7dac%team% &ffor &e'%reason%' &ffor &7%duration%&f." # placeholders: %reason% %team% %executor% %duration%
     no-permission: "&cYou need to be Admin or higher in your Team to ban players!"
-    banned: "&cYou are currently banned from this Team! &cReason: &7%reason% &cDuration: &7%duration%" # placeholders: %reason% %duration%
+    banned: "&#db7dac❙ &fYou are banned from this Team for &#db7dac'%reason%' &ffor &e%duration%&f." # placeholders: %reason% %duration%
     already-banned: "&cThat player is already banned."
     not-in-team: "&cThat player is not in your Team."
     self: "&cYou cannot ban yourself."
@@ -271,7 +272,7 @@ team:
     toggled-on: "&#db7dac❙ &fTeam chat enabled. Your messages will go to Team chat."
     toggled-off: "&#db7dac❙ &fTeam chat disabled. Your messages will go to public chat."
     not-in-team: "&cYou are not in a Team."
-    format: "&#db7dac&lTC &8» &f%player% &7(%rank%&7) &#db7dac%message%" # placeholders: %rank% %rank-caps% %message% %player%
+    format: "&#db7dac&lTC &8» &f%player% &7(%rank%&7)&8: &#db7dac%message%" # placeholders: %rank% %rank-caps% %message% %player%
 
 admin:
   reload:

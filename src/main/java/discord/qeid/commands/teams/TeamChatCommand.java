@@ -15,6 +15,8 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+import static discord.qeid.utils.ColorUtils.formatLegacy;
+
 public class TeamChatCommand {
 
     private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
@@ -62,10 +64,11 @@ public class TeamChatCommand {
             .replace("%tag%", team.getTag())
             .replace("%player%", player.getName())
             .replace("%message%", message);
+
         for (UUID member : discord.qeid.listeners.TeamMessengerListener.getAllTeamMembers(team)) {
             Player p = player.getServer().getPlayer(member);
             if (p != null && p.isOnline()) {
-                p.sendMessage(LEGACY.deserialize(format));
+                p.sendMessage(formatLegacy(format));
             }
         }
         return 1;

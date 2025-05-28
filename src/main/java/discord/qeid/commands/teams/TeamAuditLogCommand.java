@@ -10,6 +10,7 @@ import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.ColorUtils;
 import discord.qeid.utils.MessagesUtil;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import net.kyori.adventure.text.Component;
@@ -49,12 +50,15 @@ public class TeamAuditLogCommand {
         Team team = teamManager.getTeamByPlayer(player.getUniqueId());
         if (team == null) {
             player.sendMessage(MessagesUtil.get("team.info.not-in-team"));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+
             return Command.SINGLE_SUCCESS;
         }
 
         TeamRoles role = TeamManager.getRole(team, player.getUniqueId());
         if (role != TeamRoles.ADMIN && role != TeamRoles.OWNER) {
             player.sendMessage(MessagesUtil.get("team.auditlog.no-permission"));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return 1;
         }
 
