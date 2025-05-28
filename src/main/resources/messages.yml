@@ -129,9 +129,9 @@ team:
 
     invitee: # supports minimessage component formatting
       - "&7&m                                            "
-      - "&fYou were invited to join &#db7dac&n%team% &fby &#db7dac%inviter%&#db7dac!" # placeholders: %team% %inviter%
-      - "<click:run_command:'/team join %tag%'><hover:show_text:'&#db7dac&oClick to join this team!'>&#db7dac&l[ CLICK HERE ]</hover></click> &for run &#db7dac&n/team join %tag_upper%&f to join this team."
-      - "&eThis invite will expire in &f5 minutes&b."
+      - "&fYou were invited to join <#db7dac><underlined>%team%</underlined></#db7dac> &fby <#db7dac>%inviter%</#db7dac>&f!"
+      - "<click:run_command:'/team join %team%'><hover:show_text:'<#db7dac><i>Click to join this team!'></hover><bold><#db7dac>[ CLICK HERE ]</bold></click> <#bfbfbf>or run <#db7dac><underlined>/team join %team%</underlined></#db7dac> <#bfbfbf>to join this team."
+      - "&eThis invite will expire in 5 minutes&b."
       - "&7&m                                            "
   join:
     no-pending-invite: "&cYou have no pending invite to that team."
@@ -248,9 +248,9 @@ team:
         - "&7User: &f%executor%"
         - "&7Action: &2%action%"
         - "&7Information: &f%info%"
-        - "&8&m"
+        - "&8&m                                            "
       no-entries:
-        - "&fNo audit log entries found."
+        - "&#db7dac❙ &fNo audit log entries found."
       footer: # placeholders: %next% %prev% %separator% %info%
         - "&7&m                                            "
         - "%prev% %next%"

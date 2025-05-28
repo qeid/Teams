@@ -57,7 +57,7 @@ public class TeamJoinCommand {
                     //
                     Team targetTeam = teamManager.getTeamByName(input);
                     if (targetTeam == null) {
-                        player.sendMessage(MessagesUtil.get("team.join.team-null"));
+                        player.sendMessage(MessagesUtil.get("team.join.null"));
                         player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
@@ -118,7 +118,7 @@ public class TeamJoinCommand {
                     teamManager.logAudit(
                     team.getId(),
                     playerId,
-                    "JOIN",
+                    "Join",
                     player.getName() + " joined the team."
                 );
 

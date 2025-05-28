@@ -102,7 +102,7 @@ public class TeamUnbanCommand {
         teamManager.logAudit(
             team.getId(),
             executorId,
-            "UNBAN",
+            "Unban",
             executor.getName() + " unbanned " + target.getName() + ". Reason: " + reason
         );
 
