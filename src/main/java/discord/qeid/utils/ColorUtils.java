@@ -13,7 +13,6 @@ public class ColorUtils {
         return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
     }
 
-    // If you want a String with color codes for legacy Bukkit API:
     public static String formatLegacy(String message) {
         if (message == null) return "";
         return message.replaceAll("&([0-9a-fk-or])", "§$1");
