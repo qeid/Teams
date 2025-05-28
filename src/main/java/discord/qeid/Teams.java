@@ -4,6 +4,7 @@ import discord.qeid.commands.CommandTree;
 import discord.qeid.database.DatabaseManager;
 import discord.qeid.database.PlayerDataManager;
 import discord.qeid.database.TeamManager;
+import discord.qeid.listeners.TeamChatListener;
 import discord.qeid.utils.MessagesUtil;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,6 +36,8 @@ public class Teams extends JavaPlugin {
 
 
         getTeamManager().migrateAddCreatedAt();
+        getServer().getPluginManager().registerEvents(new TeamChatListener(), this);
+
         //getTeamManager().logTeamTa    bleColumns();
 
         // register command

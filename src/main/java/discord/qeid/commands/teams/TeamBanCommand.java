@@ -11,6 +11,7 @@ import discord.qeid.utils.ColorUtils;
 import discord.qeid.utils.MessagesUtil;
 import discord.qeid.utils.DurationUtil;
 import discord.qeid.listeners.TeamMessengerListener;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.Bukkit;
@@ -78,23 +79,28 @@ public class TeamBanCommand {
 
         if (team == null) {
             sender.sendMessage(MessagesUtil.get("team.ban.not-in-team"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
         OfflinePlayer target = Bukkit.getOfflinePlayer(targetName);
         if (target == null || target.getName() == null) {
             sender.sendMessage(MessagesUtil.get("team.ban.not-in-team"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+
             return Command.SINGLE_SUCCESS;
         }
 
         UUID targetId = target.getUniqueId();
         if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
             sender.sendMessage(MessagesUtil.get("team.ban.not-in-team"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
         if (targetId.equals(executorId)) {
             sender.sendMessage(MessagesUtil.get("team.ban.self"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
@@ -103,6 +109,7 @@ public class TeamBanCommand {
 
         if (!canBan(executorRole, targetRole)) {
             sender.sendMessage(MessagesUtil.get("team.ban.no-permission"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
@@ -112,6 +119,7 @@ public class TeamBanCommand {
 
         if (teamManager.isBanned(team.getId(), targetId)) {
             sender.sendMessage(MessagesUtil.get("team.ban.already-banned"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
@@ -121,6 +129,7 @@ public class TeamBanCommand {
 
         if (!success) {
             sender.sendMessage(MessagesUtil.get("team.ban.failed"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
@@ -156,6 +165,7 @@ public class TeamBanCommand {
                 .replace("%reason%", reason)
                 .replace("%duration%", formatFullDuration(durationSeconds)));
         }
+        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
         return Command.SINGLE_SUCCESS;
     }

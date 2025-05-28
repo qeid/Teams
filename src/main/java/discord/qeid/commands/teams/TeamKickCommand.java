@@ -10,10 +10,12 @@ import discord.qeid.utils.ColorUtils;
 import discord.qeid.utils.MessagesUtil;
 import discord.qeid.listeners.TeamMessengerListener;
 import discord.qeid.utils.DebugUtil;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -78,23 +80,27 @@ public class TeamKickCommand {
 
         if (team == null) {
             sender.sendMessage(MessagesUtil.get("team.kick.not-in-team"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
         OfflinePlayer target = Bukkit.getOfflinePlayer(targetName);
         if (target == null || target.getName() == null) {
             sender.sendMessage(MessagesUtil.get("team.kick.not-in-team"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
         UUID targetId = target.getUniqueId();
         if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
             sender.sendMessage(MessagesUtil.get("team.kick.not-in-team"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
         if (targetId.equals(executorId)) {
             sender.sendMessage(MessagesUtil.get("team.kick.self"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
@@ -103,12 +109,14 @@ public class TeamKickCommand {
 
         if (!canKick(executorRole, targetRole)) {
             sender.sendMessage(MessagesUtil.get("team.kick.no-permission"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
         boolean kicked = teamManager.kickMember(team.getId(), targetId);
         if (!kicked) {
             sender.sendMessage(MessagesUtil.get("team.kick.failed"));
+            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
@@ -125,12 +133,14 @@ public class TeamKickCommand {
                 .replace("%reason%", reason)
                 .replace("%executor%", executor.getName()
                 .replace("%team%", team.getName())));
+            targetOnline.playSound(targetOnline.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1.0F, 1.5F);
         }
 
         sender.sendMessage(MessagesUtil.get("team.kick.success")
                 .replace("%target%", target.getName())
                 .replace("%reason%", reason)
                 .replace("%team%", team.getName()));
+        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
 
         Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());

@@ -5,6 +5,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
 import discord.qeid.model.Team;
 import discord.qeid.utils.MessagesUtil;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import net.kyori.adventure.text.Component;
@@ -44,6 +45,7 @@ public class TeamChatCommand {
         boolean toggled = !dataManager.isTeamChatToggled(uuid);
         dataManager.setTeamChatToggled(uuid, toggled);
         player.sendMessage(LEGACY.deserialize(MessagesUtil.get("team.chat." + (toggled ? "toggled-on" : "toggled-off"))));
+        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
         return 1;
     }
 
@@ -53,6 +55,7 @@ public class TeamChatCommand {
         Team team = teamManager.getTeamByPlayer(uuid);
         if (team == null) {
             player.sendMessage(LEGACY.deserialize(MessagesUtil.get("team.chat.not-in-team")));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return 1;
         }
         String format = MessagesUtil.get("team.chat.format")

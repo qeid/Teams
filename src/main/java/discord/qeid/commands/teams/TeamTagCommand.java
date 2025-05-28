@@ -7,6 +7,7 @@ import discord.qeid.Teams;
 import discord.qeid.listeners.TeamMessengerListener;
 import discord.qeid.model.Team;
 import discord.qeid.utils.MessagesUtil;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
@@ -44,12 +45,14 @@ public class TeamTagCommand {
                     Team team = teamManager.getTeamByPlayer(player.getUniqueId());
                     if (team == null) {
                         player.sendMessage(MessagesUtil.get("team.info.not-in-team"));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     // Only owner can change tag
                     if (!team.getOwner().equals(player.getUniqueId())) {
                         player.sendMessage(MessagesUtil.get("team.tag.no-permission"));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -60,12 +63,14 @@ public class TeamTagCommand {
                             .replace("%min%", String.valueOf(minTagLength))
                             .replace("%max%", String.valueOf(maxTagLength))
                             .replace("%regex%", tagRegex));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     boolean success = teamManager.setTag(team.getId(), newTag);
                     if (!success) {
                         player.sendMessage(MessagesUtil.get("team.tag.failed"));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -79,6 +84,7 @@ public class TeamTagCommand {
 
                     player.sendMessage(MessagesUtil.get("team.tag.success")
                         .replace("%tag%", newTag));
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
                     // Audit log
                     teamManager.logAudit(

@@ -7,6 +7,7 @@ import discord.qeid.listeners.TeamMessengerListener;
 import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.MessagesUtil;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
@@ -20,17 +21,20 @@ public class TeamSetHomeCommand {
                 CommandSender sender = ctx.getSource().getSender();
                 if (!(sender instanceof Player player)) {
                     sender.sendMessage(MessagesUtil.get("general.players-only"));
+
                     return Command.SINGLE_SUCCESS;
                 }
                 var teamManager = Teams.getInstance().getTeamManager();
                 Team team = teamManager.getTeamByPlayer(player.getUniqueId());
                 if (team == null) {
                     player.sendMessage(MessagesUtil.get("team.info.not-in-team"));
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                     return Command.SINGLE_SUCCESS;
                 }
                 TeamRoles role = TeamManager.getRole(team, player.getUniqueId());
                 if (role != TeamRoles.ADMIN && role != TeamRoles.OWNER) {
                     player.sendMessage(MessagesUtil.get("team.sethome.no-permission"));
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                     return Command.SINGLE_SUCCESS;
                 }
                 boolean success = teamManager.setHome(team.getId(), player.getLocation());
@@ -48,8 +52,10 @@ public class TeamSetHomeCommand {
                         .replace("%y%", String.format("%.2f", loc.getY()))
                         .replace("%z%", String.format("%.2f", loc.getZ()));
                     TeamMessengerListener.broadcastWithRank(team, player.getUniqueId(), broadcastMsg);
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
                 } else {
                     player.sendMessage(MessagesUtil.get("team.sethome.failed"));
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                 }
 
                 var loc = player.getLocation();

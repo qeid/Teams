@@ -2,59 +2,64 @@
 
 
 team:
-  prefix: "team > "
+  prefix: "&#db7dac&lTEAMS &8» "
   null: "&8(None)"
-  team:
+  sounds:
+    notification: "entity.bee.sting"
+    help: "entity.experience_orb.pickup"
+    error: "entity.villager.no"
+    success: "entity.player.levelup"
   help:
-    sound: "entity.experience_orb.pickup"
+    # &7 bc
+    # &#db7dac sc
+    # &f mc
     pages:
       1: #page 1
         - "&7&m                                            "
-        - "&7❙ &7&lTeams &f- &bListing help commands &7(Page 1)"
-        - "&7❙"
-        - "&7❙ &f/team create <name> &7- &bCreate a team"
-        - "&7❙ &f/team invite (player) &7- &bInvite someone to your team"
-        - "&7❙ &f/team kick (player) &7- &bKick someone from your team"
-        - "&7❙ &f/team join <team> &7- &bJoin a team"
-        - "&7❙ &f/team chat [message] &7- &bToggle team chat or send a message"
-        - "&7❙ &f/team leave &7- &bLeave your current team"
-        - "&7❙ &f/team disband &7- &bDisband your team [confirmation]"
-        - "&7❙ &f/team info [team] &7- &bView yours or another team's info"
-        - "&7❙ &f/team who <player> &7- &bView info about a player's team"
+        - "&#db7dac❙ &#db7dac&lTEAMS &7- &fListing help commands &7(Page 1)"
+        - "&#db7dac❙"
+        - "&#db7dac❙ &f/team create <name> &7- &#db7dacCreate a team"
+        - "&#db7dac❙ &f/team invite (player) &7- &#db7dacInvite someone to your team"
+        - "&#db7dac❙ &f/team kick (player) &7- &#db7dacKick someone from your team"
+        - "&#db7dac❙ &f/team join <team> &7- &#db7dacJoin a team"
+        - "&#db7dac❙ &f/team chat [message] &7- &#db7dacToggle team chat or send a message"
+        - "&#db7dac❙ &f/team leave &7- &#db7dacLeave your current team"
+        - "&#db7dac❙ &f/team disband &7- &#db7dacDisband your team [confirmation]"
+        - "&#db7dac❙ &f/team info [team] &7- &#db7dacView yours or another team's info"
+        - "&#db7dac❙ &f/team who <player> &7- &#db7dacView info about a player's team"
         - "&7&m                                            "
         - "%footer%"
       2: # page 2
         - "&7&m                                            "
-        - "&7❙ &7&lTeams &f- &bListing help commands &7(Page 2)"
-        - "&7❙"
-        - "&7❙ &f/team tag (new tag) &7- &bChange team tag"
-        - "&7❙ &f/team auditlog [page] &7- &bView audit log"
-        - "&7❙ &f/team promote (player) &7- &bPromote a member"
-        - "&7❙ &f/team demote (player) &7- &bDemote a member"
-        - "&7❙ &f/team home &7- &bTeleport to your team home"
-        - "&7❙ &f/team sethome &7- &bSet team home"
-        - "&7❙ &f/team delhome &7- &bDelete team home"
-        - "&7❙ &f/team transfer <player> &7- &bTransfer ownership [confirmation]"
+        - "&#db7dac❙ &#db7dac&lTEAMS &7- &fListing help commands &7(Page 2)"
+        - "&#db7dac❙"
+        - "&#db7dac❙ &f/team tag (new tag) &7- &#db7dacChange team tag"
+        - "&#db7dac❙ &f/team auditlog [page] &7- &#db7dacView audit log"
+        - "&#db7dac❙ &f/team promote (player) &7- &#db7dacPromote a member"
+        - "&#db7dac❙ &f/team demote (player) &7- &#db7dacDemote a member"
+        - "&#db7dac❙ &f/team home &7- &#db7dacTeleport to your team home"
+        - "&#db7dac❙ &f/team sethome &7- &#db7dacSet team home"
+        - "&#db7dac❙ &f/team delhome &7- &#db7dacDelete team home"
+        - "&#db7dac❙ &f/team transfer <player> &7- &#db7dacTransfer ownership [confirmation]"
         - "&7&m                                            "
         - "%footer%"
       3: #page 3
         - "&7&m                                            "
-        - "&7❙ &7&lTeams &f- &bListing help commands &7(Page 3)"
-        - "&7❙"
-        - "&7❙ &f/team help [page] &7- &bShows this help message"
+        - "&#db7dac❙ &#db7dac&lTEAMS &7- &fListing help commands &7(Page 3)"
+        - "&#db7dac❙"
+        - "&#db7dac❙ &f/team help [page] &7- &#db7dacShows this help message"
         - "&7&m                                            "
         - "%footer%"
       0: #admin page
-        - "&6&m                                            "
-        - "&6❙ &6&lTeams ADMIN &7- &fListing admin commands &6(Page 1)"
+        - "&7&m                                            "
+        - "&6❙ &6&lTEAMS ADMIN &7- &fListing admin commands &7(Page 1)"
         - "&6❙"
-        - "&6❙ &f/team force-disband <team> [reason] &7- &eForcefully disband a team"
-        - "&6❙ &f/team filter add <string> &7- &eAdd a word to the Name Creation Filter"
-        - "&6❙ &f/team filter remove <string> &7- &eRemove a word from the Name Creation Filter"
-        - "&6❙ &f/team filter list &7- &eView the NCF List"
-        - "&6❙ &f/team force-join <team> &7- &eForcefully join a team without an invite."
-        - "&eNote: Name Creation Filter uses the same list from Ghost Filter."
-        - "&6&m                                            "
+        - "&6❙ &f/team force-disband <team> [reason] &7- &6Forcefully disband a team"
+        - "&6❙ &f/team filter add <string> &7- &6Add a word to the Name Creation Filter"
+        - "&6❙ &f/team filter remove <string> &7- &e6emove a word from the Name Creation Filter"
+        - "&6❙ &f/team filter list &7- &6View the NCF List"
+        - "&6❙ &f/team force-join <team> &7- &6Forcefully join a team without an invite."
+        - "&7&m                                            "
         - "%footer%"
     footer:
       1: "%next% %admin%"
@@ -62,55 +67,62 @@ team:
       3: "%prev% %admin%"
       0: "%user%"
     nav:
-      next: "&b[» Next Page]"
-      prev: "&b[« Prev Page]"
-      admin: "&6[★ Admin Commands]"
-      user: "&7[☆ User Commands]"
-      next-tooltip: "&7Go to next page"
-      prev-tooltip: "&7Go to previous page"
-      admin-tooltip: "&6View admin commands"
-      user-tooltip: "&7View user commands"
+      next: "&#db7dac&l[ >>> ]"
+      prev: "&#db7dac&l[ <<< ]"
+      admin: "&6&l[ &6★ &6&l]"
+      user: "&#db7dac&l[ &#db7dac☆ &#db7dac&l]"
+      next-tooltip: "&#db7dac&oGo to next page"
+      prev-tooltip: "&#db7dac&oBack to previous page"
+      admin-tooltip: "&6&oView admin commands"
+      user-tooltip: "&#db7dac&oView user commands"
   notifications: # these all have the prefix before the message.
-    invite-sent: "&f%sender% (%rank%) invited %target% to join the team. they have 5 minutes" # placeholders: %sender% %target% %rank% %rank-caps%
-    player-joined: "&f%player% has joined the team!" # placeholders: %player%
-    player-banned: "&f%target% has been banned by %executor% (%rank%). Reason: %reason% Duration: %duration%" # placeholders: %reason% %target% %player% %duration% %rank% %rank-caps%
-    player-kicked: "&f%target% has been kicked by %executor% (%rank%). Reason: %reason%" # placeholders: %reason% %target% %executor% %rank% %rank-caps%
-    player-left: "&f%player% has left the team." # placeholders: %player%
-    owner-disbanded: "&c%player% has disbanded the team: %team%" # placeholders: %player% %team%
-    transferred: "%old-owner% transferred team ownership to %new-owner%." # placeholders: %new-owner% %old-owner% %rank% %rank-caps% %target-rank% %target-rank-caps%
-    promoted: "%executor% (%rank%) promoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
-    demoted: "%executor% (%rank%) demoted %target% from %oldrole% to %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
-    home-set: "&e%executor% (%rank%) &7updated the team home to &fX: %x% Y: %y% Z: %z%" # placeholders: %x% %y% %z% %executor% %rank% %rank-caps%
-    home-deleted: "&e%executor% (%rank%) &7deleted the team home." # placeholders: %executor% %rank% %rank-caps%
-    tag-change: "&e%executor% (%rank%) &7changed the team tag to &f%tag%&7." # placeholders: %executor% %rank% %rank-caps% %tag%
+    invite-sent: "&f%sender% &7(%rank%&7) &finvited &n%target%&f to join the team. They have 5 minutes to join." # placeholders: %sender% %target% %rank% %rank-caps%
+    player-joined: "&7%player% &fhas joined the team!" # placeholders: %player%
+    player-banned: "&7%target% &fhas been banned by %executor% &7(%rank%&7) &ffor '%reason%' for %duration%" # placeholders: %reason% %target% %player% %duration% %rank% %rank-caps%
+    player-kicked: "&7%target% &fhas been kicked by %executor% &7(%rank%&7) &ffor '%reason%'" # placeholders: %reason% %target% %executor% %rank% %rank-caps%
+    player-left: "&7%player% &fhas left the team." # placeholders: %player%
+    owner-disbanded: "&f%player% has disbanded the Team." # placeholders: %player% %team%
+    transferred: "&7%old-owner% &ftransferred Team ownership to &#db7dac%new-owner%&f." # placeholders: %new-owner% %old-owner% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    promoted: "&f%executor% &7(%rank%&7) &fpromoted %target% from %oldrole% &fto %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    demoted: "&f%executor% &7(%rank%&7) &fdemoted %target% from %oldrole% &fto %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    home-set: "&f%executor% &7(%rank%&7) &fupdated the Team home to &e%x%, %y%, %z%" # placeholders: %x% %y% %z% %executor% %rank% %rank-caps%
+    home-deleted: "&f%executor% &7(%rank%&7) &fdeleted the Team home." # placeholders: %executor% %rank% %rank-caps%
+    tag-change: "&f%executor% &7(%rank%&7) &fchanged the Team tag to &e%tag%&f." # placeholders: %executor% %rank% %rank-caps% %tag%
 
   create:
-    success: "&aSuccessfully created team &f%name% &awith tag &f[%tag%]" # placeholders: %name% %tag%
-    exists: "&cA team with that name already exists."
-    in-team: "&cYou are already in a team."
-    error: "&cAn error occurred while creating the team, please contact a server administrator for more information."
-    not-player: "&cOnly players can create teams."
+    success: "&#db7dac❙ &fSuccessfully created team &e%name% &fwith tag &7[%tag%]" # placeholders: %name% %tag%
+    exists: "&cA Team with that name already exists."
+    in-team: "&cYou are already in a Team."
+    error: "&cAn error occurred while creating the Team, please contact a server administrator for more information."
+    not-player: "&cOnly players can create Teams."
     length-error: "&cTeam names must be 32 characters or less."
   invite:
-    sent: "&aYou invited &f%target% &ato join your team!" # placeholders: %target%
-    received: "&6You have been invited to join &f%team%&6! Use &e/team join %team% &6to accept. Expires in 5 minutes." # placeholders: %team% %sender%
-    no_team: "&cYou must be in a team to invite players."
+    sent: "&#db7dac❙ &fYou invited &e%target% &fto join your team!" # placeholders: %target%
+    no_team: "&cYou must be in a Team to invite players."
     expired-invitee: "&cYour invite from %team% has expired." # placeholders: %team%
-    expired-team: "&fThe invite to %target% expired." # placeholders: %target%
-    no_permission: "&cYou do not have permission to invite players."
-    already_in_team: "&cThat player is already in a team."
+    expired-team: "&#db7dac❙ &fThe invite sent to &7%target% &fexpired." # placeholders: %target%
+    no_permission: "&cYou need to be Mod or higher in your Team to invite players!"
+    already_in_team: "&cThat player is already in a Team."
     already_invited: "&eThat player has already been invited."
     player_not_found: "&cThat player is not online."
     banned: "&cYou cannot invite that player. They are currently banned from the Team."
+
+    invitee:
+      - "&7&m                                            "
+      - "&fYou were invited to join &7%team% &fby &#db7dac%inviter%&#db7dac!" # placeholders: %team% %inviter%
+      - "<click:run_command:'/team join %tag%'><hover:show_text:'&#db7dac&oClick to join this team!'>&#db7dac&l[ CLICK HERE ]</hover></click> &for run &#db7dac&n/team join %tag_upper%&f to join this team."
+      - "&eThis invite will expire in &f5 minutes&b."
+      - "&7&m                                            "
+
   join:
     no-pending-invite: "&cYou have no pending invite to that team."
-    team-null: "&cThat team does not exist."
-    join-failed: "&cSorry, but we're unable to add you to this team. Please try again later."
-    join-success: "You have joined the team '%team%'" # placeholders: %team%
-    already-in-team: "&cYou are already in a team."
-    banned: "&cYou are banned from this team. Reason: %reason% Duration: %duration%" # placeholders: %reason% %duration%
+    null: "&cThat team does not exist."
+    failed: "&cSorry, but we're unable to add you to this team. Please try again later."
+    success: "&#db7dac❙ &fYou have joined the Team &e'%team%'" # placeholders: %team%
+    already-in-team: "&cYou are already in a Team."
+    banned: "&cYou are currently banned from this Team! &cReason: &7%reason% &cDuration: &7%duration%" # placeholders: %reason% %duration%
   kick:
-    success: "&aYou kicked &f%target% &afrom the team for %reason%." # placeholders: %reason% %target%
+    success: "&#db7dac❙ &fYou kicked &7%target% &ffrom the team for &e%reason%&f." # placeholders: %reason% %target%
     failed: "&cSomething failed whilst trying to kick that player. Please try again later."
     you-were-kicked: "&cYou were kicked from %team% for %reason%." # placeholders: %reason% %team% %executor%
     no-permission: "&cYou don't have permission to kick that player."
@@ -118,116 +130,129 @@ team:
     self: "&cYou cannot kick yourself."
     usage: "&cUsage: /team kick <player> [reason]"
   ban:
-    success: "&aYou banned &f%target% &afrom the team for %reason% for %duration%." # placeholders: %reason% %target% %duration%
+    success: "&#db7dac❙ &FYou banned &7%target% &ffrom the Team for %reason% for %duration%." # placeholders: %reason% %target% %duration%
     failed: "&cSomething failed whilst trying to ban that player. Please try again later."
-    you-were-banned: "&cYou were banned from %team% for %reason% for %duration%." # placeholders: %reason% %team% %executor% %duration%
+    you-were-banned: "&cYou were banned from %team%! Reason: &7%reason% &cDuration: &7%duration%." # placeholders: %reason% %team% %executor% %duration%
     no-permission: "&cYou don't have permission to ban that player."
-    banned: "&cYou have been banned from %team%! Reason: %reason% Duration: %duration%" # placeholders: %reason% %team% %executor% %duration%
+    banned: "&cYou are currently banned from this Team! &cReason: &7%reason% &cDuration: &7%duration%" # placeholders: %reason% %duration%
     already-banned: "&cThat player is already banned."
-    not-in-team: "&cThat player is not in your team."
+    not-in-team: "&cThat player is not in your Team."
     self: "&cYou cannot ban yourself."
     usage: "&cUsage: /team ban <player> [reason] [duration: e.g. 10m, 2h, 1d]"
   leave:
-    success: "&aYou have left the team &f%team%&a." # placeholders: %team%
-    not-in-team: "&cYou're not in a team."
-    owner-cannot-leave: "&cYou're the team owner. Use /team disband instead."
-    failed: "&cSomething went wrong while leaving the team."
+    success: "&#db7dac❙ &fYou have left the Team." # placeholders: %team%
+    not-in-team: "&cYou're not in a Team."
+    owner-cannot-leave: "&cYou cannot leave whilst you're the Team owner! Transfer ownership or disband the Team."
+    failed: "&cSomething went wrong while trying to leave the Team. Please try again later."
   disband:
-    confirm: "&eRun /team disband again within 10 seconds to confirm disbanding your team."
-    success: "&cYou have disbanded your team: %team%" # placeholders: %team%
-    timeout: "&cDisband confirmation timed out."
-    not-in-team: "&cYou're not in a team."
-    not-owner: "&cOnly the team owner can disband the team."
-    failed: "&cSomething went wrong while disbanding the team."
+    confirm: "&#db7dac❙ &fAre you sure? Run &n/team disband &fagain within 10 seconds to &cconfirm disbanding &fyour Team."
+    success: "&#db7dac❙ &fYou have successfully disbanded your Team: %team%" # placeholders: %team%
+    timeout: "&#db7dac❙ &fDisband confirmation timed out."
+    not-in-team: "&cYou're not in a Team."
+    not-owner: "&cOnly the Team owner can disband the Team!"
+    failed: "&cSomething went wrong whilst trying to disband the Team. Please try again later."
   info:
-    not-in-team: "&cYou're not in a team."
-    team-not-found: "&cThat team doesn't exist."
+    not-in-team: "&cYou're not in a Team."
+    team-not-found: "&cThat Team doesn't exist."
 
     # indicators will not display if false in config
-    online-indicator: "&a●"
+    online-indicator: "&2●"
     offline-indicator: "&c●"
 
     message: # Placeholders : %name% %tag% %owner% %admins% %mods% %members% %created%
-      - "&7&m-----------------------------"
-      - "&eTeam: &f%name% &7[%tag%]"
-      - "&eOwner: &f%owner%"
-      - "&eAdmins: &f%admins%"
-      - "&eModerators: &f%mods%"
-      - "&eMembers: &f%members%"
-      - "&eCreated: &f%created%"
-      - "&7&m-----------------------------"
+      - "&7&m                                            "
+      - "&#db7dac❙ &#db7dac&l%name% &7(%tag%)"
+      - "&#db7dac❙"
+      - "&#db7dac❙ &fOwner: &#db7dac%owner%"
+      - "&#db7dac❙ &fCreated: &#db7dac%created%"
+      - "&#db7dac❙"
+      - "&#db7dac❙ &fAdmins: &#db7dac%admins%"
+      - "&#db7dac❙ &fModerators: &#db7dac%mods%"
+      - "&#db7dac❙ &fMembers: &#db7dac%members%"
+      - "&7&m                                            "
   transfer:
-    confirm: "Run the command again within 10 seconds to transfer ownership to %target%" # placeholders: %target%
-    success: "Ownership has been transferred to %target%" # placeholders: %target%
-    timeout: "Ownership transfer timed out."
-    not-owner: "You are not the team owner."
-    not-in-team: "That player is not in your team."
+    confirm: "&#db7dac❙ &fAre you sure? Run the command again within 10 seconds to confirm transfer to &#db7dac%target%." # placeholders: %target%
+    success: "&#db7dac❙ &fOwnership has successfully transferred to &7%target%&f." # placeholders: %target%
+    timeout: "&#db7dac❙ &fOwnership transfer timed out."
+    not-owner: "&cYou are not the Team owner!"
+    not-in-team: "&cThat player is not in your Team."
     self: "&cYou cannot transfer ownership to yourself."
-    player-not-found: "Player not found."
+    player-not-found: "&cThat player was not found!"
   who:
-    not-found: "&cPlayer not found."
-    not-in-team: "&c%player% is not in a team." # placeholders: %player%
+    not-found: "&cThat player was not found!"
+    not-in-team: "&c%player% is not in a Team." # placeholders: %player%
   promote:
-    success: "&aPromoted %target% to &e%newrole%!" # placeholders: %target% %oldrole% %newrole%
+    success: "&#db7dac❙ &fSuccessfully promoted %target% to &7%newrole%&f!" # placeholders: %target% %oldrole% %newrole%
     no-permission: "&cYou don't have permission to promote that player."
-    not-in-team: "&cThat player is not in your team."
+    not-in-team: "&cThat player is not in your Team."
     invalid-target: "&cThat player cannot be promoted."
-    not-found: "&cPlayer not found."
-    failed: "&cPromotion failed."
+    not-found: "&cThat player was not found!"
+    failed: "&cSomething went wrong whilst trying to promote that player. Please try again later."
   demote:
-    success: "&cDemoted %target% to &7%newrole%." # placeholders: %target% %oldrole% %newrole%
+    success: "&#db7dac❙ &fSuccessfully demoted %target% to &7%newrole%&f!" # placeholders: %target% %oldrole% %newrole%
     no-permission: "&cYou don't have permission to demote that player."
-    not-in-team: "&cThat player is not in your team."
+    not-in-team: "&cThat player is not in your Team."
     invalid-target: "&cThat player cannot be demoted."
-    not-found: "&cPlayer not found."
-    failed: "&cDemotion failed."
+    not-found: "&cThat player was not found!"
+    failed: "&cSomething went wrong whilst trying to demote that player. Please try again later."
   sethome:
-    success: "&aTeam home set at &fX: %x% Y: %y% Z: %z%&a!" # placeholders: %x% %y% %z%
-    failed: "&cFailed to set team home."
-    no-permission: "&cOnly team admins or owner can set the home."
+    success: "&#db7dac❙ &fYou have set the Team home to &e%x%, %y%, %z%&f!" # placeholders: %x% %y% %z%
+    failed: "&cSomething went wrong whilst trying to set the Team home. Please try again later."
+    no-permission: "&cYou need to be Admin or higher in your Team to update the home!"
   home:
-    not-set: "&cYour team does not have a home set."
-    success: "&aTeleported to your team home!"
+    not-set: "&cYour Team does not have a home set."
+    success: "&#db7dac❙ &fTeleported to Team home."
   delhome:
-    success: "&aTeam home deleted."
-    failed: "&cFailed to delete team home."
-    not-set: "&cYour team does not have a home set."
-    no-permission: "&cOnly team admins or owner can delete the home."
+    success: "&#db7dac❙ &fSuccessfully deleted the Team home."
+    failed: "&cSomething went wrong whilst trying to delete the Team home. Please try again later."
+    not-set: "&cYour Team does not have a home set."
+    no-permission: "&cYou need to be Admin or higher in your Team to update the home!"
   auditlog:
-    no-permission: "&cOnly team admins or the owner can view the audit log."
-    header: "&8----- &bTeam Audit Log &7(Page %page%/%maxpage%) &8-----" # placeholders: %page% %maxpage%
-    no-entries: "&7No audit log entries found."
-    entry: "&b[%date%] &7%executor% &f- &e%action%" # placeholders: %date% %executor% %action%
-    entry-hover: | # placeholders: %date% %executor% %action% %info%
-      &7Date: &f%date%
-      &7By: &f%executor%
-      &7Action: &f%action%
-      &7Info: &f%info%
-    date-format: "yyyy-MM-dd HH:mm:ss" # https://docs.oracle.com/javase/10/docs/api/java/text/SimpleDateFormat.html
-    nav-prev: "« Prev"
-    nav-next: "Next »"
-    nav-separator: " | "
-    nav-hover-prev: "Previous page"
-    nav-hover-next: "Next page"
+    no-permission: "&cYou need to be Admin or higher in your Team to view the audit log!"
+    pages:
+      header:
+        - "&7&m                                            "
+        - "&#db7dac❙ &#db7dac&lTEAM AUDIT LOG &7(Page %page%/%maxpage%)"
+        - "&#db7dac❙"
+      entry: "&#db7dac❙ &f%executor% ran action: &e%action% &7(%date%) &8&o[Hover]"
+      entry-hover:
+        - "&8&m                                            "
+        - "&7Date: &f%date%"
+        - "&7User: &f%executor%"
+        - "&7Action: &2%action%"
+        - "&7Information: &f%info%"
+        - "&8&m"
+      no-entries:
+        - "&fNo audit log entries found."
+      footer:
+        - "&7&m                                            "
+        - "%prev% %next%"
+      nav:
+        next: "&#db7dac&l[ >>> ]"
+        prev: "&#db7dac&l[ <<< ]"
+        separator: " "
+        next-tooltip: "&#db7dac&oGo to next page"
+        prev-tooltip: "&#db7dac&oBack to previous page"
+    date-format: "dd/MM/yy @ HH:mm:ss"
   tag:
-    success: "&aTeam tag changed to &f[%tag%]&a!" # placeholders: %tag%
-    failed: "&cFailed to change team tag."
-    no-permission: "&cOnly the team owner can change the tag."
-    invalid: "&cThat tag is invalid. Tags must be %min%-%max% characters and match: %regex%" # placeholders: %min% %max% %regex%
+    success: "&#db7dac❙ &fSuccessfully Team tag changed to &7%tag%&f!" # placeholders: %tag%
+    failed: "&cSomething went wrong whilst trying to update the Team tag. Please try again later."
+    no-permission: "&cOnly the Team owner can change the tag."
+    invalid: "&cThat tag is invalid. Tags must be %min%-%max% characters" # placeholders: %min% %max% %regex%
 
   chat:
-    toggled-on: "&aTeam chat enabled. Your messages will go to team chat."
-    toggled-off: "&cTeam chat disabled. Your messages will go to public chat."
-    not-in-team: "&cYou are not in a team."
-    format: "&8[&bTeam&8] &7[%tag%] &f%player%&7: &b%message%"
+    toggled-on: "&#db7dac❙ &fTeam chat enabled. Your messages will go to Team chat."
+    toggled-off: "&#db7dac❙ &fTeam chat disabled. Your messages will go to public chat."
+    not-in-team: "&cYou are not in a Team."
+    format: "&#db7dac&lTC &8» &f%player% &7(%rank%&7)&f: &#db7dac%message%"
 
 
 admin:
   reload:
-    no-permission: "&cYou do not have permission to use this command."
-    usage: "&cUsage: /team reload [database|messages|config]"
-    success: "&aReloaded %type% in %time% ms."
-    failed: "&cFailed to reload %type%."
+    no-permission: "&cInsufficient permissions!"
+    usage: "&6❙ &fUsage: /team reload [database|messages|config]"
+    success: "&6❙ &fReloaded %type% in %time% ms. Check console for further details."
+    failed: "&cSomething went wrong whilst trying to reload %type%. Check console for further details"
 
 
 

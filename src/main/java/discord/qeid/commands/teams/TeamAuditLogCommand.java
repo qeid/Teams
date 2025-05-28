@@ -10,13 +10,13 @@ import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.ColorUtils;
 import discord.qeid.utils.MessagesUtil;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
-import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -24,7 +24,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 
 public class TeamAuditLogCommand {
 
@@ -65,76 +64,105 @@ public class TeamAuditLogCommand {
 
         List<AuditLogEntry> entries = teamManager.getAuditLog(team.getId(), page, PAGE_SIZE);
 
-        // Load messages from messages.yml
-        String header = MessagesUtil.get("team.auditlog.header")
-                .replace("%page%", String.valueOf(page))
-                .replace("%maxpage%", String.valueOf(maxPage));
-        String noEntries = MessagesUtil.get("team.auditlog.no-entries");
-        String entryFormat = MessagesUtil.get("team.auditlog.entry");
-        String entryHover = MessagesUtil.get("team.auditlog.entry-hover");
-        String dateFormat = MessagesUtil.getMessages().getString("team.auditlog.date-format", "yyyy-MM-dd HH:mm:ss");
-        String navPrev = MessagesUtil.get("team.auditlog.nav-prev");
-        String navNext = MessagesUtil.get("team.auditlog.nav-next");
-        String navSeparator = MessagesUtil.get("team.auditlog.nav-separator");
-        String navHoverPrev = MessagesUtil.get("team.auditlog.nav-hover-prev");
-        String navHoverNext = MessagesUtil.get("team.auditlog.nav-hover-next");
+        // Header
+        List<String> headerLines = MessagesUtil.getMessages().getStringList("team.auditlog.pages.header");
+        for (String line : headerLines) {
+            player.sendMessage(ColorUtils.format(
+                line.replace("%page%", String.valueOf(page))
+                    .replace("%maxpage%", String.valueOf(maxPage))
+            ));
+        }
 
+        // Date format
+        String dateFormat = MessagesUtil.getMessages().getString("team.auditlog.date-format", "yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern(dateFormat)
                 .withZone(ZoneId.systemDefault());
 
-        player.sendMessage(ColorUtils.format(header));
+        // Entries
+        String entryFormat = MessagesUtil.getMessages().getString("team.auditlog.pages.entry");
+        String entryHoverFormat = String.join("\n", MessagesUtil.getMessages().getStringList("team.auditlog.pages.entry-hover"));
 
         if (entries.isEmpty()) {
-            player.sendMessage(ColorUtils.format(noEntries));
-            return Command.SINGLE_SUCCESS;
-        }
+            List<String> noEntriesLines = MessagesUtil.getMessages().getStringList("team.auditlog.pages.no-entries");
+            for (String line : noEntriesLines) {
+                player.sendMessage(ColorUtils.format(line));
+            }
+        } else {
+            for (AuditLogEntry entry : entries) {
+                String executorName = Bukkit.getOfflinePlayer(entry.executor()).getName();
+                String date = fmt.format(Instant.ofEpochSecond(entry.timestamp()));
+                String info = entry.info() == null ? "" : entry.info();
 
-        for (AuditLogEntry entry : entries) {
-            String executorName = Bukkit.getOfflinePlayer(entry.executor()).getName();
-            String date = fmt.format(Instant.ofEpochSecond(entry.timestamp()));
-            String info = entry.info() == null ? "" : entry.info();
+                String summary = entryFormat
+                        .replace("%date%", date)
+                        .replace("%executor%", executorName)
+                        .replace("%action%", entry.action())
+                        .replace("%info%", info);
 
-            String summary = entryFormat
-                    .replace("%date%", date)
-                    .replace("%executor%", executorName)
-                    .replace("%action%", entry.action())
-                    .replace("%info%", info);
+                String hover = entryHoverFormat
+                        .replace("%date%", date)
+                        .replace("%executor%", executorName)
+                        .replace("%action%", entry.action())
+                        .replace("%info%", info);
 
-            String hover = entryHover
-                    .replace("%date%", date)
-                    .replace("%executor%", executorName)
-                    .replace("%action%", entry.action())
-                    .replace("%info%", info);
+                Component line = ColorUtils.format(summary)
+                        .hoverEvent(HoverEvent.showText(ColorUtils.format(hover)))
+                        .clickEvent(ClickEvent.copyToClipboard(info));
 
-            Component line = ColorUtils.format(summary)
-                    .hoverEvent(HoverEvent.showText(ColorUtils.format(hover)))
-                    .clickEvent(ClickEvent.copyToClipboard(info));
-
-            player.sendMessage(line);
+                player.sendMessage(line);
+            }
         }
 
         // Navigation
-        if (maxPage > 1) {
-            Component nav = Component.empty();
-            if (page > 1) {
-                nav = nav.append(
-                        ColorUtils.format(navPrev)
-                                .clickEvent(ClickEvent.runCommand("/team auditlog " + (page - 1)))
-                                .hoverEvent(HoverEvent.showText(ColorUtils.format(navHoverPrev)))
-                );
+        String navPrev = MessagesUtil.getMessages().getString("team.auditlog.pages.nav.prev", "&#db7dac&l[ <<< ]");
+        String navNext = MessagesUtil.getMessages().getString("team.auditlog.pages.nav.next", "&#db7dac&l[ >>> ]");
+        String navSeparator = MessagesUtil.getMessages().getString("team.auditlog.pages.nav.separator", " &8| ");
+        String navHoverPrev = MessagesUtil.getMessages().getString("team.auditlog.pages.nav.prev-tooltip", "&#db7dac&oBack to previous page");
+        String navHoverNext = MessagesUtil.getMessages().getString("team.auditlog.pages.nav.next-tooltip", "&#db7dac&oGo to next page");
+
+        Component prev = (page > 1)
+                ? ColorUtils.format(navPrev)
+                    .clickEvent(ClickEvent.runCommand("/team auditlog " + (page - 1)))
+                    .hoverEvent(HoverEvent.showText(ColorUtils.format(navHoverPrev)))
+                : Component.empty();
+
+        Component next = (page < maxPage)
+                ? ColorUtils.format(navNext)
+                    .clickEvent(ClickEvent.runCommand("/team auditlog " + (page + 1)))
+                    .hoverEvent(HoverEvent.showText(ColorUtils.format(navHoverNext)))
+                : Component.empty();
+
+        List<String> footerLines = MessagesUtil.getMessages().getStringList("team.auditlog.pages.footer");
+        for (String footerTemplate : footerLines) {
+            String line = footerTemplate
+                .replace("%separator%", navSeparator)
+                .replace("%page%", String.valueOf(page))
+                .replace("%maxpage%", String.valueOf(maxPage));
+            String[] partsPrev = line.split("%prev%", -1);
+            Component footer = Component.empty();
+
+            if (partsPrev.length > 1) {
+                footer = footer.append(ColorUtils.format(partsPrev[0]));
+                footer = footer.append(prev);
+                line = partsPrev[1];
+            } else {
+                line = partsPrev[0];
             }
-            nav = nav.append(ColorUtils.format(navSeparator));
-            nav = nav.append(Component.text("Page " + page + "/" + maxPage, NamedTextColor.GRAY));
-            nav = nav.append(ColorUtils.format(navSeparator));
-            if (page < maxPage) {
-                nav = nav.append(
-                        ColorUtils.format(navNext)
-                                .clickEvent(ClickEvent.runCommand("/team auditlog " + (page + 1)))
-                                .hoverEvent(HoverEvent.showText(ColorUtils.format(navHoverNext)))
-                );
+
+            String[] partsNext = line.split("%next%", -1);
+            if (partsNext.length > 1) {
+                footer = footer.append(ColorUtils.format(partsNext[0]));
+                footer = footer.append(next);
+                footer = footer.append(ColorUtils.format(partsNext[1]));
+            } else {
+                footer = footer.append(ColorUtils.format(partsNext[0]));
             }
-            player.sendMessage(nav);
+
+            player.sendMessage(footer);
         }
+
+
+        player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_BREAK, 1.0F, 1.5F);
 
         return Command.SINGLE_SUCCESS;
     }

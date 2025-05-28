@@ -37,6 +37,7 @@ public class CommandTree {
             .then(TeamReloadCommand.buildSubcommand())
             .then(TeamAuditLogCommand.buildSubcommand())
             .then(TeamTagCommand.buildSubcommand())
+            .then(TeamChatCommand.buildSubcommand())
         .build();
 
     }

@@ -5,6 +5,7 @@ import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.ColorUtils;
 import discord.qeid.utils.MessagesUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -19,10 +20,19 @@ public class TeamMessengerListener {
         String prefix = MessagesUtil.get("team.prefix").replace("%tag%", team.getTag());
         String formattedMessage = ColorUtils.formatLegacy(rawMessage);
 
+        String soundName = MessagesUtil.get("team.sounds.notification");
+        Sound sound = null;
+        try {
+            sound = Sound.valueOf(soundName.toUpperCase().replace('.', '_'));
+        } catch (Exception ignored) {}
+
         for (UUID uuid : getAllOnlineTeamMembers(team)) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null && player.isOnline()) {
                 player.sendMessage(prefix + formattedMessage);
+                if (sound != null) {
+                    player.playSound(player.getLocation(), sound, 1f, 1.5f);
+                }
             }
         }
     }
@@ -49,10 +59,19 @@ public class TeamMessengerListener {
                 .replace("%rank-caps%", coloredCaps)
         );
 
+        String soundName = MessagesUtil.get("team.sounds.notification");
+        Sound sound = null;
+        try {
+            sound = Sound.valueOf(soundName.toUpperCase().replace('.', '_'));
+        } catch (Exception ignored) {}
+
         for (UUID uuid : getAllOnlineTeamMembers(team)) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null && player.isOnline()) {
                 player.sendMessage(prefix + formattedMessage);
+                if (sound != null) {
+                    player.playSound(player.getLocation(), sound, 1f, 1.5f);
+                }
             }
         }
     }
@@ -76,10 +95,19 @@ public class TeamMessengerListener {
                     .replace("%target-rank-caps%", targetCaps)
             );
 
+            String soundName = MessagesUtil.get("team.sounds.notification");
+            Sound sound = null;
+            try {
+                sound = Sound.valueOf(soundName.toUpperCase().replace('.', '_'));
+            } catch (Exception ignored) {}
+
             for (UUID uuid : getAllOnlineTeamMembers(team)) {
                 Player player = Bukkit.getPlayer(uuid);
                 if (player != null && player.isOnline()) {
                     player.sendMessage(prefix + formattedMessage);
+                    if (sound != null) {
+                        player.playSound(player.getLocation(), sound, 1f, 1.5f);
+                    }
                 }
             }
         }

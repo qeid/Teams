@@ -54,6 +54,16 @@ public class PlayerDataManager {
         return pendingInvites.getOrDefault(target, Collections.emptySet()).contains(teamId);
     }
 
+    private final Set<UUID> teamChatToggled = new HashSet<>();
+
+    public boolean isTeamChatToggled(UUID uuid) {
+        return teamChatToggled.contains(uuid);
+    }
+
+    public void setTeamChatToggled(UUID uuid, boolean toggled) {
+        if (toggled) teamChatToggled.add(uuid);
+        else teamChatToggled.remove(uuid);
+    }
     public void removeInvite(UUID target, String teamId) {
         Set<String> invites = pendingInvites.get(target);
         if (invites != null) {

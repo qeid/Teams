@@ -7,12 +7,17 @@ import discord.qeid.Teams;
 import discord.qeid.model.Team;
 import discord.qeid.utils.MessagesUtil;
 import discord.qeid.listeners.TeamMessengerListener;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.UUID;
 
 public class TeamInviteCommand {
@@ -51,11 +56,13 @@ public class TeamInviteCommand {
                     Team team = teamManager.getTeamByPlayer(inviterUUID);
                     if (team == null) {
                         inviter.sendMessage(MessagesUtil.get("team.invite.no_team"));
+                        inviter.playSound(inviter.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (teamManager.isBanned(team.getId(), targetUUID)) {
                         inviter.sendMessage(MessagesUtil.get("team.invite.banned"));
+                        inviter.playSound(inviter.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -63,17 +70,20 @@ public class TeamInviteCommand {
                         && !team.getAdmins().contains(inviterUUID)
                         && !team.getMods().contains(inviterUUID)) {
                         inviter.sendMessage(MessagesUtil.get("team.invite.no_permission"));
+                        inviter.playSound(inviter.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     Team targetTeam = teamManager.getTeamByPlayer(targetUUID);
                     if (targetTeam != null) {
                         inviter.sendMessage(MessagesUtil.get("team.invite.already_in_team"));
+                        inviter.playSound(inviter.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (playerData.hasInvite(targetUUID, team.getId())) {
                         inviter.sendMessage(MessagesUtil.get("team.invite.already_invited"));
+                        inviter.playSound(inviter.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -90,9 +100,24 @@ public class TeamInviteCommand {
                     }, 20L * 60 * 5); // 5 minutes
 
                     inviter.sendMessage(MessagesUtil.get("team.invite.sent").replace("%target%", target.getName()));
-                    target.sendMessage(MessagesUtil.get("team.invite.received")
-                        .replace("%team%", team.getName())
-                        .replace("%sender%", inviter.getName()));
+                    MiniMessage mm = MiniMessage.miniMessage();
+                    LegacyComponentSerializer legacy = LegacyComponentSerializer.legacyAmpersand();
+
+                    String teamName = team.getName();
+                    String tag = team.getTag();
+                    String tagUpper = tag.toUpperCase();
+                    String inviterName = inviter.getName();
+
+                    List<String> lines = MessagesUtil.getMessages().getStringList("team.invite.invitee");
+                    for (String line : lines) {
+                        if (line.contains("<click:") || line.contains("<hover:")) {
+                            Component comp = mm.deserialize(line.replace("%team%", teamName).replace("%inviter%", inviterName).replace("%tag%", tag).replace("%tag_upper%", tagUpper));
+                            target.sendMessage(comp);
+                        } else {
+                            Component comp = legacy.deserialize(line.replace("%team%", teamName).replace("%inviter%", inviterName).replace("%tag%", tag).replace("%tag_upper%", tagUpper));
+                            target.sendMessage(comp);
+                        }
+                    }
 
                     TeamMessengerListener.broadcastWithRank(team, inviterUUID, MessagesUtil.get("team.notifications.invite-sent")
                         .replace("%sender%", inviter.getName())
@@ -104,6 +129,7 @@ public class TeamInviteCommand {
                         "Invite",
                         inviter.getName() + " invited " + target.getName() + " to the team."
                     );
+                    inviter.playSound(inviter.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
                     return Command.SINGLE_SUCCESS;
                 })

@@ -47,7 +47,7 @@ public class TeamDelHomeCommand {
                 if (success) {
                     player.sendMessage(MessagesUtil.get("team.delhome.success"));
                     player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
-                    String broadcastMsg = MessagesUtil.get("team.notifications.delhome")
+                    String broadcastMsg = MessagesUtil.get("team.notifications.home-deleted")
                         .replace("%executor%", player.getName());
                     TeamMessengerListener.broadcastWithRank(team, player.getUniqueId(), broadcastMsg);
                 } else {

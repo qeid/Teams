@@ -57,14 +57,14 @@ public class TeamHelpCommand {
         }
 
         // Build navigation buttons
-        String navNext = MessagesUtil.getMessages().getString("team.help.footer.nav.next", "&b[» Next Page]");
-        String navPrev = MessagesUtil.getMessages().getString("team.help.footer.nav.prev", "&b[« Prev Page]");
-        String navAdmin = MessagesUtil.getMessages().getString("team.help.footer.nav.admin", "&6[★ Admin Commands]");
-        String navUser = MessagesUtil.getMessages().getString("team.help.footer.nav.user", "&7[☆ User Commands]");
-        String navNextTooltip = MessagesUtil.getMessages().getString("team.help.footer.nav.next-tooltip", "&7Go to next page");
-        String navPrevTooltip = MessagesUtil.getMessages().getString("team.help.footer.nav.prev-tooltip", "&7Go to previous page");
-        String navAdminTooltip = MessagesUtil.getMessages().getString("team.help.footer.nav.admin-tooltip", "&6View admin commands");
-        String navUserTooltip = MessagesUtil.getMessages().getString("team.help.footer.nav.user-tooltip", "&7View user commands");
+        String navNext = MessagesUtil.getMessages().getString("team.help.nav.next", "&b[» Next Page]");
+        String navPrev = MessagesUtil.getMessages().getString("team.help.nav.prev", "&b[« Prev Page]");
+        String navAdmin = MessagesUtil.getMessages().getString("team.help.nav.admin", "&6[★ Admin Commands]");
+        String navUser = MessagesUtil.getMessages().getString("team.help.nav.user", "&7[☆ User Commands]");
+        String navNextTooltip = MessagesUtil.getMessages().getString("team.help.nav.next-tooltip", "&7Go to next page");
+        String navPrevTooltip = MessagesUtil.getMessages().getString("team.help.nav.prev-tooltip", "&7Go to previous page");
+        String navAdminTooltip = MessagesUtil.getMessages().getString("team.help.nav.admin-tooltip", "&6View admin commands");
+        String navUserTooltip = MessagesUtil.getMessages().getString("team.help.nav.user-tooltip", "&7View user commands");
 
         boolean isAdmin = player.hasPermission(Teams.getInstance().getConfig().getString("admin.permission", "teams.admin"));
 

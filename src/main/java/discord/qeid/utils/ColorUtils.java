@@ -13,10 +13,26 @@ public class ColorUtils {
         return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
     }
 
+
+
     public static String formatLegacy(String message) {
         if (message == null) return "";
-        return message.replaceAll("&([0-9a-fk-or])", "§$1");
+
+        Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
+        Matcher matcher = hexPattern.matcher(message);
+        StringBuffer buffer = new StringBuffer();
+        while (matcher.find()) {
+            String hex = matcher.group(1);
+            StringBuilder replacement = new StringBuilder("§x");
+            for (char c : hex.toCharArray()) {
+                replacement.append('§').append(c);
+            }
+            matcher.appendReplacement(buffer, replacement.toString());
+        }
+        matcher.appendTail(buffer);
+        return buffer.toString().replaceAll("&([0-9a-fk-or])", "§$1");
     }
+
 
     public static String applyTagCase(String tag, String caseType) {
         if (tag == null) return null;
