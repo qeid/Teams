@@ -1,3 +1,6 @@
+-- Database for all Team related data. Do NOT TOUCH! Use a SQlite editor
+-- if you know what you're doing, and want to manually edit Team data.
+
 CREATE TABLE IF NOT EXISTS teams (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL UNIQUE,
