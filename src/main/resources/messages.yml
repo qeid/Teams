@@ -96,7 +96,7 @@ team:
       user-tooltip: "&#db7dac&oView user commands"
 
   notifications: # these all have the prefix before the message.
-    invite-sent: "&f%sender% &7(%rank%&7) &finvited &n%target%&f to join the team. They have 5 minutes to join." # placeholders: %sender% %target% %rank% %rank-caps%
+    invite-sent: "&f%sender% &7(%rank%&7) &finvited &#db7dac%target%&f to join the team. They have 5 minutes to join." # placeholders: %sender% %target% %rank% %rank-caps%
     player-joined: "&7%player% &fhas joined the team!" # placeholders: %player%
     player-banned: "&7%target% &fhas been banned by %executor% &7(%rank%&7) &ffor &e'%reason%' &ffor %duration%." # placeholders: %reason% %target% %executor% %duration% %rank% %rank-caps%
     player-unbanned: "&7%target% &fhas been unbanned by %executor% &7(%rank%&7) &ffor &e'%reason%'&f." # placeholders: %reason% %target% %executor%
@@ -104,8 +104,8 @@ team:
     player-left: "&7%player% &fhas left the team." # placeholders: %player%
     owner-disbanded: "&f%player% has disbanded the Team." # placeholders: %player% %team%
     transferred: "&7%old-owner% &ftransferred Team ownership to &#db7dac%new-owner%&f." # placeholders: %new-owner% %old-owner% %rank% %rank-caps% %target-rank% %target-rank-caps%
-    promoted: "&f%executor% &7(%rank%&7) &fpromoted %target% from %oldrole% &fto %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
-    demoted: "&f%executor% &7(%rank%&7) &fdemoted %target% from %oldrole% &fto %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    promoted: "&f%executor% &7(%rank%&7) &fpromoted &#db7dac%target% &ffrom %oldrole% &fto %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    demoted: "&f%executor% &7(%rank%&7) &fdemoted &#db7dac%target% &ffrom %oldrole% &fto %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
     home-set: "&f%executor% &7(%rank%&7) &fupdated the Team home to &e%x%, %y%, %z%&f." # placeholders: %x% %y% %z% %executor% %rank% %rank-caps%
     home-deleted: "&f%executor% &7(%rank%&7) &fdeleted the Team home." # placeholders: %executor% %rank% %rank-caps%
     tag-change: "&f%executor% &7(%rank%&7) &fchanged the Team tag to &e%tag%&f." # placeholders: %executor% %rank% %rank-caps% %tag%
@@ -129,8 +129,8 @@ team:
 
     invitee: # supports minimessage component formatting
       - "&7&m                                            "
-      - "&fYou were invited to join <#db7dac><underlined>%team%</underlined></#db7dac> &fby <#db7dac>%inviter%</#db7dac>&f!"
-      - "<click:run_command:'/team join %team%'><hover:show_text:'<#db7dac><i>Click to join this team!'></hover><bold><#db7dac>[ CLICK HERE ]</bold></click> <#bfbfbf>or run <#db7dac><underlined>/team join %team%</underlined></#db7dac> <#bfbfbf>to join this team."
+      - "&fYou were invited to join &#db7dac&n%team% &fby &#db7dac%inviter%&f!"
+      - "<click:run_command:'/team join %team%'><hover:show_text:'<#db7dac><white>Click to join this team!'></hover><bold><#db7dac>[ CLICK ]</bold></click> <white>or run <#db7dac><underlined>/team join %team%</underlined></#db7dac> <white>to join this team."
       - "&eThis invite will expire in 5 minutes&b."
       - "&7&m                                            "
   join:
