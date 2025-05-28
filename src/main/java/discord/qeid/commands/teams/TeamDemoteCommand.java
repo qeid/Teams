@@ -9,6 +9,7 @@ import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.MessagesUtil;
 import discord.qeid.listeners.TeamMessengerListener;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.Bukkit;
@@ -53,6 +54,7 @@ public class TeamDemoteCommand {
                     OfflinePlayer target = Bukkit.getOfflinePlayer(name);
                     if (target == null || target.getName() == null) {
                         sender.sendMessage(MessagesUtil.get("team.demote.not-found"));
+                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -62,11 +64,13 @@ public class TeamDemoteCommand {
                     Team team = manager.getTeamByPlayer(execId);
                     if (team == null) {
                         sender.sendMessage(MessagesUtil.get("team.demote.not-in-team"));
+                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
                         sender.sendMessage(MessagesUtil.get("team.demote.not-in-team"));
+                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -82,16 +86,19 @@ public class TeamDemoteCommand {
 
                     if (newRole == null) {
                         sender.sendMessage(MessagesUtil.get("team.demote.invalid-target"));
+                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (!canDemote(execRole, oldRole)) {
                         sender.sendMessage(MessagesUtil.get("team.demote.no-permission"));
+                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     if (!manager.demoteToRole(team.getId(), targetId, newRole)) {
                         sender.sendMessage(MessagesUtil.get("team.demote.failed"));
+                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -100,6 +107,7 @@ public class TeamDemoteCommand {
                         .replace("%oldrole%", oldRole.name())
                         .replace("%newrole%", newRole));
 
+                    ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
                     Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
 
 

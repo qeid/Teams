@@ -8,6 +8,7 @@ import discord.qeid.Teams;
 import discord.qeid.model.Team;
 import discord.qeid.utils.MessagesUtil;
 import discord.qeid.utils.DebugUtil;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
@@ -54,17 +55,20 @@ public class TeamCreateCommand {
         if (teamName.length() < minNameLength) {
             player.sendMessage(MessagesUtil.get("team.create.name-too-short")
                 .replace("%min%", String.valueOf(minNameLength)));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
         if (teamName.length() > maxNameLength) {
             player.sendMessage(MessagesUtil.get("team.create.length-error")
                 .replace("%max%", String.valueOf(maxNameLength)));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
         // validate name characters
         if (!Pattern.matches(nameRegex, teamName)) {
             player.sendMessage(MessagesUtil.get("team.create.invalid-name"));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
@@ -73,6 +77,7 @@ public class TeamCreateCommand {
         if (tag.length() < minTagLength) {
             player.sendMessage(MessagesUtil.get("team.create.tag-too-short")
                 .replace("%min%", String.valueOf(minTagLength)));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
         if (tag.length() > maxTagLength) {
@@ -82,6 +87,7 @@ public class TeamCreateCommand {
         // validate tag characters
         if (!Pattern.matches(tagRegex, tag)) {
             player.sendMessage(MessagesUtil.get("team.create.invalid-tag"));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
@@ -91,12 +97,14 @@ public class TeamCreateCommand {
         Team existing = teamManager.getTeamByPlayer(player.getUniqueId());
         if (existing != null) {
             player.sendMessage(MessagesUtil.get("team.create.in-team"));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
         // team name taken?
         if (teamManager.teamExists(teamName)) {
             player.sendMessage(MessagesUtil.get("team.create.exists"));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
@@ -105,14 +113,14 @@ public class TeamCreateCommand {
 
         if (!success) {
             player.sendMessage(MessagesUtil.get("team.create.error"));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
 
         player.sendMessage(MessagesUtil.get("team.create.success")
                 .replace("%name%", teamName)
                 .replace("%tag%", tag));
-        // TODO: Add audit log here
-
+        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
         Team team = teamManager.getTeamByPlayer(player.getUniqueId());
         DebugUtil.sendTeamDebugInfo(player, team);
