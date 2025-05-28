@@ -587,6 +587,34 @@ public class TeamManager {
         }
     }
 
+    public boolean unbanPlayer(String teamId, UUID player) {
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+            "DELETE FROM team_bans WHERE team_id = ? AND player_uuid = ?"
+        )) {
+            stmt.setString(1, teamId);
+            stmt.setString(2, player.toString());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<UUID> getBannedPlayers(String teamId) {
+        List<UUID> banned = new ArrayList<>();
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+            "SELECT player_uuid FROM team_bans WHERE team_id = ?"
+        )) {
+            stmt.setString(1, teamId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                banned.add(UUID.fromString(rs.getString("player_uuid")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return banned;
+    }
 
 
     private String generateRandomId() {
