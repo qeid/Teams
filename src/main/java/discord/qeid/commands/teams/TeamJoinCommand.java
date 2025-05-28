@@ -6,11 +6,8 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
 import discord.qeid.database.TeamManager;
 import discord.qeid.model.Team;
-import discord.qeid.utils.ColorUtils;
-import discord.qeid.utils.MessagesUtil;
+import discord.qeid.utils.*;
 import discord.qeid.listeners.TeamMessengerListener;
-import discord.qeid.utils.DebugUtil;
-import discord.qeid.utils.DurationUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 
@@ -61,6 +58,7 @@ public class TeamJoinCommand {
                     Team targetTeam = teamManager.getTeamByName(input);
                     if (targetTeam == null) {
                         player.sendMessage(MessagesUtil.get("team.join.team-null"));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -69,6 +67,7 @@ public class TeamJoinCommand {
                     //
                     if (teamManager.getTeamByPlayer(playerId) != null) {
                         player.sendMessage(MessagesUtil.get("team.join.already-in-team"));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -77,24 +76,28 @@ public class TeamJoinCommand {
                         player.sendMessage(MessagesUtil.get("team.join.banned")
                             .replace("%reason%", banInfo.reason())
                             .replace("%duration%", DurationUtil.formatDurationUntil(banInfo.expiresAt())));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     //
                     if (!dataManager.hasInvite(playerId, teamId)) {
                         player.sendMessage(MessagesUtil.get("team.join.no-pending-invite"));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     Team team = teamManager.getTeamById(teamId);
                     if (team == null) {
-                        player.sendMessage(MessagesUtil.get("team.join.team-null"));
+                        player.sendMessage(MessagesUtil.get("team.join.null"));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
                     boolean added = teamManager.addMemberToTeam(teamId, playerId);
                     if (!added) {
-                        player.sendMessage(MessagesUtil.get("team.join.join-failed"));
+                        player.sendMessage(MessagesUtil.get("team.join.failed"));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -104,7 +107,8 @@ public class TeamJoinCommand {
 
 
                     dataManager.removeInvite(playerId, teamId);
-                    player.sendMessage(MessagesUtil.get("team.join.join-success").replace("%team%", team.getName()));
+                    player.sendMessage(MessagesUtil.get("team.join.success").replace("%team%", team.getName()));
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
                     Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
                     TeamMessengerListener.broadcast(updatedTeam, MessagesUtil.get("team.notifications.player-joined").replace("%player%", player.getName()));
 

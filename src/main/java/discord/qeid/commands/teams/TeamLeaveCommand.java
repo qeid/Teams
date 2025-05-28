@@ -7,6 +7,7 @@ import discord.qeid.model.Team;
 import discord.qeid.utils.MessagesUtil;
 import discord.qeid.listeners.TeamMessengerListener;
 import discord.qeid.utils.DebugUtil;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
@@ -31,22 +32,26 @@ public class TeamLeaveCommand {
 
                 if (team == null) {
                     player.sendMessage(MessagesUtil.get("team.leave.not-in-team"));
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                     return Command.SINGLE_SUCCESS;
                 }
 
                 if (team.getOwner().equals(playerId)) {
                     player.sendMessage(MessagesUtil.get("team.leave.owner-cannot-leave"));
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                     return Command.SINGLE_SUCCESS;
                 }
 
                 boolean removed = teamManager.kickMember(team.getId(), playerId);
                 if (!removed) {
                     player.sendMessage(MessagesUtil.get("team.leave.failed"));
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                     return Command.SINGLE_SUCCESS;
                 }
 
                 player.sendMessage(MessagesUtil.get("team.leave.success")
                     .replace("%team%", team.getName()));
+                player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
                 Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
                 TeamMessengerListener.broadcastExcluding(updatedTeam, playerId,
