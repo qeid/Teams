@@ -7,7 +7,6 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
 import discord.qeid.model.Team;
 import discord.qeid.utils.MessagesUtil;
-import discord.qeid.utils.DebugUtil;
 import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -18,7 +17,6 @@ import org.bukkit.entity.Player;
 import java.util.regex.Pattern;
 
 import static discord.qeid.utils.ColorUtils.applyTagCase;
-import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public class TeamCreateCommand {
 
@@ -45,9 +43,7 @@ public class TeamCreateCommand {
         int maxTagLength = config.getInt("team.create.max-tag-length", 5);
         String nameRegex = config.getString("team.create.name-regex", "^[A-Za-z0-9 _-]+$");
         String tagRegex = config.getString("team.create.tag-regex", "^[A-Za-z0-9]+$");
-        
         String tagCase = config.getString("team.create.tag-case", "upper");
-
 
         String teamName = StringArgumentType.getString(ctx, "team name").trim();
 
@@ -74,6 +70,8 @@ public class TeamCreateCommand {
 
         // tag is first word, clamped to max tag length
         String tag = teamName.split(" ")[0];
+        tag = applyTagCase(tag, tagCase);
+
         if (tag.length() < minTagLength) {
             player.sendMessage(MessagesUtil.get("team.create.tag-too-short")
                 .replace("%min%", String.valueOf(minTagLength)));
@@ -81,7 +79,7 @@ public class TeamCreateCommand {
             return Command.SINGLE_SUCCESS;
         }
         if (tag.length() > maxTagLength) {
-            tag = applyTagCase(tag, tagCase);
+            tag = tag.substring(0, maxTagLength);
         }
 
         // validate tag characters
@@ -104,6 +102,15 @@ public class TeamCreateCommand {
         // team name taken?
         if (teamManager.teamExists(teamName)) {
             player.sendMessage(MessagesUtil.get("team.create.exists"));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+            return Command.SINGLE_SUCCESS;
+        }
+
+        // tag taken? (disambiguity check)
+        Team tagExisting = teamManager.getTeamByTag(tag);
+        if (tagExisting != null) {
+            player.sendMessage(MessagesUtil.get("team.tag.exists")
+                .replace("%tag%", tag));
             player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }

@@ -19,7 +19,7 @@ team:
     # Regex for allowed team tags (letters and numbers only, no spaces)
     tag-regex: "^[A-Za-z0-9]+$"
 
-    # Tag case: "upper" for ALL CAPS, "lower" for all lowercase, "proper" for First letter uppercase
+    # Tag case: "upper" for ALL CAPS, "lower" for all lowercase, "proper" for First letter uppercase (Note: existing teams tags will not change)
     tag-case: "upper"
   info:
     # Show online/offline indicator in /team info & who (true = show, false = hide)

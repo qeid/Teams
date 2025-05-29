@@ -22,7 +22,7 @@ public class TeamJoinCommand {
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("join")
-            .then(Commands.argument("team invites", StringArgumentType.word())
+            .then(Commands.argument("team invites", StringArgumentType.greedyString())
                 .suggests((ctx, builder) -> {
                     CommandSender sender = ctx.getSource().getSender();
                     if (!(sender instanceof Player player)) return builder.buildFuture();
@@ -48,7 +48,7 @@ public class TeamJoinCommand {
                         return Command.SINGLE_SUCCESS;
                     }
 
-                    String input = StringArgumentType.getString(ctx, "team invites").trim();
+                    String input = StringArgumentType.getString(ctx, "team invites");
                     UUID playerId = player.getUniqueId();
 
                     var teamManager = Teams.getInstance().getTeamManager();

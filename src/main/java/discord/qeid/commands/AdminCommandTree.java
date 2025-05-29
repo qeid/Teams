@@ -23,6 +23,9 @@ public class AdminCommandTree {
             .then(TeamAdminForceJoinCommand.buildSubcommand())
             .then(TeamAdminLogsCommand.buildSubcommand())
             .then(TeamAdminForceDisbandCommand.buildSubcommand())
+            .then(TeamAdminAuditLogCommand.buildSubcommand())
+            .then(TeamAdminBansCommand.buildSubcommand())
+            .then(TeamAdminInfoCommand.buildSubcommand())
         .build();
     }
 }

@@ -25,8 +25,8 @@ public class TeamAdminForceJoinCommand {
             .then(Commands.argument("team", StringArgumentType.word())
                 .suggests((ctx, builder) -> {
                     Teams.getInstance().getTeamManager().getAllTeams().stream()
-                        .map(Team::getName)
-                        .filter(name -> name.toLowerCase().startsWith(builder.getRemainingLowerCase()))
+                        .map(Team::getTag)
+                        .filter(tag -> tag.toLowerCase().startsWith(builder.getRemainingLowerCase()))
                         .forEach(builder::suggest);
                     return builder.buildFuture();
                 })
@@ -39,41 +39,40 @@ public class TeamAdminForceJoinCommand {
                         return builder.buildFuture();
                     })
                     .executes(ctx -> {
-                        String teamName = StringArgumentType.getString(ctx, "team");
+                        String tag = StringArgumentType.getString(ctx, "team");
                         String playerName = StringArgumentType.getString(ctx, "player");
-                        return execute(ctx.getSource().getSender(), teamName, playerName);
+                        return execute(ctx.getSource().getSender(), tag, playerName);
                     })
                 )
                 .executes(ctx -> {
-                    String teamName = StringArgumentType.getString(ctx, "team");
+                    String tag = StringArgumentType.getString(ctx, "tag");
                     CommandSender sender = ctx.getSource().getSender();
                     String playerName = sender instanceof Player ? sender.getName() : null;
-                    return execute(sender, teamName, playerName);
+                    return execute(sender, tag, playerName);
                 })
             ).build();
     }
 
-    private static int execute(CommandSender sender, String teamName, String playerName) {
+    private static int execute(CommandSender sender, String tag, String playerName) {
         TeamManager teamManager = Teams.getInstance().getTeamManager();
-        Team team = teamManager.getTeamByName(teamName);
+        Team team = teamManager.getTeamByTag(tag);
 
         if (team == null) {
             sender.sendMessage(MessagesUtil.get("admin.forcejoin.team-not-found"));
-            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+            if (sender instanceof Player p) p.playSound(p.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return 1;
         }
 
-        OfflinePlayer target;
         if (playerName == null) {
             sender.sendMessage(MessagesUtil.get("admin.forcejoin.player-not-found"));
-            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+            if (sender instanceof Player p) p.playSound(p.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return 1;
         }
-        target = Bukkit.getOfflinePlayer(playerName);
+        OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
 
         if (target == null || target.getName() == null) {
             sender.sendMessage(MessagesUtil.get("admin.forcejoin.player-not-found"));
-            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+            if (sender instanceof Player p) p.playSound(p.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return 1;
         }
 
@@ -82,14 +81,14 @@ public class TeamAdminForceJoinCommand {
         if (teamManager.getTeamByPlayer(targetId) != null) {
             sender.sendMessage(MessagesUtil.get("admin.forcejoin.already-in-team")
                 .replace("%player%", target.getName()));
-            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+            if (sender instanceof Player p) p.playSound(p.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return 1;
         }
 
         boolean added = teamManager.addMemberToTeam(team.getId(), targetId);
         if (!added) {
             sender.sendMessage(ColorUtils.format("&cFailed to force-join player to the Team."));
-            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+            if (sender instanceof Player p) p.playSound(p.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return 1;
         }
 
@@ -111,6 +110,15 @@ public class TeamAdminForceJoinCommand {
                 .replace("%player%", target.getName())
         );
 
+        Teams.getInstance().getAdminLogManager().logAction(
+            sender instanceof Player ? ((Player) sender).getUniqueId() : UUID.randomUUID(),
+            sender.getName(),
+            "Force Join",
+            team.getName(),
+            target.getName(),
+            null
+        );
+
         Player onlineTarget = Bukkit.getPlayer(targetId);
         if (onlineTarget != null) {
             onlineTarget.sendMessage(MessagesUtil.get("admin.forcejoin.you-were-joined")
@@ -118,15 +126,7 @@ public class TeamAdminForceJoinCommand {
                 .replace("%executor%", sender.getName()));
         }
 
-        Teams.getInstance().getAdminLogManager().logAction(
-            sender instanceof Player ? ((Player) sender).getUniqueId() : UUID.randomUUID(),
-            sender.getName(),
-            "Force Join",
-            team.getName(),
-            target.getName(), // or null
-            null
-        );
-        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
+        if (sender instanceof Player p) p.playSound(p.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
         return 1;
     }

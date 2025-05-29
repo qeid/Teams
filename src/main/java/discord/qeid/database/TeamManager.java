@@ -616,6 +616,31 @@ public class TeamManager {
         return banned;
     }
 
+    public Team getTeamByTag(String tag) {
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+                "SELECT id, name, tag, owner_uuid, created_at FROM teams WHERE LOWER(tag) = LOWER(?)")) {
+            stmt.setString(1, tag);
+            ResultSet rs = stmt.executeQuery();
+            if (!rs.next()) return null;
+            UUID owner = UUID.fromString(rs.getString("owner_uuid"));
+            String teamId = rs.getString("id");
+            Map<TeamRoles, Set<UUID>> members = loadTeamMembers(teamId);
+            return new Team(
+                teamId,
+                rs.getString("name"),
+                rs.getString("tag"),
+                owner,
+                members.get(TeamRoles.ADMIN),
+                members.get(TeamRoles.MOD),
+                members.get(TeamRoles.MEMBER),
+                rs.getLong("created_at")
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     private String generateRandomId() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

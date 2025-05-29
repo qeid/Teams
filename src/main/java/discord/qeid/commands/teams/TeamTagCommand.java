@@ -38,7 +38,6 @@ public class TeamTagCommand {
                     String tagCase = config.getString("team.create.tag-case", "upper");
 
                     String newTag = StringArgumentType.getString(ctx, "new tag").trim();
-
                     newTag = applyTagCase(newTag, tagCase);
 
                     var teamManager = Teams.getInstance().getTeamManager();
@@ -49,20 +48,26 @@ public class TeamTagCommand {
                         return Command.SINGLE_SUCCESS;
                     }
 
-                    // Only owner can change tag
                     if (!team.getOwner().equals(player.getUniqueId())) {
                         player.sendMessage(MessagesUtil.get("team.tag.no-permission"));
                         player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
-                    // Validate tag
                     if (newTag.length() < minTagLength || newTag.length() > maxTagLength ||
                         !Pattern.matches(tagRegex, newTag)) {
                         player.sendMessage(MessagesUtil.get("team.tag.invalid")
                             .replace("%min%", String.valueOf(minTagLength))
                             .replace("%max%", String.valueOf(maxTagLength))
                             .replace("%regex%", tagRegex));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                        return Command.SINGLE_SUCCESS;
+                    }
+
+                    Team existing = teamManager.getTeamByTag(newTag);
+                    if (existing != null && !existing.getId().equals(team.getId())) {
+                        player.sendMessage(MessagesUtil.get("team.tag.exists")
+                            .replace("%tag%", newTag));
                         player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
@@ -74,7 +79,6 @@ public class TeamTagCommand {
                         return Command.SINGLE_SUCCESS;
                     }
 
-                    // Broadcast to team
                     Team updatedTeam = teamManager.getTeamById(team.getId());
                     TeamMessengerListener.broadcastWithRank(updatedTeam, player.getUniqueId(),
                         MessagesUtil.get("team.notifications.tag-change")
@@ -86,7 +90,6 @@ public class TeamTagCommand {
                         .replace("%tag%", newTag));
                     player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
-                    // Audit log
                     teamManager.logAudit(
                         team.getId(),
                         player.getUniqueId(),
