@@ -120,7 +120,7 @@ team:
     sent: "&#db7dac❙ &fYou invited &#db7dac%target% &fto join your Team!" # placeholders: %target%
     no_team: "&cYou must be in a Team to invite players."
     expired-invitee: "&cYour invite from %team% has expired." # placeholders: %team%
-    expired-team: "&#db7dac❙ &fThe invite sent to &#db7dac%target% &fexpired." # placeholders: %target%
+    expired-team: "&fThe invite sent to &#db7dac%target% &fexpired." # placeholders: %target%
     no_permission: "&cYou need to be Mod or higher in your Team to invite players!"
     already_in_team: "&cThat player is already in a Team."
     already_invited: "&eThat player has already been invited."
@@ -138,7 +138,7 @@ team:
     no-pending-invite: "&cYou have no pending invite to that Team."
     null: "&cThat Team does not exist."
     failed: "&cSorry, but we're unable to add you to this Team. Please try again later."
-    success: "&#db7dac❙ &fYou have joined the Team &e%team%" # placeholders: %team%
+    success: "&#db7dac❙ &fYou have joined the Team &#db7dac%team%" # placeholders: %team%
     already-in-team: "&cYou are already in a Team."
     banned: "&#db7dac❙ &fYou are currently banned from this Team for &#db7dac'%reason%' &ffor &e%duration%&f." # placeholders: %reason% %duration%
   kick:

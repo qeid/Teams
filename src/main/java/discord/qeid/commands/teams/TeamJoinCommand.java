@@ -113,7 +113,7 @@ public class TeamJoinCommand {
                     TeamMessengerListener.broadcast(updatedTeam, MessagesUtil.get("team.notifications.player-joined").replace("%player%", player.getName()));
 
                     team = teamManager.getTeamById(team.getId());
-                    DebugUtil.sendTeamDebugInfo(player, team);
+                    //DebugUtil.sendTeamDebugInfo(player, team);
 
                     teamManager.logAudit(
                     team.getId(),

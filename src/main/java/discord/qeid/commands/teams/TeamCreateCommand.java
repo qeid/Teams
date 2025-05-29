@@ -123,7 +123,7 @@ public class TeamCreateCommand {
         player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
         Team team = teamManager.getTeamByPlayer(player.getUniqueId());
-        DebugUtil.sendTeamDebugInfo(player, team);
+        //DebugUtil.sendTeamDebugInfo(player, team);
 
         return Command.SINGLE_SUCCESS;
     }
