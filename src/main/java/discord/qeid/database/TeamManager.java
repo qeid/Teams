@@ -289,18 +289,46 @@ public class TeamManager {
 
     public TeamBanInfo getBanInfo(String teamId, UUID player) {
         try (PreparedStatement stmt = db.getConnection().prepareStatement(
-                "SELECT reason, expires_at FROM team_bans WHERE team_id = ? AND player_uuid = ?")) {
+                "SELECT player_uuid, executor_uuid, reason, expires_at, executed_at FROM team_bans WHERE team_id = ? AND player_uuid = ?")) {
             stmt.setString(1, teamId);
             stmt.setString(2, player.toString());
             ResultSet rs = stmt.executeQuery();
 
             if (!rs.next()) return null;
-            return new TeamBanInfo(rs.getString("reason"), rs.getLong("expires_at"));
+            UUID playerId = UUID.fromString(rs.getString("player_uuid"));
+            UUID executorId = rs.getString("executor_uuid") != null ? UUID.fromString(rs.getString("executor_uuid")) : null;
+            String reason = rs.getString("reason");
+            long expiresAt = rs.getLong("expires_at");
+            long executedAt = rs.getLong("executed_at");
+            return new TeamBanInfo(playerId, executorId, reason, expiresAt, executedAt);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
+
+
+    public List<TeamBanInfo> getAllBans(String teamId) {
+        List<TeamBanInfo> bans = new ArrayList<>();
+        try (PreparedStatement stmt = db.getConnection().prepareStatement(
+            "SELECT player_uuid, executor_uuid, reason, expires_at, executed_at FROM team_bans WHERE team_id = ?"
+        )) {
+            stmt.setString(1, teamId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UUID player = UUID.fromString(rs.getString("player_uuid"));
+                UUID executor = rs.getString("executor_uuid") != null ? UUID.fromString(rs.getString("executor_uuid")) : null;
+                String reason = rs.getString("reason");
+                long expiresAt = rs.getLong("expires_at");
+                long executedAt = rs.getLong("executed_at");
+                bans.add(new TeamBanInfo(player, executor, reason, expiresAt, executedAt));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bans;
+    }
+
 
     public boolean disbandTeam(String teamId) {
         Connection conn = db.getConnection();
@@ -640,6 +668,8 @@ public class TeamManager {
             return null;
         }
     }
+
+
 
 
     private String generateRandomId() {

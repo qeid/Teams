@@ -98,7 +98,7 @@ public class TeamAdminForceDisbandCommand {
 
         pending.put(adminId, new PendingDisband(tag, reason, now));
         sender.sendMessage(MessagesUtil.get("admin.forcedisband.confirm")
-            .replace("%team%", team.getName())
+            .replace("%team%", team.getTag())
             .replace("%reason%", reason));
         player.playSound(player.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 1.0F, 1.5F);
 
