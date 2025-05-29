@@ -14,11 +14,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static discord.qeid.utils.ColorUtils.applyTagCase;
 
 public class TeamTagCommand {
+
+    // Map<teamId, lastTagChangeMillis>
+    private static final Map<String, Long> lastTagChange = new HashMap<>();
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("tag")
@@ -36,6 +42,7 @@ public class TeamTagCommand {
                     int maxTagLength = config.getInt("team.create.max-tag-length", 5);
                     String tagRegex = config.getString("team.create.tag-regex", "^[A-Za-z0-9]+$");
                     String tagCase = config.getString("team.create.tag-case", "upper");
+                    int cooldownSeconds = config.getInt("team.tag.cooldown-seconds", 300);
 
                     String newTag = StringArgumentType.getString(ctx, "new tag").trim();
                     newTag = applyTagCase(newTag, tagCase);
@@ -50,6 +57,19 @@ public class TeamTagCommand {
 
                     if (!team.getOwner().equals(player.getUniqueId())) {
                         player.sendMessage(MessagesUtil.get("team.tag.no-permission"));
+                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                        return Command.SINGLE_SUCCESS;
+                    }
+
+                    // Cooldown check
+                    String teamId = team.getId();
+                    long now = System.currentTimeMillis();
+                    long last = lastTagChange.getOrDefault(teamId, 0L);
+                    long wait = (last + cooldownSeconds * 1000L) - now;
+                    if (wait > 0) {
+                        long seconds = wait / 1000;
+                        player.sendMessage(MessagesUtil.get("team.tag.cooldown")
+                            .replace("%cooldown%", String.valueOf(seconds)));
                         player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
@@ -78,6 +98,9 @@ public class TeamTagCommand {
                         player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
+
+                    // Set cooldown
+                    lastTagChange.put(teamId, now);
 
                     Team updatedTeam = teamManager.getTeamById(team.getId());
                     TeamMessengerListener.broadcastWithRank(updatedTeam, player.getUniqueId(),

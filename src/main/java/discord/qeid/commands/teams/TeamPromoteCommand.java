@@ -23,14 +23,12 @@ import java.util.UUID;
 import static discord.qeid.utils.ColorUtils.coloredRank;
 import static discord.qeid.utils.ColorUtils.formatLegacy;
 
-
 public class TeamPromoteCommand {
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("promote")
             .then(Commands.argument("player", StringArgumentType.word())
                 .suggests((ctx, builder) -> {
-                    //System.out.println("[DEBUG][PROMOTE] Suggestions loaded:");
                     CommandSender sender = ctx.getSource().getSender();
                     if (!(sender instanceof Player p)) return builder.buildFuture();
 
@@ -62,82 +60,88 @@ public class TeamPromoteCommand {
 
                     UUID execId = executor.getUniqueId();
                     UUID targetId = target.getUniqueId();
-                    TeamManager manager = Teams.getInstance().getTeamManager();
-                    Team team = manager.getTeamByPlayer(execId);
-                    if (team == null) {
-                        sender.sendMessage(MessagesUtil.get("team.promote.not-in-team"));
-                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
-
-                    if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
-                        sender.sendMessage(MessagesUtil.get("team.promote.not-in-team"));
-                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
-
-                    TeamRoles execRole = manager.getRole(team, execId);
-                    TeamRoles oldRole = manager.getRole(team, targetId);
-
-                    // chain
-                    String newRole = switch (oldRole) {
-                        case MEMBER -> TeamRoles.MOD.name();
-                        case MOD -> TeamRoles.ADMIN.name();
-                        default -> null;
-                    };
-
-                    if (newRole == null) {
-                        sender.sendMessage(MessagesUtil.get("team.promote.invalid-target"));
-                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
-
-                    // permission checks
-                    if (!canPromote(execRole, oldRole)) {
-                        sender.sendMessage(MessagesUtil.get("team.promote.no-permission"));
-                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
-
-                    if (!manager.promoteToRole(team.getId(), targetId, newRole)) {
-                        sender.sendMessage(MessagesUtil.get("team.promote.failed"));
-                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
-
-                    team = manager.getTeamById(team.getId());
 
 
-                    String oldRoleColor = coloredRank(oldRole, true);
-                    String newRoleColor = coloredRank(TeamRoles.valueOf(newRole), true);
+                    Bukkit.getScheduler().runTaskAsynchronously(Teams.getInstance(), () -> {
+                        TeamManager manager = Teams.getInstance().getTeamManager();
+                        Team team = manager.getTeamByPlayer(execId);
+                        if (team == null) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                sender.sendMessage(MessagesUtil.get("team.promote.not-in-team"));
+                                ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    sender.sendMessage(MessagesUtil.get("team.promote.success")
-                        .replace("%target%", target.getName())
-                        .replace("%oldrole%", formatLegacy(oldRoleColor))
-                        .replace("%newrole%", formatLegacy(newRoleColor)));
-                    ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
+                        if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                sender.sendMessage(MessagesUtil.get("team.promote.not-in-team"));
+                                ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
+                        TeamRoles execRole = manager.getRole(team, execId);
+                        TeamRoles oldRole = manager.getRole(team, targetId);
 
-                    TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, MessagesUtil.get("team.notifications.promoted")
-                        .replace("%target%", target.getName())
-                        .replace("%executor%", executor.getName())
-                        .replace("%oldrole%", oldRoleColor)
-                        .replace("%newrole%", newRoleColor));
+                        String newRole = switch (oldRole) {
+                            case MEMBER -> TeamRoles.MOD.name();
+                            case MOD -> TeamRoles.ADMIN.name();
+                            default -> null;
+                        };
 
-                    manager.logAudit(
-                        team.getId(),
-                        executor.getUniqueId(),
-                        "Promote",
-                        executor.getName() + " promoted " + target.getName() + " from " + oldRole.name() + " to " + newRole + "."
-                    );
+                        if (newRole == null) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                sender.sendMessage(MessagesUtil.get("team.promote.invalid-target"));
+                                ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
+                        if (!canPromote(execRole, oldRole)) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                sender.sendMessage(MessagesUtil.get("team.promote.no-permission"));
+                                ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
+                        boolean promoted = manager.promoteToRole(team.getId(), targetId, newRole);
+                        if (!promoted) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                sender.sendMessage(MessagesUtil.get("team.promote.failed"));
+                                ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
+                        Team updatedTeam = manager.getTeamById(team.getId());
+                        String oldRoleColor = coloredRank(oldRole, true);
+                        String newRoleColor = coloredRank(TeamRoles.valueOf(newRole), true);
+
+                        Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                            sender.sendMessage(MessagesUtil.get("team.promote.success")
+                                .replace("%target%", target.getName())
+                                .replace("%oldrole%", formatLegacy(oldRoleColor))
+                                .replace("%newrole%", formatLegacy(newRoleColor)));
+                            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
+
+                            TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, MessagesUtil.get("team.notifications.promoted")
+                                .replace("%target%", target.getName())
+                                .replace("%executor%", executor.getName())
+                                .replace("%oldrole%", oldRoleColor)
+                                .replace("%newrole%", newRoleColor));
+
+                            manager.logAudit(
+                                team.getId(),
+                                executor.getUniqueId(),
+                                "Promote",
+                                executor.getName() + " promoted " + target.getName() + " from " + oldRole.name() + " to " + newRole + "."
+                            );
+                        });
+                    });
 
                     return Command.SINGLE_SUCCESS;
-
-
                 })).build();
     }
 

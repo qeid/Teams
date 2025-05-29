@@ -10,8 +10,7 @@ import discord.qeid.utils.*;
 import discord.qeid.listeners.TeamMessengerListener;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-
-
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,7 +29,7 @@ public class TeamJoinCommand {
                     UUID playerId = player.getUniqueId();
                     Set<String> teamIds = Teams.getInstance().getPlayerDataManager().getInvites(playerId);
 
-                    // Map team IDs to their names
+
                     TeamManager manager = Teams.getInstance().getTeamManager();
                     teamIds.stream()
                         .map(manager::getTeamById)
@@ -51,76 +50,83 @@ public class TeamJoinCommand {
                     String input = StringArgumentType.getString(ctx, "team invites");
                     UUID playerId = player.getUniqueId();
 
-                    var teamManager = Teams.getInstance().getTeamManager();
-                    var dataManager = Teams.getInstance().getPlayerDataManager();
+                    Bukkit.getScheduler().runTaskAsynchronously(Teams.getInstance(), () -> {
+                        TeamManager teamManager = Teams.getInstance().getTeamManager();
+                        var dataManager = Teams.getInstance().getPlayerDataManager();
 
-                    //
-                    Team targetTeam = teamManager.getTeamByName(input);
-                    if (targetTeam == null) {
-                        player.sendMessage(MessagesUtil.get("team.join.null"));
-                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
+                        Team targetTeam = teamManager.getTeamByName(input);
+                        if (targetTeam == null) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                player.sendMessage(MessagesUtil.get("team.join.null"));
+                                player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    String teamId = targetTeam.getId();
+                        String teamId = targetTeam.getId();
 
-                    //
-                    if (teamManager.getTeamByPlayer(playerId) != null) {
-                        player.sendMessage(MessagesUtil.get("team.join.already-in-team"));
-                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
+                        if (teamManager.getTeamByPlayer(playerId) != null) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                player.sendMessage(MessagesUtil.get("team.join.already-in-team"));
+                                player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    if (teamManager.isBanned(teamId, playerId)) {
-                        var banInfo = teamManager.getBanInfo(teamId, playerId);
-                        player.sendMessage(MessagesUtil.get("team.join.banned")
-                            .replace("%reason%", banInfo.reason())
-                            .replace("%duration%", DurationUtil.formatDurationUntil(banInfo.expiresAt())));
-                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
+                        if (teamManager.isBanned(teamId, playerId)) {
+                            var banInfo = teamManager.getBanInfo(teamId, playerId);
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                player.sendMessage(MessagesUtil.get("team.join.banned")
+                                    .replace("%reason%", banInfo.reason())
+                                    .replace("%duration%", DurationUtil.formatDurationUntil(banInfo.expiresAt())));
+                                player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    //
-                    if (!dataManager.hasInvite(playerId, teamId)) {
-                        player.sendMessage(MessagesUtil.get("team.join.no-pending-invite"));
-                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
+                        if (!dataManager.hasInvite(playerId, teamId)) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                player.sendMessage(MessagesUtil.get("team.join.no-pending-invite"));
+                                player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    Team team = teamManager.getTeamById(teamId);
-                    if (team == null) {
-                        player.sendMessage(MessagesUtil.get("team.join.null"));
-                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
+                        Team team = teamManager.getTeamById(teamId);
+                        if (team == null) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                player.sendMessage(MessagesUtil.get("team.join.null"));
+                                player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    boolean added = teamManager.addMemberToTeam(teamId, playerId);
-                    if (!added) {
-                        player.sendMessage(MessagesUtil.get("team.join.failed"));
-                        player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
+                        boolean added = teamManager.addMemberToTeam(teamId, playerId);
+                        if (!added) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                player.sendMessage(MessagesUtil.get("team.join.failed"));
+                                player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
+                        dataManager.removeInvite(playerId, teamId);
 
+                        Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                            player.sendMessage(MessagesUtil.get("team.join.success").replace("%team%", team.getName()));
+                            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
+                            Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
+                            TeamMessengerListener.broadcast(updatedTeam, MessagesUtil.get("team.notifications.player-joined").replace("%player%", player.getName()));
 
-
-
-                    dataManager.removeInvite(playerId, teamId);
-                    player.sendMessage(MessagesUtil.get("team.join.success").replace("%team%", team.getName()));
-                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
-                    Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
-                    TeamMessengerListener.broadcast(updatedTeam, MessagesUtil.get("team.notifications.player-joined").replace("%player%", player.getName()));
-
-                    team = teamManager.getTeamById(team.getId());
-                    //DebugUtil.sendTeamDebugInfo(player, team);
-
-                    teamManager.logAudit(
-                    team.getId(),
-                    playerId,
-                    "Join",
-                    player.getName() + " joined the team."
-                );
+                            Teams.getInstance().getTeamManager().logAudit(
+                                team.getId(),
+                                playerId,
+                                "Join",
+                                player.getName() + " joined the team."
+                            );
+                        });
+                    });
 
                     return Command.SINGLE_SUCCESS;
                 })

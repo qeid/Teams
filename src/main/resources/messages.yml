@@ -117,6 +117,7 @@ team:
     error: "&cAn error occurred while creating the Team, please contact a server administrator for more information."
     not-player: "&cOnly players can create Teams."
     length-error: "&cTeam names must be 32 characters or less."
+    cooldown: "&cYou've recently created a Team! Please wait and try again later." # placeholders: %cooldown%
   invite:
     sent: "&#db7dac❙ &fYou invited &#db7dac%target% &fto join your Team!" # placeholders: %target%
     no_team: "&cYou must be in a Team to invite players."
@@ -231,6 +232,7 @@ team:
   home:
     not-set: "&cYour Team does not have a home set."
     success: "&#db7dac❙ &fTeleported to Team home."
+    cooldown: "&cPlease wait a little before attempting to teleport again!" # placeholders: %cooldown%
   delhome:
     success: "&#db7dac❙ &fSuccessfully deleted the Team home."
     failed: "&cSomething went wrong whilst trying to delete the Team home. Please try again later."
@@ -269,6 +271,7 @@ team:
     no-permission: "&cOnly the Team owner can change the tag."
     invalid: "&cThat tag is invalid. Tags must be %min%-%max% characters" # placeholders: %min% %max% %regex%
     exists: "&cA team with that tag already exists." # placeholders: %tag%
+    cooldown: "&cYou've recently changed your Team tag. Please wait and try again later."
   chat:
     toggled-on: "&#db7dac❙ &fTeam chat enabled. Your messages will go to Team chat."
     toggled-off: "&#db7dac❙ &fTeam chat disabled. Your messages will go to public chat."

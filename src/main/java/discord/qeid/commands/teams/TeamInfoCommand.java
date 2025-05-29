@@ -9,6 +9,7 @@ import discord.qeid.model.Team;
 import discord.qeid.utils.ColorUtils;
 import discord.qeid.utils.MessagesUtil;
 
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.Bukkit;
@@ -26,60 +27,57 @@ public class TeamInfoCommand {
                 CommandSender sender = ctx.getSource().getSender();
                 if (!(sender instanceof Player player)) {
                     sender.sendMessage(ColorUtils.format("&cOnly players can run this."));
-                    return Command.SINGLE_SUCCESS;
+                    return 1;
                 }
-
                 UUID uuid = player.getUniqueId();
-                TeamManager teamManager = Teams.getInstance().getTeamManager();
-                Team team = teamManager.getTeamByPlayer(uuid);
-
-                if (team == null) {
-                    player.sendMessage(MessagesUtil.get("team.info.not-in-team"));
-                    return Command.SINGLE_SUCCESS;
-                }
-
-                teamManager.sendTeamInfo(player, team);
-                return Command.SINGLE_SUCCESS;
+                Bukkit.getScheduler().runTaskAsynchronously(Teams.getInstance(), () -> {
+                    TeamManager teamManager = Teams.getInstance().getTeamManager();
+                    Team team = teamManager.getTeamByPlayer(uuid);
+                    Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                        if (team == null) {
+                            player.sendMessage(MessagesUtil.get("team.info.not-in-team"));
+                            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                        } else {
+                            teamManager.sendTeamInfo(player, team);
+                        }
+                    });
+                });
+                return 1;
             })
-
             .then(Commands.argument("team", StringArgumentType.greedyString())
                 .suggests((ctx, builder) -> {
-                    //System.out.println("[DEBUG][INFO] Tab suggestions requested: ");
-
                     Teams plugin = Teams.getInstance();
                     var teamManager = plugin.getTeamManager();
-
                     teamManager.getAllTeams().stream()
                         .map(Team::getName)
                         .filter(name -> name.toLowerCase().startsWith(builder.getRemainingLowerCase()))
-                        //.peek(name -> System.out.println("[DEBUG][INFO] Suggesting: " + name))
                         .forEach(builder::suggest);
-
                     return builder.buildFuture();
                 })
-
                 .executes(ctx -> {
                     CommandSender sender = ctx.getSource().getSender();
                     if (!(sender instanceof Player player)) {
                         sender.sendMessage(MessagesUtil.get("general.players-only"));
-                        return Command.SINGLE_SUCCESS;
+                        return 1;
                     }
-
                     String input = StringArgumentType.getString(ctx, "team");
-                    TeamManager teamManager = Teams.getInstance().getTeamManager();
-                    Team team = teamManager.getTeamByName(input);
-
-                    if (team == null) {
-                        player.sendMessage(MessagesUtil.get("team.info.team-not-found"));
-                        return Command.SINGLE_SUCCESS;
-                    }
-
-                    teamManager.sendTeamInfo(player, team);
-                    return Command.SINGLE_SUCCESS;
+                    Bukkit.getScheduler().runTaskAsynchronously(Teams.getInstance(), () -> {
+                        TeamManager teamManager = Teams.getInstance().getTeamManager();
+                        Team team = teamManager.getTeamByName(input);
+                        Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                            if (team == null) {
+                                player.sendMessage(MessagesUtil.get("team.info.team-not-found"));
+                                player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            } else {
+                                teamManager.sendTeamInfo(player, team);
+                            }
+                        });
+                    });
+                    return 1;
                 })
             ).build();
+    }
 
-}
 
 
 

@@ -23,15 +23,12 @@ import java.util.UUID;
 import static discord.qeid.utils.ColorUtils.coloredRank;
 import static discord.qeid.utils.ColorUtils.formatLegacy;
 
-
 public class TeamDemoteCommand {
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("demote")
             .then(Commands.argument("player", StringArgumentType.word())
                 .suggests((ctx, builder) -> {
-                    //System.out.println("[DEBUG][PROMOTE] Suggestions loaded:");
-
                     CommandSender sender = ctx.getSource().getSender();
                     if (!(sender instanceof Player p)) return builder.buildFuture();
 
@@ -63,75 +60,87 @@ public class TeamDemoteCommand {
 
                     UUID execId = executor.getUniqueId();
                     UUID targetId = target.getUniqueId();
-                    TeamManager manager = Teams.getInstance().getTeamManager();
-                    Team team = manager.getTeamByPlayer(execId);
-                    if (team == null) {
-                        sender.sendMessage(MessagesUtil.get("team.demote.not-in-team"));
-                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
 
-                    if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
-                        sender.sendMessage(MessagesUtil.get("team.demote.not-in-team"));
-                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
+                    // Run all DB logic async
+                    Bukkit.getScheduler().runTaskAsynchronously(Teams.getInstance(), () -> {
+                        TeamManager manager = Teams.getInstance().getTeamManager();
+                        Team team = manager.getTeamByPlayer(execId);
+                        if (team == null) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                sender.sendMessage(MessagesUtil.get("team.demote.not-in-team"));
+                                ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    TeamRoles execRole = TeamManager.getRole(team, execId);
-                    TeamRoles oldRole = TeamManager.getRole(team, targetId);
+                        if (!TeamMessengerListener.getAllTeamMembers(team).contains(targetId)) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                sender.sendMessage(MessagesUtil.get("team.demote.not-in-team"));
+                                ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
+                        TeamRoles execRole = TeamManager.getRole(team, execId);
+                        TeamRoles oldRole = TeamManager.getRole(team, targetId);
 
-                    String newRole = switch (oldRole) {
-                        case ADMIN -> TeamRoles.MOD.name();
-                        case MOD -> TeamRoles.MEMBER.name();
-                        default -> null;
-                    };
+                        String newRole = switch (oldRole) {
+                            case ADMIN -> TeamRoles.MOD.name();
+                            case MOD -> TeamRoles.MEMBER.name();
+                            default -> null;
+                        };
 
-                    if (newRole == null) {
-                        sender.sendMessage(MessagesUtil.get("team.demote.invalid-target"));
-                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
+                        if (newRole == null) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                sender.sendMessage(MessagesUtil.get("team.demote.invalid-target"));
+                                ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    if (!canDemote(execRole, oldRole)) {
-                        sender.sendMessage(MessagesUtil.get("team.demote.no-permission"));
-                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
+                        if (!canDemote(execRole, oldRole)) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                sender.sendMessage(MessagesUtil.get("team.demote.no-permission"));
+                                ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    if (!manager.demoteToRole(team.getId(), targetId, newRole)) {
-                        sender.sendMessage(MessagesUtil.get("team.demote.failed"));
-                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-                        return Command.SINGLE_SUCCESS;
-                    }
+                        boolean demoted = manager.demoteToRole(team.getId(), targetId, newRole);
+                        if (!demoted) {
+                            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                                sender.sendMessage(MessagesUtil.get("team.demote.failed"));
+                                ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                            });
+                            return;
+                        }
 
-                    String oldRoleColor = coloredRank(oldRole, true);
-                    String newRoleColor = coloredRank(TeamRoles.valueOf(newRole), true);
+                        // Reload team after demote
+                        Team updatedTeam = manager.getTeamById(team.getId());
+                        String oldRoleColor = coloredRank(oldRole, true);
+                        String newRoleColor = coloredRank(TeamRoles.valueOf(newRole), true);
 
-                    sender.sendMessage(MessagesUtil.get("team.demote.success")
-                        .replace("%target%", target.getName())
-                        .replace("%oldrole%", formatLegacy(oldRoleColor))
-                        .replace("%newrole%", formatLegacy(newRoleColor)));
+                        Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                            sender.sendMessage(MessagesUtil.get("team.demote.success")
+                                .replace("%target%", target.getName())
+                                .replace("%oldrole%", formatLegacy(oldRoleColor))
+                                .replace("%newrole%", formatLegacy(newRoleColor)));
+                            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
 
-                    ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
+                            TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, MessagesUtil.get("team.notifications.demoted")
+                                .replace("%target%", target.getName())
+                                .replace("%executor%", executor.getName())
+                                .replace("%oldrole%", oldRoleColor)
+                                .replace("%newrole%", newRoleColor));
 
-                    Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
-
-
-
-                    TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, MessagesUtil.get("team.notifications.demoted")
-                        .replace("%target%", target.getName())
-                        .replace("%executor%", executor.getName())
-                        .replace("%oldrole%", oldRoleColor)
-                        .replace("%newrole%", newRoleColor));
-
-                    manager.logAudit(
-                        team.getId(),
-                        executor.getUniqueId(),
-                        "Demote",
-                        executor.getName() + " demoted " + target.getName() + " from " + oldRole.name() + " to " + newRole + "."
-                    );
-
+                            manager.logAudit(
+                                team.getId(),
+                                executor.getUniqueId(),
+                                "Demote",
+                                executor.getName() + " demoted " + target.getName() + " from " + oldRole.name() + " to " + newRole + "."
+                            );
+                        });
+                    });
 
                     return Command.SINGLE_SUCCESS;
                 })).build();

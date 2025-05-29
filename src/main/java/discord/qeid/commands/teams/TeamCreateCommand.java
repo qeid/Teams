@@ -14,11 +14,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static discord.qeid.utils.ColorUtils.applyTagCase;
 
 public class TeamCreateCommand {
+
+    // Map<UUID, lastCreateTimeMillis>
+    private static final Map<UUID, Long> lastCreate = new HashMap<>();
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("create")
@@ -44,6 +50,19 @@ public class TeamCreateCommand {
         String nameRegex = config.getString("team.create.name-regex", "^[A-Za-z0-9 _-]+$");
         String tagRegex = config.getString("team.create.tag-regex", "^[A-Za-z0-9]+$");
         String tagCase = config.getString("team.create.tag-case", "upper");
+        int cooldownSeconds = config.getInt("team.create.cooldown-seconds", 600);
+
+        UUID uuid = player.getUniqueId();
+        long now = System.currentTimeMillis();
+        long last = lastCreate.getOrDefault(uuid, 0L);
+        long wait = (last + cooldownSeconds * 1000L) - now;
+        if (wait > 0) {
+            long seconds = wait / 1000;
+            player.sendMessage(MessagesUtil.get("team.create.cooldown")
+                .replace("%cooldown%", String.valueOf(seconds)));
+            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+            return Command.SINGLE_SUCCESS;
+        }
 
         String teamName = StringArgumentType.getString(ctx, "team name").trim();
 
@@ -123,6 +142,9 @@ public class TeamCreateCommand {
             player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return Command.SINGLE_SUCCESS;
         }
+
+        // Set cooldown
+        lastCreate.put(uuid, now);
 
         player.sendMessage(MessagesUtil.get("team.create.success")
                 .replace("%name%", teamName)

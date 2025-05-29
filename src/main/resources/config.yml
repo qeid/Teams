@@ -12,6 +12,9 @@ team:
     # Maximum length for team tags
     max-tag-length: 6
 
+    # cooldown for creating (safety measure for lag attempts)
+    cooldown-seconds: 300 # 5 minutes
+
     # Regex for allowed team names (letters, numbers, spaces, underscores, dashes)
     # Use 'https://digitalfortress.tech/tips/top-15-commonly-used-regex/' for help on common regex patterns.
     name-regex: "^[A-Za-z0-9 _-]+$"
@@ -19,11 +22,18 @@ team:
     # Regex for allowed team tags (letters and numbers only, no spaces)
     tag-regex: "^[A-Za-z0-9]+$"
 
-    # Tag case: "upper" for ALL CAPS, "lower" for all lowercase, "proper" for First letter uppercase (Note: existing teams tags will not change)
-    tag-case: "upper"
+    # Tag case: "upper" for ALL CAPS, "lower" for all lowercase, "proper" for first letter uppercase (Note: existing teams tags will not change)
+    tag-case: "proper"
   info:
     # Show online/offline indicator in /team info & who (true = show, false = hide)
     show-online-indicator: true
-  admin:
-    # Permission required to use team admin commands
-    permission: "teams.admin"
+  home:
+    # cooldown for tping to home (safety measure for lag attempts)
+    cooldown-seconds: 15 # 15 seconds
+  tag:
+    # cooldown for changing team tag (safety measure for lag attempts)
+    cooldown-seconds: 300 # 5 minutes
+
+admin:
+  # Permission required to use team admin commands
+  permission: "teams.admin"

@@ -25,28 +25,36 @@ public class TeamChatListener implements Listener {
         UUID uuid = player.getUniqueId();
         var dataManager = Teams.getInstance().getPlayerDataManager();
         if (!dataManager.isTeamChatToggled(uuid)) return;
-    
+
         var teamManager = Teams.getInstance().getTeamManager();
         Team team = teamManager.getTeamByPlayer(uuid);
         if (team == null) return;
-    
+
         TeamRoles role = discord.qeid.database.TeamManager.getRole(team, uuid);
         String rank = coloredRank(role, true);
-    
+
         String format = MessagesUtil.get("team.chat.format")
             .replace("%tag%", team.getTag())
             .replace("%player%", player.getName())
             .replace("%message%", event.getMessage())
             .replace("%rank%", rank);
-    
-        for (UUID member : discord.qeid.listeners.TeamMessengerListener.getAllTeamMembers(team)) {
-            Player p = player.getServer().getPlayer(member);
-            if (p != null && p.isOnline()) {
-                p.sendMessage(formatLegacy(format));
-                p.playSound(p.getLocation(), SoundUtil.get("team.sounds.notification"), 1.0F, 1.0F);
-            }
-        }
+
+
+        var members = discord.qeid.listeners.TeamMessengerListener.getAllTeamMembers(team);
+
+
         event.setCancelled(true);
+
+
+        org.bukkit.Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+            for (UUID member : members) {
+                Player p = player.getServer().getPlayer(member);
+                if (p != null && p.isOnline()) {
+                    p.sendMessage(formatLegacy(format));
+                    p.playSound(p.getLocation(), SoundUtil.get("team.sounds.notification"), 1.0F, 1.0F);
+                }
+            }
+        });
     }
 
 }

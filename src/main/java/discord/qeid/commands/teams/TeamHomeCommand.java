@@ -9,10 +9,19 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import com.mojang.brigadier.Command;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class TeamHomeCommand {
+
+    // Map<UUID, lastHomeTpMillis>
+    private static final Map<UUID, Long> lastHomeTp = new HashMap<>();
+
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("home")
             .executes(ctx -> {
@@ -21,6 +30,22 @@ public class TeamHomeCommand {
                     sender.sendMessage(MessagesUtil.get("general.players-only"));
                     return Command.SINGLE_SUCCESS;
                 }
+
+                FileConfiguration config = Teams.getInstance().getConfig();
+                int cooldownSeconds = config.getInt("team.home.cooldown-seconds", 60);
+
+                UUID uuid = player.getUniqueId();
+                long now = System.currentTimeMillis();
+                long last = lastHomeTp.getOrDefault(uuid, 0L);
+                long wait = (last + cooldownSeconds * 1000L) - now;
+                if (wait > 0) {
+                    long seconds = wait / 1000;
+                    player.sendMessage(MessagesUtil.get("team.home.cooldown")
+                        .replace("%cooldown%", String.valueOf(seconds)));
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                    return Command.SINGLE_SUCCESS;
+                }
+
                 var teamManager = Teams.getInstance().getTeamManager();
                 Team team = teamManager.getTeamByPlayer(player.getUniqueId());
                 if (team == null) {
@@ -34,6 +59,9 @@ public class TeamHomeCommand {
                     player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                     return Command.SINGLE_SUCCESS;
                 }
+
+                lastHomeTp.put(uuid, now);
+
                 player.teleport(home);
                 player.sendMessage(MessagesUtil.get("team.home.success"));
                 player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);

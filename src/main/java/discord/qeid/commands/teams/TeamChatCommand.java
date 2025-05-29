@@ -9,8 +9,8 @@ import discord.qeid.utils.MessagesUtil;
 import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -34,7 +34,7 @@ public class TeamChatCommand {
                         return 1;
                     }
                     String message = StringArgumentType.getString(ctx, "message");
-                    return sendTeamChat(player, message);
+                    return sendTeamChatAsync(player, message);
                 })
             ).build();
     }
@@ -53,32 +53,38 @@ public class TeamChatCommand {
         return 1;
     }
 
-    private static int sendTeamChat(Player player, String message) {
+    private static int sendTeamChatAsync(Player player, String message) {
         UUID uuid = player.getUniqueId();
-        var teamManager = Teams.getInstance().getTeamManager();
-        Team team = teamManager.getTeamByPlayer(uuid);
+        Bukkit.getScheduler().runTaskAsynchronously(Teams.getInstance(), () -> {
+            var teamManager = Teams.getInstance().getTeamManager();
+            Team team = teamManager.getTeamByPlayer(uuid);
 
-        if (team == null) {
-            player.sendMessage(formatLegacy(MessagesUtil.get("team.chat.not-in-team")));
-            player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
-            return 1;
-        }
-        TeamRoles role = discord.qeid.database.TeamManager.getRole(team, uuid);
-        String rank = coloredRank(role, true);
-
-        String format = MessagesUtil.get("team.chat.format")
-            .replace("%tag%", team.getTag())
-            .replace("%player%", player.getName())
-            .replace("%message%", message)
-            .replace("%rank%", rank);
-
-        for (UUID member : discord.qeid.listeners.TeamMessengerListener.getAllTeamMembers(team)) {
-            Player p = player.getServer().getPlayer(member);
-            if (p != null && p.isOnline()) {
-                p.sendMessage(formatLegacy(format));
-                p.playSound(p.getLocation(), SoundUtil.get("team.sounds.notification"), 1.0F, 1.0F);
+            if (team == null) {
+                Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                    player.sendMessage(formatLegacy(MessagesUtil.get("team.chat.not-in-team")));
+                    player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
+                });
+                return;
             }
-        }
+            TeamRoles role = discord.qeid.database.TeamManager.getRole(team, uuid);
+            String rank = coloredRank(role, true);
+
+            String format = MessagesUtil.get("team.chat.format")
+                .replace("%tag%", team.getTag())
+                .replace("%player%", player.getName())
+                .replace("%message%", message)
+                .replace("%rank%", rank);
+
+            Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
+                for (UUID member : discord.qeid.listeners.TeamMessengerListener.getAllTeamMembers(team)) {
+                    Player p = player.getServer().getPlayer(member);
+                    if (p != null && p.isOnline()) {
+                        p.sendMessage(formatLegacy(format));
+                        p.playSound(p.getLocation(), SoundUtil.get("team.sounds.notification"), 1.0F, 1.0F);
+                    }
+                }
+            });
+        });
         return 1;
     }
 }
