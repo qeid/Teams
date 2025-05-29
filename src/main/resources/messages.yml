@@ -104,8 +104,8 @@ team:
     player-left: "&7%player% &fhas left the team." # placeholders: %player%
     owner-disbanded: "&f%player% has disbanded the Team." # placeholders: %player% %team%
     transferred: "&7%old-owner% &ftransferred Team ownership to &#db7dac%new-owner%&f." # placeholders: %new-owner% %old-owner% %rank% %rank-caps% %target-rank% %target-rank-caps%
-    promoted: "&f%executor% &7(%rank%&7) &fpromoted &#db7dac%target% &ffrom %oldrole% &fto %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
-    demoted: "&f%executor% &7(%rank%&7) &fdemoted &#db7dac%target% &ffrom %oldrole% &fto %newrole%." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    promoted: "&f%executor% &7(%rank%&7) &fpromoted &#db7dac%target% &ffrom %oldrole% &fto %newrole%&f." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
+    demoted: "&f%executor% &7(%rank%&7) &fdemoted &#db7dac%target% &ffrom %oldrole% &fto %newrole%&f." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
     home-set: "&f%executor% &7(%rank%&7) &fupdated the Team home to &e%x%, %y%, %z%&f." # placeholders: %x% %y% %z% %executor% %rank% %rank-caps%
     home-deleted: "&f%executor% &7(%rank%&7) &fdeleted the Team home." # placeholders: %executor% %rank% %rank-caps%
     tag-change: "&f%executor% &7(%rank%&7) &fchanged the Team tag to &e%tag%&f." # placeholders: %executor% %rank% %rank-caps% %tag%
@@ -130,17 +130,17 @@ team:
     invitee: # supports minimessage component formatting
       - "&7&m                                            "
       - "&#db7dac❙ &fYou were invited to join &#db7dac%team% &fby &#db7dac%inviter%&f!"
-      - "&#db7dac❙ <click:run_command:'/team join %team%'><hover:show_text:'<#db7dac><white>Click to join this team!'></hover><bold><#db7dac>[ CLICK ]</bold></click> <white>or run <#db7dac><underlined>/team join %team%</underlined></#db7dac> <white>to join this team."
+      - "<#db7dac>❙ <click:run_command:'/team join %team%'><hover:show_text:'<#db7dac><white>Click to join this team!'></hover><bold><#db7dac>[ CLICK ]</bold></click> <white>or run <#db7dac><underlined>/team join %team%</underlined></#db7dac> <white>to join this team."
       - "&#db7dac❙ "
-      - "&#db7dac❙ &fThis invite will expire in 5 minutes&b."
+      - "&#db7dac❙ &fThis invite will expire in 5 minutes&f."
       - "&7&m                                            "
   join:
     no-pending-invite: "&cYou have no pending invite to that Team."
     null: "&cThat Team does not exist."
     failed: "&cSorry, but we're unable to add you to this Team. Please try again later."
-    success: "&#db7dac❙ &fYou have joined the Team &e'%team%'" # placeholders: %team%
+    success: "&#db7dac❙ &fYou have joined the Team &e%team%" # placeholders: %team%
     already-in-team: "&cYou are already in a Team."
-    banned: "&#db7dac❙ &fYou are currently banned from this Team for &e'%reason%' &ffor &7%duration%&f." # placeholders: %reason% %duration%
+    banned: "&#db7dac❙ &fYou are currently banned from this Team for &#db7dac'%reason%' &ffor &e%duration%&f." # placeholders: %reason% %duration%
   kick:
     success: "&#db7dac❙ &fYou kicked &#db7dac%target% &ffrom the team for &e'%reason%'&f." # placeholders: %reason% %target%
     failed: "&cSomething failed whilst trying to kick that player. Please try again later."
@@ -154,7 +154,7 @@ team:
     failed: "&cSomething failed whilst trying to ban that player. Please try again later."
     you-were-banned: "&#db7dac❙ &fYou were banned from &#db7dac%team% &ffor &e'%reason%' &ffor &7%duration%&f." # placeholders: %reason% %team% %executor% %duration%
     no-permission: "&cYou need to be Admin or higher in your Team to ban players!"
-    banned: "&#db7dac❙ &fYou are banned from this Team for &#db7dac'%reason%' &ffor &e%duration%&f." # placeholders: %reason% %duration%
+    banned: "&#db7dac❙ &fYou were banned from your Team for &#db7dac'%reason%' &ffor &e%duration%&f." # placeholders: %reason% %duration%
     already-banned: "&cThat player is already banned."
     not-in-team: "&cThat player is not in your Team."
     self: "&cYou cannot ban yourself."
@@ -189,7 +189,7 @@ team:
 
     message: # Placeholders : %name% %tag% %owner% %admins% %mods% %members% %created%
       - "&7&m                                            "
-      - "&#db7dac❙ &#db7dac&l%name% &7(%tag%)"
+      - "&#db7dac❙ &#db7dac&l%name% &7[%tag%]"
       - "&#db7dac❙"
       - "&#db7dac❙ &fOwner: &#db7dac%owner%"
       - "&#db7dac❙ &fCreated: &#db7dac%created%"
@@ -210,14 +210,14 @@ team:
     not-found: "&cThat player was not found!"
     not-in-team: "&c%player% is not in a Team." # placeholders: %player%
   promote:
-    success: "&#db7dac❙ &fSuccessfully promoted %target% to &7%newrole%&f!" # placeholders: %target% %oldrole% %newrole%
+    success: "&#db7dac❙ &fSuccessfully promoted %target% to &7%newrole%&f." # placeholders: %target% %oldrole% %newrole%
     no-permission: "&cYou don't have permission to promote that player."
     not-in-team: "&cThat player is not in your Team."
     invalid-target: "&cThat player cannot be promoted."
     not-found: "&cThat player was not found!"
     failed: "&cSomething went wrong whilst trying to promote that player. Please try again later."
   demote:
-    success: "&#db7dac❙ &fSuccessfully demoted %target% to &7%newrole%&f!" # placeholders: %target% %oldrole% %newrole%
+    success: "&#db7dac❙ &fSuccessfully demoted %target% to &7%newrole%&f." # placeholders: %target% %oldrole% %newrole%
     no-permission: "&cYou don't have permission to demote that player."
     not-in-team: "&cThat player is not in your Team."
     invalid-target: "&cThat player cannot be demoted."

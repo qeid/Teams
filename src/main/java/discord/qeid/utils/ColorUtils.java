@@ -52,12 +52,12 @@ public class ColorUtils {
         switch (role) {
             case OWNER:  color = "&4"; rank = "OWNER"; break;
             case ADMIN:  color = "&c"; rank = "ADMIN"; break;
-            case MOD:    color = "&e"; rank = "MOD"; break;
+            case MOD:    color = "&e"; rank = "MODERATOR"; break;
             case MEMBER: color = "&7"; rank = "MEMBER"; break;
             default:     color = "&8"; rank = "NONE"; break;
         }
         if (pretty) {
-            rank = rank.charAt(0) + rank.substring(1).toLowerCase(); // "Admin"
+            rank = rank.charAt(0) + rank.substring(1).toLowerCase();
         }
         return color + rank;
     }

@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
 import discord.qeid.model.Team;
+import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.MessagesUtil;
 import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+import static discord.qeid.utils.ColorUtils.coloredRank;
 import static discord.qeid.utils.ColorUtils.formatLegacy;
 
 public class TeamChatCommand {
@@ -46,7 +48,7 @@ public class TeamChatCommand {
         var dataManager = Teams.getInstance().getPlayerDataManager();
         boolean toggled = !dataManager.isTeamChatToggled(uuid);
         dataManager.setTeamChatToggled(uuid, toggled);
-        player.sendMessage(LEGACY.deserialize(MessagesUtil.get("team.chat." + (toggled ? "toggled-on" : "toggled-off"))));
+        player.sendMessage(formatLegacy(MessagesUtil.get("team.chat." + (toggled ? "toggled-on" : "toggled-off"))));
         player.playSound(player.getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
         return 1;
     }
@@ -55,20 +57,26 @@ public class TeamChatCommand {
         UUID uuid = player.getUniqueId();
         var teamManager = Teams.getInstance().getTeamManager();
         Team team = teamManager.getTeamByPlayer(uuid);
+
         if (team == null) {
-            player.sendMessage(LEGACY.deserialize(MessagesUtil.get("team.chat.not-in-team")));
+            player.sendMessage(formatLegacy(MessagesUtil.get("team.chat.not-in-team")));
             player.playSound(player.getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
             return 1;
         }
+        TeamRoles role = discord.qeid.database.TeamManager.getRole(team, uuid);
+        String rank = coloredRank(role, true);
+
         String format = MessagesUtil.get("team.chat.format")
             .replace("%tag%", team.getTag())
             .replace("%player%", player.getName())
-            .replace("%message%", message);
+            .replace("%message%", message)
+            .replace("%rank%", rank);
 
         for (UUID member : discord.qeid.listeners.TeamMessengerListener.getAllTeamMembers(team)) {
             Player p = player.getServer().getPlayer(member);
             if (p != null && p.isOnline()) {
                 p.sendMessage(formatLegacy(format));
+                p.playSound(p.getLocation(), SoundUtil.get("team.sounds.notification"), 1.0F, 1.0F);
             }
         }
         return 1;

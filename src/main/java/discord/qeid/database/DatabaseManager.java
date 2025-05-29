@@ -20,7 +20,7 @@ public class DatabaseManager {
         try {
             String url = "jdbc:sqlite:" + plugin.getDataFolder().getAbsolutePath() + "/teams.db";
             connection = DriverManager.getConnection(url);
-            plugin.getLogger().info("Connected to SQLite.");
+            //plugin.getLogger().info("Connected to SQLite.");
         } catch (SQLException e) {
             plugin.getLogger().severe("SQLite connection failed.");
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class DatabaseManager {
             stmt.close();
             plugin.getLogger().info("SQLite schema initialized.");
         } catch (Exception e) {
-            plugin.getLogger().severe("Failed to initialize schema.");
+            plugin.getLogger().severe("Failed to initialize SQLite schema.");
             e.printStackTrace();
         }
     }

@@ -4,6 +4,7 @@ import discord.qeid.Teams;
 import discord.qeid.model.Team;
 import discord.qeid.model.TeamRoles;
 import discord.qeid.utils.MessagesUtil;
+import discord.qeid.utils.SoundUtil;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.UUID;
 
 import static discord.qeid.utils.ColorUtils.coloredRank;
+import static discord.qeid.utils.ColorUtils.formatLegacy;
 
 public class TeamChatListener implements Listener {
     private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
@@ -40,7 +42,8 @@ public class TeamChatListener implements Listener {
         for (UUID member : discord.qeid.listeners.TeamMessengerListener.getAllTeamMembers(team)) {
             Player p = player.getServer().getPlayer(member);
             if (p != null && p.isOnline()) {
-                p.sendMessage(LEGACY.deserialize(format));
+                p.sendMessage(formatLegacy(format));
+                p.playSound(p.getLocation(), SoundUtil.get("team.sounds.notification"), 1.0F, 1.0F);
             }
         }
         event.setCancelled(true);

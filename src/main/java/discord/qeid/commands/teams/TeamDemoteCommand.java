@@ -20,6 +20,9 @@ import org.bukkit.entity.Player;
 import java.util.Objects;
 import java.util.UUID;
 
+import static discord.qeid.utils.ColorUtils.coloredRank;
+import static discord.qeid.utils.ColorUtils.formatLegacy;
+
 
 public class TeamDemoteCommand {
 
@@ -102,12 +105,16 @@ public class TeamDemoteCommand {
                         return Command.SINGLE_SUCCESS;
                     }
 
+                    String oldRoleColor = coloredRank(oldRole, true);
+                    String newRoleColor = coloredRank(TeamRoles.valueOf(newRole), true);
+
                     sender.sendMessage(MessagesUtil.get("team.demote.success")
                         .replace("%target%", target.getName())
-                        .replace("%oldrole%", oldRole.name())
-                        .replace("%newrole%", newRole));
+                        .replace("%oldrole%", formatLegacy(oldRoleColor))
+                        .replace("%newrole%", formatLegacy(newRoleColor)));
 
                     ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.success"), 1.0F, 1.5F);
+
                     Team updatedTeam = Teams.getInstance().getTeamManager().getTeamById(team.getId());
 
 
@@ -115,8 +122,8 @@ public class TeamDemoteCommand {
                     TeamMessengerListener.broadcastWithTwo(updatedTeam, execId, targetId, MessagesUtil.get("team.notifications.demoted")
                         .replace("%target%", target.getName())
                         .replace("%executor%", executor.getName())
-                        .replace("%oldrole%", oldRole.name())
-                        .replace("%newrole%", newRole));
+                        .replace("%oldrole%", oldRoleColor)
+                        .replace("%newrole%", newRoleColor));
 
                     manager.logAudit(
                         team.getId(),
