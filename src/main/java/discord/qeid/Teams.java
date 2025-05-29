@@ -2,6 +2,7 @@ package discord.qeid;
 
 import discord.qeid.commands.AdminCommandTree;
 import discord.qeid.commands.CommandTree;
+import discord.qeid.database.AdminLogManager;
 import discord.qeid.database.DatabaseManager;
 import discord.qeid.database.PlayerDataManager;
 import discord.qeid.database.TeamManager;
@@ -18,6 +19,7 @@ public class Teams extends JavaPlugin {
     private DatabaseManager databaseManager; // register the db
     private TeamManager teamManager; // register manager
     private PlayerDataManager playerDataManager; //register temp player data
+    private AdminLogManager adminLogManager;
 
 
 
@@ -33,18 +35,18 @@ public class Teams extends JavaPlugin {
         this.databaseManager = new DatabaseManager(this);
         this.teamManager = new TeamManager(this);
         this.playerDataManager = new PlayerDataManager(this);
+        this.adminLogManager = new AdminLogManager(this);
 
 
 
         getTeamManager().migrateAddCreatedAt();
         getServer().getPluginManager().registerEvents(new TeamChatListener(), this);
 
-        //getTeamManager().logTeamTa    bleColumns();
 
-        // register command
+        // register commands
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            event.registrar().register(new CommandTree(this).build());
             event.registrar().register(new AdminCommandTree(this).build());
+            event.registrar().register(new CommandTree(this).build());
 
         });
 
@@ -73,6 +75,10 @@ public class Teams extends JavaPlugin {
     public PlayerDataManager getPlayerDataManager() {
         return playerDataManager;
     }
+    public AdminLogManager getAdminLogManager() {
+        return adminLogManager;
+    }
+
 
 
 }

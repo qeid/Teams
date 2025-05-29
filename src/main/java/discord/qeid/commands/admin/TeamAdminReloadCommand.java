@@ -5,11 +5,13 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import discord.qeid.Teams;
 import discord.qeid.utils.MessagesUtil;
+import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class TeamReloadCommand {
+public class TeamAdminReloadCommand {
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("reload")
@@ -18,6 +20,7 @@ public class TeamReloadCommand {
                 String perm = Teams.getInstance().getConfig().getString("admin.permission", "teams.admin");
                 if (!sender.hasPermission(perm)) {
                     sender.sendMessage(MessagesUtil.get("admin.reload.no-permission"));
+                    ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                     return Command.SINGLE_SUCCESS;
                 }
                 long start = System.currentTimeMillis();
@@ -28,10 +31,12 @@ public class TeamReloadCommand {
                     sender.sendMessage(MessagesUtil.get("admin.reload.success")
                         .replace("%type%", "messages & config")
                         .replace("%time%", String.valueOf(time)));
+                    ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                 } catch (Exception e) {
                     e.printStackTrace();
                     sender.sendMessage(MessagesUtil.get("admin.reload.failed")
                         .replace("%type%", "messages & config"));
+                    ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                 }
                 return Command.SINGLE_SUCCESS;
             })
@@ -45,10 +50,11 @@ public class TeamReloadCommand {
                 .executes(ctx -> {
                     CommandSender sender = ctx.getSource().getSender();
                     String perm = Teams.getInstance().getConfig().getString(
-                        "admin.reload-permission", "teams.admin"
+                        "admin.permission", "teams.admin"
                     );
                     if (!sender.hasPermission(perm)) {
                         sender.sendMessage(MessagesUtil.get("admin.reload.no-permission"));
+                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                         return Command.SINGLE_SUCCESS;
                     }
 
@@ -88,6 +94,7 @@ public class TeamReloadCommand {
                         }
                         default -> {
                             sender.sendMessage(MessagesUtil.get("admin.reload.usage"));
+                            ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                             return Command.SINGLE_SUCCESS;
                         }
                     }
@@ -100,6 +107,7 @@ public class TeamReloadCommand {
                     } else {
                         sender.sendMessage(MessagesUtil.get("admin.reload.failed")
                             .replace("%type%", type));
+                        ((Player)sender).playSound(((Player)sender).getLocation(), SoundUtil.get("team.sounds.error"), 1.0F, 1.5F);
                     }
                     return Command.SINGLE_SUCCESS;
                 })

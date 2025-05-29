@@ -51,3 +51,14 @@ CREATE TABLE IF NOT EXISTS team_audit_log (
     timestamp INTEGER NOT NULL,
     FOREIGN KEY(team_id) REFERENCES teams(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS admin_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    executor_uuid TEXT NOT NULL,
+    executor_name TEXT NOT NULL,
+    action TEXT NOT NULL,
+    team_name TEXT,
+    target_name TEXT,
+    reason TEXT,
+    timestamp INTEGER NOT NULL
+);

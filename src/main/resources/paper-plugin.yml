@@ -4,4 +4,4 @@ main: discord.qeid.Teams
 description: A multi-functional SMP based Teams plugin, featuring efficient SQLite storing, configurable messages, and more.
 api-version: 1.21
 author: qeid
-website: https://qeid.lol
+website: https://github.com/qeid/Teams

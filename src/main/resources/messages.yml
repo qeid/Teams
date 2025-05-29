@@ -73,11 +73,11 @@ team:
         - "&7&m                                            "
         - "&6❙ &6&lTEAMS ADMIN &7- &fListing admin commands &7(Page 1)"
         - "&6❙"
-        - "&6❙ &f/team force-disband <team> [reason] &7- &6Forcefully disband a team"
-        - "&6❙ &f/team filter add <string> &7- &6Add a word to the Name Creation Filter"
-        - "&6❙ &f/team filter remove <string> &7- &e6emove a word from the Name Creation Filter"
-        - "&6❙ &f/team filter list &7- &6View the NCF List"
-        - "&6❙ &f/team force-join <team> &7- &6Forcefully join a team without an invite."
+        - "&6❙ &f/teama force-disband <team> [reason] &7- &6Forcefully disband a team"
+        - "&6❙ &f/teama filter add <string> &7- &6Add a word to the Name Creation Filter"
+        - "&6❙ &f/teama filter remove <string> &7- &eRemove a word from the Name Creation Filter"
+        - "&6❙ &f/teama filter list &7- &6View the NCF List"
+        - "&6❙ &f/teama join <team> [player] &7- &6Forcefully join a team without an invite."
         - "&7&m                                            "
         - "%footer%"
     footer:
@@ -280,3 +280,47 @@ admin:
     usage: "&6❙ &fUsage: /team reload [database|messages|config]"
     success: "&6❙ &fReloaded %type% in %time% ms. Check console for further details." # placeholders: %type% %ms%
     failed: "&cSomething went wrong whilst trying to reload %type%. Check console for further details" # placeholders: %type%
+  forcejoin:
+    success: "&6❙ &fYou have forced &6%player% &fto join &e%team%&f." # placeholders: %player% %team%
+    already-in-team: "&c%player% is already in a Team." # placeholders: %player%
+    team-not-found: "&cThat Team does not exist."
+    player-not-found: "&cThat player was not found."
+    notify: "&7%player% &fforcefully joined your Team." # placeholders: %player% %executor%
+    audit: "%player% forcefully joined the team." # placeholders: %player% %executor%
+    you-were-joined: "&6❙ &fYou have forcefully joined the Team &e%team%&f." # placeholders: %player% %executor%
+  forcedisband:
+    success: "&6❙ &fTeam &6%team% &fhas been forcefully disbanded for &e'%reason%'&f."
+    notify: "&fYour Team has been forcefully disbanded. Please contact a administrator for more info."
+    not-found: "&cThat Team does not exist."
+    failed: "&cSomething went wrong whilst trying to disband that Team. Please try again later."
+    confirm: "&6❙ &fAre you sure? &fRun &6&n/teama disband %team% %reason% &fagain within 10 seconds to confirm &cforce disbanding &fthis team."
+    timeout: "&6❙ &fForce disband confirmation timed out."
+  admin:
+  logs:
+    header:
+      - ""
+      - "&7&m                                            "
+      - "&6❙ &6&lADMIN LOGS &7(Page %page%/%maxpage%)"
+      - "&6❙"
+    entry: "&6❙ &f%executor% ran admin action: &e%action% &7(%date%) &8&o[Hover]"
+    entry-hover:
+      - "&8&m                                            "
+      - "&7Date: &f%date%"
+      - "&7Executor: &f%executor%"
+      - "&7Action: &e%action%"
+      - "&7Team: &b%team%"
+      - "&7Target: &b%target%"
+      - "&7Reason: &f%reason%"
+      - "&8&m                                            "
+    no-entries:
+      - "&6❙ &fNo admin log entries found."
+    footer:
+      - "&7&m                                            "
+      - "%prev% %next%"
+    nav:
+      next: "&6[ >>> ]"
+      prev: "&6[ <<< ]"
+      separator: " "
+      next-tooltip: "&6&oGo to next page"
+      prev-tooltip: "&6&oBack to previous page"
+    date-format: "dd/MM/yy @ HH:mm:ss"
