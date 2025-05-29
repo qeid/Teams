@@ -73,11 +73,11 @@ team:
         - "&7&m                                            "
         - "&6❙ &6&lTEAMS ADMIN &7- &fListing admin commands &7(Page 1)"
         - "&6❙"
-        - "&6❙ &f/teama force-disband <team> [reason] &7- &6Forcefully disband a team"
-        - "&6❙ &f/teama filter add <string> &7- &6Add a word to the Name Creation Filter"
-        - "&6❙ &f/teama filter remove <string> &7- &eRemove a word from the Name Creation Filter"
-        - "&6❙ &f/teama filter list &7- &6View the NCF List"
+        - "&6❙ &f/teama force-disband <team> [reason] &7- &6Forcefully disband a Team"
         - "&6❙ &f/teama join <team> [player] &7- &6Forcefully join a team without an invite."
+        - "&6❙ &f/teama bans <team> &7- &6View ban list of a Team"
+        - "&6❙ &f/teama auditlog <team> &7- &6View audit log of a Team"
+        - "&6❙ &f/teama info <team> &7- &6View all available info about a Team"
         - "&7&m                                            "
         - "%footer%"
     footer:
@@ -96,12 +96,12 @@ team:
       user-tooltip: "&#db7dac&oView user commands"
 
   notifications: # these all have the prefix before the message.
-    invite-sent: "&f%sender% &7(%rank%&7) &finvited &#db7dac%target%&f to join the team. They have 5 minutes to join." # placeholders: %sender% %target% %rank% %rank-caps%
-    player-joined: "&7%player% &fhas joined the team!" # placeholders: %player%
+    invite-sent: "&f%sender% &7(%rank%&7) &finvited &#db7dac%target%&f to join the Team. They have 5 minutes to join." # placeholders: %sender% %target% %rank% %rank-caps%
+    player-joined: "&7%player% &fhas joined the Team!" # placeholders: %player%
     player-banned: "&7%target% &fhas been banned by %executor% &7(%rank%&7) &ffor &e'%reason%' &ffor %duration%." # placeholders: %reason% %target% %executor% %duration% %rank% %rank-caps%
     player-unbanned: "&7%target% &fhas been unbanned by %executor% &7(%rank%&7) &ffor &e'%reason%'&f." # placeholders: %reason% %target% %executor%
     player-kicked: "&7%target% &fhas been kicked by %executor% &7(%rank%&7) &ffor &e'%reason%'&f." # placeholders: %reason% %target% %executor% %rank% %rank-caps%
-    player-left: "&7%player% &fhas left the team." # placeholders: %player%
+    player-left: "&7%player% &fhas left the Team." # placeholders: %player%
     owner-disbanded: "&f%player% has disbanded the Team." # placeholders: %player% %team%
     transferred: "&7%old-owner% &ftransferred Team ownership to &#db7dac%new-owner%&f." # placeholders: %new-owner% %old-owner% %rank% %rank-caps% %target-rank% %target-rank-caps%
     promoted: "&f%executor% &7(%rank%&7) &fpromoted &#db7dac%target% &ffrom %oldrole% &fto %newrole%&f." # placeholders: %target% %oldrole% %newrole% %executor% %rank% %rank-caps% %target-rank% %target-rank-caps%
@@ -123,7 +123,7 @@ team:
     expired-team: "&fThe invite sent to &#db7dac%target% &fexpired." # placeholders: %target%
     no_permission: "&cYou need to be Mod or higher in your Team to invite players!"
     already_in_team: "&cThat player is already in a Team."
-    already_invited: "&eThat player has already been invited."
+    already_invited: "&cThat player has already been invited."
     player_not_found: "&cThat player is not online."
     banned: "&cYou cannot invite that player. They are currently banned from the Team."
 
@@ -267,7 +267,7 @@ team:
     failed: "&cSomething went wrong whilst trying to update the Team tag. Please try again later."
     no-permission: "&cOnly the Team owner can change the tag."
     invalid: "&cThat tag is invalid. Tags must be %min%-%max% characters" # placeholders: %min% %max% %regex%
-
+    exists: "&cA team with that tag already exists." # placeholders: %tag%
   chat:
     toggled-on: "&#db7dac❙ &fTeam chat enabled. Your messages will go to Team chat."
     toggled-off: "&#db7dac❙ &fTeam chat disabled. Your messages will go to public chat."
@@ -289,21 +289,20 @@ admin:
     audit: "%player% forcefully joined the team." # placeholders: %player% %executor%
     you-were-joined: "&6❙ &fYou have forcefully joined the Team &e%team%&f." # placeholders: %player% %executor%
   forcedisband:
-    success: "&6❙ &fTeam &6%team% &fhas been forcefully disbanded for &e'%reason%'&f."
-    notify: "&fYour Team has been forcefully disbanded. Please contact a administrator for more info."
+    success: "&6❙ &fTeam &6%team% &fhas been forcefully disbanded for &e'%reason%'&f." # placeholders: %team% %executor% %reason%
+    notify: "&fYour Team has been forcefully disbanded. Please contact a administrator for more info." # placeholders: %executor% %reason%
     not-found: "&cThat Team does not exist."
     failed: "&cSomething went wrong whilst trying to disband that Team. Please try again later."
-    confirm: "&6❙ &fAre you sure? &fRun &6&n/teama disband %team% %reason% &fagain within 10 seconds to confirm &cforce disbanding &fthis team."
+    confirm: "&6❙ &fAre you sure? &fRun &6&n/teama disband %team% %reason%&f again within 10 seconds to confirm &cforce disbanding &fthis team."  # placeholders: %team% %reason%
     timeout: "&6❙ &fForce disband confirmation timed out."
-  admin:
   logs:
-    header:
+    header:  # placeholders: %page% %maxpage%
       - ""
       - "&7&m                                            "
       - "&6❙ &6&lADMIN LOGS &7(Page %page%/%maxpage%)"
       - "&6❙"
-    entry: "&6❙ &f%executor% ran admin action: &e%action% &7(%date%) &8&o[Hover]"
-    entry-hover:
+    entry: "&6❙ &f%executor% ran admin action: &e%action% &7(%date%) &8&o[Hover]" # placeholders: %action% %date% %target% %info% %executor% %reason% %team%
+    entry-hover: # placeholders: %action% %date% %target% %info% %executor% %reason% %team%
       - "&8&m                                            "
       - "&7Date: &f%date%"
       - "&7Executor: &f%executor%"
@@ -314,6 +313,31 @@ admin:
       - "&8&m                                            "
     no-entries:
       - "&6❙ &fNo admin log entries found."
+    footer: # placeholders: %prev% %next%
+      - "&7&m                                            "
+      - "%prev% %next%"
+    nav:
+      next: "&6[ >>> ]"
+      prev: "&6[ <<< ]"
+      separator: " "
+      next-tooltip: "&6&oGo to next page"
+      prev-tooltip: "&6&oBack to previous page"
+    date-format: "dd/MM/yy @ HH:mm:ss"
+  auditlog:
+    header: # placeholders: %page% %maxpage% %team%
+      - "&7&m                                            "
+      - "&6❙ &6&lTEAM AUDIT LOG &7- &e%team% &7(Page %page%/%maxpage%)"
+      - "&6❙"
+    entry: "&6❙ &7(%date%) &e%executor% &7[%action%] &8&o[Hover]" # placeholders: %executor% %action% %date%
+    entry-hover: # placeholders: %executor% %info% %action% %date%
+      - "&8&m                                            "
+      - "&7Date: &f%date%"
+      - "&7Executor: &f%executor%"
+      - "&7Action: &e%action%"
+      - "&7Info: &f%info%"
+      - "&8&m"
+    no-entries:
+      - "&6❙ &fNo audit log entries found."
     footer:
       - "&7&m                                            "
       - "%prev% %next%"
@@ -324,3 +348,30 @@ admin:
       next-tooltip: "&6&oGo to next page"
       prev-tooltip: "&6&oBack to previous page"
     date-format: "dd/MM/yy @ HH:mm:ss"
+  bans:
+    header: # placeholders: %page% %maxpage% %team% %uuid% %player% %reason% %expires%
+      - "&7&m                                            "
+      - "&6❙ &6&lTEAM BAN LIST &7- &e%team%"
+      - "&6❙"
+    entry: "&6❙ &c%player% &7(%uuid%) &8- &cReason: &f%reason% &8| &cExpires: &f%expires%"
+    no-entries:
+      - "&6❙ &fNo bans found for this team."
+    footer:
+      - "&7&m                                            "
+  info:
+    header: # placeholders: %team%
+      - "&7&m                                            "
+      - "&6❙ &6&lTEAM ADMIN INFO &7- &e%team%"
+      - "&7&m                                            "
+    section: # placeholders: %id% %name% %tag% %owner% %owner_uuid% %created% %team% %home% %admins% %mods% %members%
+      id: "&6ID: &f%id%"
+      name: "&6Name: &f%name%"
+      tag: "&6Tag: &f[%tag%]"
+      owner: "&6Owner: &f%owner% &8(%owner_uuid%)"
+      created: "&6Created: &f%created%"
+      home: "&6Home: &f%home% &7[<click:run_command:'/teama home %team%'><hover:show_text:'&eTeleport to team home'>&bTeleport</hover></click>]"
+      admins: "&6Admins: &f%admins%"
+      mods: "&6Mods: &f%mods%"
+      members: "&6Members: &f%members%"
+      auditlog: "&6Audit Log: <click:run_command:'/teama auditlog %team% 1'><hover:show_text:'&eView audit log for this team'>&b[Click]</hover></click>"
+      bans: "&6Bans: <click:run_command:'/teama bans %team%'><hover:show_text:'&eView ban list for this team'>&b[Click]</hover></click>"
