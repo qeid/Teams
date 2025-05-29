@@ -37,6 +37,10 @@ public class TeamHelpCommand {
         return runHelp(ctx, 1);
     }
 
+    public static int runAdminHelp(CommandContext<CommandSourceStack> ctx) {
+        return runHelp(ctx, 0);
+    }
+
     private static int runHelp(CommandContext<CommandSourceStack> ctx, int page) {
         CommandSender sender = ctx.getSource().getSender();
         if (!(sender instanceof Player player)) {

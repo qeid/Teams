@@ -1,5 +1,6 @@
 package discord.qeid;
 
+import discord.qeid.commands.AdminCommandTree;
 import discord.qeid.commands.CommandTree;
 import discord.qeid.database.DatabaseManager;
 import discord.qeid.database.PlayerDataManager;
@@ -43,6 +44,7 @@ public class Teams extends JavaPlugin {
         // register command
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             event.registrar().register(new CommandTree(this).build());
+            event.registrar().register(new AdminCommandTree(this).build());
 
         });
 
