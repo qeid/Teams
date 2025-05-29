@@ -369,9 +369,13 @@ admin:
       tag: "&6Tag: &f[%tag%]"
       owner: "&6Owner: &f%owner% &8(%owner_uuid%)"
       created: "&6Created: &f%created%"
-      home: "&6Home: &f%home% &7[<click:run_command:'/teama home %team%'><hover:show_text:'&eTeleport to team home'>&bTeleport</hover></click>]"
+      home: "<gold>Home: <white>%home% <gray>[<click:run_command:'/teama home %team%'><hover:show_text:'<yellow>Teleport to team home'><aqua>Teleport</hover></click>]</gray>"
       admins: "&6Admins: &f%admins%"
       mods: "&6Mods: &f%mods%"
       members: "&6Members: &f%members%"
-      auditlog: "&6Audit Log: <click:run_command:'/teama auditlog %team% 1'><hover:show_text:'&eView audit log for this team'>&b[Click]</hover></click>"
-      bans: "&6Bans: <click:run_command:'/teama bans %team%'><hover:show_text:'&eView ban list for this team'>&b[Click]</hover></click>"
+      auditlog: "<gold>Audit Log: <click:run_command:'/teama auditlog %team%'><hover:show_text:'<yellow>View audit log for this team'><aqua>[Click]</hover></click>"
+      bans: "<gold>Bans: <click:run_command:'/teama bans %team%'><hover:show_text:'<yellow>View ban list for this team'><aqua>[Click]</hover></click>"
+  home:
+    success: "&6❙ &fTeleported to the home of Team &e%team%&f." # placeholders: %team%
+    not-set: "&cThat Team does not have a home set."
+    not-found: "&cThat Team does not exist."

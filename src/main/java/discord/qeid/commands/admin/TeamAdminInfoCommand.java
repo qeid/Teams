@@ -11,6 +11,7 @@ import discord.qeid.utils.SoundUtil;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -25,7 +26,7 @@ public class TeamAdminInfoCommand {
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("info")
-            .then(Commands.argument("team", StringArgumentType.word())
+            .then(Commands.argument("team", StringArgumentType.greedyString())
                 .suggests((ctx, builder) -> {
                     Teams.getInstance().getTeamManager().getAllTeams().stream()
                         .map(Team::getName)
@@ -74,25 +75,25 @@ public class TeamAdminInfoCommand {
                   String.format("%.2f", home.getX()) + ", " +
                   String.format("%.2f", home.getY()) + ", " +
                   String.format("%.2f", home.getZ());
+        MiniMessage mm = MiniMessage.miniMessage();
+
         String homeLine = MessagesUtil.getMessages().getString("admin.info.section.home")
-                .replace("%home%", homeStr)
-                .replace("%team%", team.getName());
-        sender.sendMessage(ColorUtils.format(homeLine));
+            .replace("%home%", homeStr)
+            .replace("%team%", team.getName());
+        sender.sendMessage(mm.deserialize(homeLine));
 
         // roles
         sendSection(sender, "admins", "%admins%", formatPlayerList(team.getAdmins()));
         sendSection(sender, "mods", "%mods%", formatPlayerList(team.getMods()));
         sendSection(sender, "members", "%members%", formatPlayerList(team.getMembers()));
 
-        // alog
         String auditLogLine = MessagesUtil.getMessages().getString("admin.info.section.auditlog")
-                .replace("%team%", team.getName());
-        sender.sendMessage(ColorUtils.format(auditLogLine));
+            .replace("%team%", team.getName());
+        sender.sendMessage(mm.deserialize(auditLogLine));
 
-        // bans
         String bansLine = MessagesUtil.getMessages().getString("admin.info.section.bans")
-                .replace("%team%", team.getName());
-        sender.sendMessage(ColorUtils.format(bansLine));
+            .replace("%team%", team.getName());
+        sender.sendMessage(mm.deserialize(bansLine));
 
         return 1;
     }
