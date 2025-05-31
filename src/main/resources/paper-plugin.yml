@@ -5,3 +5,9 @@ description: A multi-functional SMP based Teams plugin, featuring efficient SQLi
 api-version: 1.21
 author: qeid
 website: https://github.com/qeid/Teams
+dependencies:
+  server:
+    PlaceholderAPI:
+      # Load order is relative to the dependency. So here PlaceholderAPI loads before our plugin.
+      load: BEFORE
+      required: false

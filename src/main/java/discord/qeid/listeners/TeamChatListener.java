@@ -36,8 +36,8 @@ public class TeamChatListener implements Listener {
         String format = MessagesUtil.get("team.chat.format")
             .replace("%tag%", team.getTag())
             .replace("%player%", player.getName())
-            .replace("%message%", event.getMessage())
-            .replace("%rank%", rank);
+            .replace("%rank%", rank)
+            .replace("%message%", event.getMessage());
 
 
         var members = discord.qeid.listeners.TeamMessengerListener.getAllTeamMembers(team);

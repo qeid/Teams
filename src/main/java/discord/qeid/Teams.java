@@ -1,5 +1,6 @@
 package discord.qeid;
 
+import discord.qeid.api.TeamsPlaceholderExpansion;
 import discord.qeid.commands.AdminCommandTree;
 import discord.qeid.commands.CommandTree;
 import discord.qeid.database.AdminLogManager;
@@ -47,6 +48,16 @@ public class Teams extends JavaPlugin {
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             event.registrar().register(new AdminCommandTree(this).build());
             event.registrar().register(new CommandTree(this).build());
+
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new TeamsPlaceholderExpansion().register();
+            getLogger().info("PlaceholderAPI detected. Teams placeholders registered.");
+    } else {
+            getLogger().warning("==============================================");
+            getLogger().warning("PlaceholderAPI not found! Teams placeholders will NOT work.");
+            getLogger().warning("Download it from: https://www.spigotmc.org/resources/placeholderapi.6245/");
+            getLogger().warning("==============================================");
+        }
 
         });
 

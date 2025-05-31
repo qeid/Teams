@@ -72,8 +72,8 @@ public class TeamChatCommand {
             String format = MessagesUtil.get("team.chat.format")
                 .replace("%tag%", team.getTag())
                 .replace("%player%", player.getName())
-                .replace("%message%", message)
-                .replace("%rank%", rank);
+                .replace("%rank%", rank)
+                .replace("%message%", message);
 
             Bukkit.getScheduler().runTask(Teams.getInstance(), () -> {
                 for (UUID member : discord.qeid.listeners.TeamMessengerListener.getAllTeamMembers(team)) {
