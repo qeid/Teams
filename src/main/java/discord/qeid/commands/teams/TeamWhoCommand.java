@@ -16,6 +16,12 @@ import org.bukkit.entity.Player;
 
 public class TeamWhoCommand {
 
+    /**
+     * This command allows team members to unban other players from their team.
+     * It checks permissions based on roles and handles the unban process.
+     * The command can be used by team owners and admins to manage team membership.
+     */
+
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("who")
             .then(Commands.argument("player", StringArgumentType.word())

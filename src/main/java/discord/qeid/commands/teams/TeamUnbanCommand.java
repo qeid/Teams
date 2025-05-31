@@ -22,6 +22,12 @@ import java.util.UUID;
 
 public class TeamUnbanCommand {
 
+    /**
+     * This command allows team members to unban other players from their team.
+     * It checks permissions based on roles and handles the unban reason.
+     * The command can be used by team owners and admins to manage team membership.
+     */
+
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("unban")
             .then(Commands.argument("player", StringArgumentType.word())

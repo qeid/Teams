@@ -15,6 +15,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Teams extends JavaPlugin {
 
+    /**
+     * Teams plugin main class.
+     * This class initializes the plugin, registers commands, and manages the lifecycle of the plugin.*/
+
     private static Teams instance;
 
     private DatabaseManager databaseManager; // register the db

@@ -15,6 +15,13 @@ import org.bukkit.entity.Player;
 import com.mojang.brigadier.Command;
 
 public class TeamSetHomeCommand {
+
+    /**
+     * This command allows team owners and admins to set the team's home location.
+     * It checks if the player has the required permissions and sets the home if successful.
+     * If successful, it broadcasts a message to the team and plays a success sound.
+     */
+
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("sethome")
             .executes(ctx -> {

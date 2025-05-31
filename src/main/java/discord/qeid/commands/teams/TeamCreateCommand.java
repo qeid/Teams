@@ -23,6 +23,13 @@ import static discord.qeid.utils.ColorUtils.applyTagCase;
 
 public class TeamCreateCommand {
 
+    /**
+     * A command to create a new team.
+     * Usage: /team create <team name>
+     * The team name is the first word of the input, and it will be used as the team tag.
+     * The tag is clamped to a maximum length defined in the config.
+     */
+
     // Map<UUID, lastCreateTimeMillis>
     private static final Map<UUID, Long> lastCreate = new HashMap<>();
 

@@ -1,10 +1,10 @@
-name: Teams
+name: SuperTeams
 version: 1.0.0
 main: discord.qeid.Teams
 description: A multi-functional SMP based Teams plugin, featuring efficient SQLite storing, configurable messages, and more.
 api-version: 1.21
 author: qeid
-website: https://github.com/qeid/Teams
+website: https://github.com/qeid/SuperTeams
 dependencies:
   server:
     PlaceholderAPI:

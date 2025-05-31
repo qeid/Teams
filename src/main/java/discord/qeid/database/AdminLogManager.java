@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 public class AdminLogManager {
+    /*     * This class manages the admin logs for team actions.
+     * It allows logging actions performed by admins and retrieving logs with pagination.
+     * The logs include details such as executor, action, team name, target name, reason, and timestamp.
+     */
+
     private final Teams plugin;
 
     public AdminLogManager(Teams plugin) {

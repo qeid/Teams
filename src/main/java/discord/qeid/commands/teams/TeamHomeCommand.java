@@ -19,6 +19,12 @@ import java.util.UUID;
 
 public class TeamHomeCommand {
 
+    /*    * This command allows players to teleport to their team's home location.
+     * It checks for a cooldown and whether the player is in a team.
+     * If the home location is not set, it informs the player.
+     * If successful, it teleports the player and plays a success sound.
+     */
+
     // Map<UUID, lastHomeTpMillis>
     private static final Map<UUID, Long> lastHomeTp = new HashMap<>();
 

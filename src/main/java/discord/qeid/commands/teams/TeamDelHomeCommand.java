@@ -15,6 +15,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class TeamDelHomeCommand {
+    /**
+     * This command allows team owners and admins to delete the team's home location.
+     * It checks if the player has the required permissions and if a home is set.
+     * If successful, it broadcasts a message to the team and plays a success sound.
+     */
+
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("delhome")
             .executes(ctx -> {

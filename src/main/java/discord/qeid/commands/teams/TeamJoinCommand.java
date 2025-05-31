@@ -20,6 +20,11 @@ import java.util.UUID;
 public class TeamJoinCommand {
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
+        /*        * This command allows players to join a team they have been invited to.
+         * It checks if the player has an invite, is not already in a team, and is not banned.
+         * If all conditions are met, the player is added to the team and notified.
+         */
+
         return Commands.literal("join")
             .then(Commands.argument("team invites", StringArgumentType.greedyString())
                 .suggests((ctx, builder) -> {

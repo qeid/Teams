@@ -25,6 +25,11 @@ import java.util.UUID;
 public class TeamKickCommand {
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
+        /*         * This command allows team members to kick other players from their team.
+         * It checks permissions based on roles and handles the kick reason.
+         * The command can be used by team owners, admins, and mods to manage team membership.
+         */
+
         return Commands.literal("kick")
             .then(Commands.argument("player", StringArgumentType.word())
                 .suggests((ctx, builder) -> { CommandSender sender = ctx.getSource().getSender();

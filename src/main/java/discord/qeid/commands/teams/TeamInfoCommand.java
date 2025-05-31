@@ -21,6 +21,11 @@ import java.util.stream.Collectors;
 
 public class TeamInfoCommand {
 
+    /*     * This command allows players to view information about their team or another team.
+     * It can be used by any player to check team details, including members and roles.
+     * The command supports both viewing your own team and querying other teams by name.
+     */
+
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("info")
             .executes(ctx -> {

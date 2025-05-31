@@ -21,6 +21,10 @@ import static discord.qeid.utils.ColorUtils.formatLegacy;
 
 public class TeamChatCommand {
 
+    /**
+     * Legacy serializer for converting legacy text formats (like &a) to Adventure components.
+     */
+
     private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {

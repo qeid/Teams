@@ -16,6 +16,11 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class TeamLeaveCommand {
+    /**
+     * This command allows players to leave their current team.
+     * It checks if the player is part of a team and handles the leave process.
+     * If the player is the team owner, they cannot leave without transferring ownership.
+     */
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("leave")

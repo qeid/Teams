@@ -22,6 +22,12 @@ import java.util.UUID;
 
 public class TeamInviteCommand {
 
+    /**
+     * This command allows team members to invite other players to their team.
+     * It checks permissions based on roles and handles the invite process.
+     * The command can be used by team owners, admins, and mods to manage team membership.
+     */
+
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("invite")
             .then(Commands.argument("player", StringArgumentType.word())

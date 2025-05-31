@@ -26,6 +26,11 @@ import static discord.qeid.utils.DurationUtil.formatFullDuration;
 
 public class TeamBanCommand {
 
+    /*     * This command allows team members to ban other players from their team.
+     * It checks permissions based on roles and handles the ban duration and reason.
+     * The command can be used by team owners and admins to manage team membership.
+     */
+
     private final Teams plugin;
 
     public TeamBanCommand(Teams plugin) {

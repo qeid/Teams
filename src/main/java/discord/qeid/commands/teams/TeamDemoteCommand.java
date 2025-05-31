@@ -24,6 +24,11 @@ import static discord.qeid.utils.ColorUtils.coloredRank;
 import static discord.qeid.utils.ColorUtils.formatLegacy;
 
 public class TeamDemoteCommand {
+    /**
+     * This command allows team members to demote other players within their team.
+     * It checks permissions based on roles and handles the demotion process.
+     * The command can be used by team owners and admins to manage team membership.
+     */
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {
         return Commands.literal("demote")

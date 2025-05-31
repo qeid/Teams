@@ -17,6 +17,10 @@ import static discord.qeid.utils.ColorUtils.coloredRank;
 import static discord.qeid.utils.ColorUtils.formatLegacy;
 
 public class TeamChatListener implements Listener {
+    /**
+     * Legacy serializer for converting legacy text formats (like &a) to Adventure components.
+     */
+
     private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
 
     @EventHandler

@@ -18,6 +18,11 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class TeamDisbandCommand {
+    /**
+     * This command allows team owners to disband their team.
+     * It requires confirmation and handles the disbanding process with a cooldown.
+     * If the team is successfully disbanded, it broadcasts a message to all members.
+     */
 
     private static final Map<UUID, Long> pendingDisbands = new HashMap<>();
 

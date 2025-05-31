@@ -29,6 +29,10 @@ import java.util.UUID;
 
 public class TeamAuditLogCommand {
 
+    /*     * This command allows team admins and owners to view the audit log of their team.
+     * It supports pagination and displays entries with clickable and hoverable components.
+     */
+
     private static final int PAGE_SIZE = 10;
 
     public static LiteralCommandNode<CommandSourceStack> buildSubcommand() {

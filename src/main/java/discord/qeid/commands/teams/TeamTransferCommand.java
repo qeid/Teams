@@ -19,6 +19,11 @@ import java.util.*;
 
 public class TeamTransferCommand {
 
+    /**
+     * This command allows team owners to transfer ownership of their team to another member.
+     * It requires confirmation and handles the transfer process, including updating roles.
+     */
+
     private static final Map<UUID, UUID> pendingTransfers = new HashMap<>();
     private static final Map<UUID, Long> pendingTimes = new HashMap<>();
 

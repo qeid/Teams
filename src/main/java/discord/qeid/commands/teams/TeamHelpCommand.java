@@ -18,6 +18,9 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class TeamHelpCommand {
+    /**
+     * Legacy serializer for converting legacy text formats (like &a) to Adventure components.
+     */
 
     private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacyAmpersand();
 

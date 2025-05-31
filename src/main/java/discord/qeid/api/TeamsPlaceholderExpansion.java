@@ -12,6 +12,12 @@ import java.util.UUID;
 
 public class TeamsPlaceholderExpansion extends PlaceholderExpansion {
 
+    /**
+     * PlaceholderAPI expansion for Teams plugin.
+     * Provides team-related placeholders for players.
+     *
+     * @see <a href="*/
+
     @Override
     public @NotNull String getIdentifier() {
         return "teams";
@@ -32,13 +38,29 @@ public class TeamsPlaceholderExpansion extends PlaceholderExpansion {
         Team team = Teams.getInstance().getTeamManager().getTeamByPlayer(player.getUniqueId());
         if (team == null) return "";
 
+        String name = team.getName();
+        String tag = team.getTag();
+        String role = Teams.getInstance().getTeamManager().getRole(team, player.getUniqueId()).name();
+
         switch (params.toLowerCase()) {
-            case "team":
-                return team.getName();
+            case "name":
+                return name;
+            case "name_uppercase":
+                return name.toUpperCase();
+            case "name_propercase":
+                return properCase(name);
             case "tag":
-                return team.getTag();
+                return tag;
+            case "tag_uppercase":
+                return tag.toUpperCase();
+            case "tag_propercase":
+                return properCase(tag);
             case "role":
-                return Teams.getInstance().getTeamManager().getRole(team, player.getUniqueId()).name();
+                return role;
+            case "role_uppercase":
+                return role.toUpperCase();
+            case "role_propercase":
+                return properCase(role);
             case "owner":
                 return Bukkit.getOfflinePlayer(team.getOwner()).getName();
             case "admins":
@@ -62,17 +84,24 @@ public class TeamsPlaceholderExpansion extends PlaceholderExpansion {
             case "ban_count":
                 return String.valueOf(Teams.getInstance().getTeamManager().getBannedPlayers(team.getId()).size());
             case "is_owner":
-                return team.getOwner().equals(player.getUniqueId()) ? "yes" : "no";
+                return team.getOwner().equals(player.getUniqueId()) ? "Yes" : "No";
             case "is_admin":
-                return team.getAdmins().contains(player.getUniqueId()) ? "yes" : "no";
+                return team.getAdmins().contains(player.getUniqueId()) ? "Yes" : "No";
             case "is_mod":
-                return team.getMods().contains(player.getUniqueId()) ? "yes" : "no";
+                return team.getMods().contains(player.getUniqueId()) ? "Yes" : "No";
             case "is_member":
-                return team.getMembers().contains(player.getUniqueId()) ? "yes" : "no";
+                return team.getMembers().contains(player.getUniqueId()) ? "Yes" : "No";
             default:
                 return "";
         }
     }
+
+    private String properCase(String s) {
+        if (s == null || s.isEmpty()) return "";
+        if (s.length() == 1) return s.toUpperCase();
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+    }
+
 
     private String formatPlayerList(Set<UUID> uuids) {
         if (uuids.isEmpty()) return "";

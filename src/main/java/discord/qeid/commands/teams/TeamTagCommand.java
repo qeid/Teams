@@ -23,6 +23,12 @@ import static discord.qeid.utils.ColorUtils.applyTagCase;
 
 public class TeamTagCommand {
 
+    /**
+     * This command allows team owners to change their team's tag.
+     * It checks permissions, validates the new tag, and applies a cooldown.
+     * The command broadcasts the tag change to all team members.
+     */
+
     // Map<teamId, lastTagChangeMillis>
     private static final Map<String, Long> lastTagChange = new HashMap<>();
 
